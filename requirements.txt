@@ -1,0 +1,10 @@
+arrow
+flask
+flask-migrate
+flask-restful
+flask-restplus
+flask-script
+flask-sqlalchemy
+itsdangerous
+passlib
+sqlalchemy-utils

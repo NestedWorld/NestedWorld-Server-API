@@ -1,0 +1,7 @@
+# Build stuff
+*.pyc
+__pycache__
+
+# Misc stuff
+.*
+!.gitignore
