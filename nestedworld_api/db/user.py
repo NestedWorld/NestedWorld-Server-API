@@ -1,13 +1,12 @@
 import arrow
 import sqlalchemy_utils as sau
-from flask.ext.login import UserMixin
 from . import db
 from ..settings import PASSWORD_SCHEMES
 
 PasswordType = sau.PasswordType(schemes=PASSWORD_SCHEMES)
 
 
-class User(db.Model, UserMixin):
+class User(db.Model):
 
     __tablename__ = 'users'
 
