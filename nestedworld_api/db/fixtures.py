@@ -12,8 +12,10 @@ def reset_db():
     # Reset users
     admin = User(
         email='kokakiwi@kokakiwi.net', password='kiwi3219', is_activated=True)
+    florian = User(
+        email='florian.faisan@epitech.eu', password='florian', is_activated=True)
 
-    add(admin)
+    add(admin, florian)
 
     # Reset apps
     app = Application(name='Test app', token='test')
