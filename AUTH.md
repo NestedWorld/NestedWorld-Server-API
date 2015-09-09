@@ -16,6 +16,20 @@ Params (Form body):
 Output (JSON object):
 - `token`: The session token!
 
+## Register
+
+`POST /v1/users/auth/register`
+
+Register a user with a email/password pair.
+
+Params (Form body):
+- `email`: User email (required)
+- `password`: User password (required)
+
+Output (JSON object):
+- `user`: User informations (JSON object)
+  - `email`: User email, very useful... Maybe.
+
 ## Requests
 
 When you got the session token, you must pass it to *every* requests which require a session in the header field `Authorization` with the following format `Bearer <session token>`.

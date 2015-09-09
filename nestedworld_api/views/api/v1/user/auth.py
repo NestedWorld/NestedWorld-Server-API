@@ -74,6 +74,44 @@ class Login(Resource):
 
         return {'token': session.token}
 
+# Register
+
+@auth.route('/register')
+class Register(Resource):
+
+    parser = auth.parser()
+    parser.add_argument(
+        'email', type=str, required=True, help='User email', location='form')
+    parser.add_argument(
+        'password', type=str, required=True, help='User password', location='form')
+
+    result = auth.model('User', {
+        'email': fields.String(required=True, description='User email'),
+    })
+
+    @auth.doc(parser=parser)
+    @auth.marshal_with(result, envelope='user')
+    def post(self):
+        '''
+            Register a user.
+        '''
+        from nestedworld_api.db import db
+        from nestedworld_api.db import Application, User
+
+        args = Register.parser.parse_args()
+
+        user = User.query.filter(User.email == args.email).first()
+        if user is not None:
+            auth.abort(409, 'User already exists')
+
+        user = User()
+        user.email = args.email
+        user.password = args.password
+
+        db.session.add(user)
+        db.session.commit()
+
+        return user
 
 # Logout
 
