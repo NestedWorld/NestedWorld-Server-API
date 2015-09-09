@@ -8,4 +8,5 @@ flask-script
 flask-sqlalchemy
 itsdangerous
 passlib
+psycopg2
 sqlalchemy-utils
