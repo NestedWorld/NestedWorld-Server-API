@@ -1,5 +1,6 @@
 arrow
 flask
+flask-heroku
 flask-migrate
 flask-restful
 flask-restplus

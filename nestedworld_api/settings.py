@@ -1,11 +1,15 @@
+import os
 from pathlib import Path
 from .secret import *
 
 PROJECT_ROOT = Path().parent.resolve()
 
 # Database config
-DB_PATH = PROJECT_ROOT / 'db.sqlite3'
-SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % (DB_PATH)
+if 'DATABASE_URL' in os.environ:
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+else:
+    DB_PATH = PROJECT_ROOT / 'db.sqlite3'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % (DB_PATH)
 
 SQLALCHEMY_ECHO = True
 
