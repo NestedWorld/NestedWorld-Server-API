@@ -16,12 +16,15 @@ def resetdb():
     '''
     from .db import db, fixtures
     from .db import Application, User, Session
-    from .settings import DB_PATH
+    from . import settings
 
     # Remove old DB
-    if DB_PATH.exists():
-        DB_PATH.unlink()
+    if hasattr(settings, 'DB_PATH'):
+        DB_PATH = settings.DB_PATH
+        if DB_PATH.exists():
+            DB_PATH.unlink()
 
+    db.drop_all()
     db.create_all()
     fixtures.reset_db()
     db.session.commit()
