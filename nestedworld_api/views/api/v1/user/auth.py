@@ -49,6 +49,7 @@ class Login(Resource):
         import json
         from nestedworld_api.db import db
         from nestedworld_api.db import User, Application, Session
+
         args = Login.parser.parse_args()
 
         user = User.query.filter(

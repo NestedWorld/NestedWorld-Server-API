@@ -3,7 +3,7 @@ Authentication flow
 
 ## Login
 
-`POST /v1/user/auth/login/simple`
+`POST /v1/users/auth/login/simple`
 
 Login a user with a email/password pair and the application token (used to identify the application with which the user is connected).
 
@@ -22,7 +22,7 @@ When you got the session token, you must pass it to *every* requests which requi
 
 ## Logout
 
-`GET /v1/user/auth/logout`
+`GET /v1/users/auth/logout`
 
 Logout a user, in fact it just end the current session (and forbid any following requests with the session token)
 

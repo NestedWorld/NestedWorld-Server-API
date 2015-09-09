@@ -2,7 +2,7 @@ from flask.ext.restplus import Resource
 from nestedworld_api.login import login_required, current_session
 from .. import api
 
-user = api.namespace('user', description='User operations')
+user = api.namespace('users', description='User operations')
 
 
 from . import auth
