@@ -107,6 +107,7 @@ class Register(Resource):
         user = User()
         user.email = args.email
         user.password = args.password
+        user.is_activated = True # TODO: Send activation email
 
         db.session.add(user)
         db.session.commit()
