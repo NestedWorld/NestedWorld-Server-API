@@ -22,3 +22,11 @@ class User(db.Model):
         db.Boolean, nullable=False, default=True, doc='Is the user active?')
     is_activated = db.Column(
         db.Boolean, nullable=False, default=False, doc='Is the user activated?')
+
+    pseudo = db.Column(db.String(32), nullable=False, doc='User pseudo')
+    city = db.Column(db.String(255), nullable=True, doc='User city')
+    birth_date = db.Column(db.Date, nullable=True, doc='User Birth Date')
+    gender = db.Column(
+        db.Enum('female', 'male', 'other', name='gender_types'),
+        nullable=True, doc='User gender')
+
