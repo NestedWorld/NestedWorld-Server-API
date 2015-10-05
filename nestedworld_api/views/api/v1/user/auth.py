@@ -84,6 +84,8 @@ class Register(Resource):
         'email', type=str, required=True, help='User email', location='form')
     parser.add_argument(
         'password', type=str, required=True, help='User password', location='form')
+    parser.add_argument(
+        'pseudo', type=str, required=True, help='User pseudonyme', location='form')
 
     result = auth.model('User', {
         'email': fields.String(required=True, description='User email'),
@@ -107,6 +109,7 @@ class Register(Resource):
         user = User()
         user.email = args.email
         user.password = args.password
+        user.pseudo = args.pseudo
         user.is_activated = True # TODO: Send activation email
 
         db.session.add(user)
