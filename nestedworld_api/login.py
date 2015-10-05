@@ -12,7 +12,7 @@ def get_session(**kwargs):
 
     header = request.headers.get('Authorization')
     if header is None:
-        return 401
+        return None
 
     token = header.replace('Bearer ', '', 1)
     session = Session.decode_token(token, **kwargs)
