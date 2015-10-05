@@ -53,14 +53,14 @@ class Login(Resource):
         args = Login.parser.parse_args()
 
         user = User.query.filter(
-            User.email == args.email, User.is_activated == True).first()
+            User.email == args.email, User.is_active == True).first()
         if user is None or user.password != args.password:
-            auth.abort(403, 'User not found')
+            auth.abort(400, 'User not found')
 
         app = Application.query.filter(
             Application.token == args.app_token).first()
         if app is None:
-            auth.abort(403, 'Bad application token')
+            auth.abort(400, 'Bad application token')
 
         data = None
         try:
@@ -107,7 +107,6 @@ class Register(Resource):
         user = User()
         user.email = args.email
         user.password = args.password
-        user.is_activated = True # TODO: Send activation email
 
         db.session.add(user)
         db.session.commit()
