@@ -5,3 +5,5 @@ __pycache__
 # Misc stuff
 .*
 !.gitignore
+*.sublime-project
+*.sublime-workspace
