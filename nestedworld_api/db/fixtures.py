@@ -11,10 +11,10 @@ def add(*objects):
 def reset_db():
     # Reset users
     admin = User(
-        email='kokakiwi@kokakiwi.net', password='kiwi3219', is_activated=True,
+        email='kokakiwi@kokakiwi.net', password='kiwi3219',
         pseudo='kokakiwi', city='Seoul', birth_date=date(1992, 8, 10), gender='male')
     florian = User(
-        email='florian.faisan@epitech.eu', password='florian', is_activated=True,
+        email='florian.faisan@epitech.eu', password='florian',
         pseudo='kassisdion', city='Seoul', birth_date=date(1993, 9, 12), gender='male')
 
     add(admin, florian)

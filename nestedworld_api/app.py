@@ -7,5 +7,13 @@ app.config.from_object('nestedworld_api.settings')
 from .db import db
 db.init_app(app)
 
+# Config mail
+from .mail import mail
+mail.init_app(app)
+
+# Config mako
+from flask.ext.mako import MakoTemplates
+mako = MakoTemplates(app)
+
 # Import views
 from . import views
