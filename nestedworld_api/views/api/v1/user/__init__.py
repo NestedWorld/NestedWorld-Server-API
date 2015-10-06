@@ -17,9 +17,16 @@ class User(Resource):
 
     @login_required
     def get(self):
-        '''
-            Get a hello message with some user informations.
-        '''
-        s = 'Hello %s, you are connected with "%s"' % (
-            current_session.user.email, current_session.application.name)
-        return s
+        import json
+
+        data = {}
+
+        data['email'] = current_session.user.email
+        data['registered_at'] = str(current_session.user.registered_at)
+        data['is_active'] = current_session.user.is_active
+        data['pseudo'] = current_session.user.pseudo
+        data['birth_date'] = str(current_session.user.birth_date)
+        data['city'] = current_session.user.city
+        data['gender'] = current_session.user.gender
+        json_data = json.dumps(data)
+        return json_data
