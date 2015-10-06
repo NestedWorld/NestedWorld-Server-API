@@ -28,3 +28,26 @@ def resetdb():
     db.create_all()
     fixtures.reset_db()
     db.session.commit()
+
+@manager.command
+def reset_password(email):
+    from nestedworld_api.app import app
+    from nestedworld_api.db import db
+    from nestedworld_api.db import User, PasswordResetRequest
+    from nestedworld_api.mail import TemplatedMessage
+
+    user = User.query.filter(
+        User.email == email, User.is_active == True).first()
+    if user is None:
+        print('User not found.')
+        return
+
+    request = PasswordResetRequest(user=user)
+    db.session.add(request)
+    db.session.commit()
+
+    message = TemplatedMessage('mail/password_reset.txt', token=request.token)
+    message.add_recipient(user.email)
+    message.send()
+
+    print('Done.')

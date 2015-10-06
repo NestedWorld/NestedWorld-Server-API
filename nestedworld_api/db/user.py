@@ -5,6 +5,11 @@ from ..settings import PASSWORD_SCHEMES
 
 PasswordType = sau.PasswordType(schemes=PASSWORD_SCHEMES)
 
+def random_token():
+    import uuid
+
+    return uuid.uuid4().hex
+
 
 class User(db.Model):
 
@@ -28,3 +33,15 @@ class User(db.Model):
         db.Enum('female', 'male', 'other', name='gender_types'),
         nullable=True, doc='User gender')
 
+
+class PasswordResetRequest(db.Model):
+
+    __tablename__ = 'password_reset_requests'
+
+    id = db.Column(db.Integer, primary_key=True, doc='Request ID')
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    token = db.Column(
+        db.String(32), nullable=False, default=random_token, doc='Request token', index=True)
+
+    user = db.relationship(User)

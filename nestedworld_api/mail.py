@@ -13,5 +13,8 @@ class TemplatedMessage(Message):
         if html is not None:
             self.html = render_template(html, **context)
 
-    def send(self):
-        mail.send(self)
+    def send(self, connection=None):
+        if connection is None:
+            mail.send(self)
+        else:
+            super().send(connection)
