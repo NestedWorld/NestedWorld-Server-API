@@ -27,3 +27,10 @@ DEBUG_TB_INTERCEPT_REDIRECTS = False
 
 # Auth config
 RBAC_USE_WHITE = False
+
+# Mail config
+MAIL_SERVER = 'mailtrap.io'
+MAIL_PORT = 2525
+MAIL_USERNAME = '463717942f08b4fca'
+MAIL_PASSWORD = 'd87795288ee90a'
+MAIL_DEFAULT_SENDER = 'noreply@nestedworld.io'

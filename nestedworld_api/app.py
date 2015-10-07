@@ -15,5 +15,9 @@ mail.init_app(app)
 from flask.ext.mako import MakoTemplates
 mako = MakoTemplates(app)
 
+# Config debug toolbar
+from flask.ext.debugtoolbar import DebugToolbarExtension
+toolbar = DebugToolbarExtension(app)
+
 # Import views
 from . import views

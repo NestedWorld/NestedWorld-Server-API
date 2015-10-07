@@ -116,6 +116,41 @@ class Register(Resource):
 
         return user
 
+# Lost password
+
+@auth.route('/resetpassword')
+class ResetPassword(Resource):
+
+    parser = auth.parser()
+    parser.add_argument(
+        'email', type=str, required=True, help='User email', location='form')
+
+    @auth.doc(parser=parser)
+    def post(self):
+        '''
+            Request a password reset.
+        '''
+        from nestedworld_api.db import db
+        from nestedworld_api.db import User, PasswordResetRequest
+        from nestedworld_api.mail import TemplatedMessage
+
+        args = Login.parser.parse_args()
+
+        user = User.query.filter(
+            User.email == args.email, User.is_active == True).first()
+        if user is None:
+            auth.abort(400, 'User not found')
+
+        request = PasswordResetRequest(user=user)
+        db.session.add(request)
+        db.session.commit()
+
+        message = TemplatedMessage('mail/password_reset.txt', token=request.token)
+        message.add_recipient(user.email)
+        message.send()
+
+        return 'OK'
+
 # Logout
 
 @auth.route('/logout')
