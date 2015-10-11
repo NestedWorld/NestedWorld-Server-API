@@ -1,5 +1,6 @@
 arrow
 flask
+flask-cors
 flask-debugtoolbar
 flask-heroku
 flask-mail

@@ -7,6 +7,10 @@ app.config.from_object('nestedworld_api.settings')
 from .db import db
 db.init_app(app)
 
+# Config CORS
+from flask.ext.cors import CORS
+cors = CORS(app)
+
 # Config mail
 from .mail import mail
 mail.init_app(app)
