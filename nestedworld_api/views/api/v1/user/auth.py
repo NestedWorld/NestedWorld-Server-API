@@ -134,7 +134,7 @@ class ResetPassword(Resource):
         from nestedworld_api.db import User, PasswordResetRequest
         from nestedworld_api.mail import TemplatedMessage
 
-        args = Login.parser.parse_args()
+        args = ResetPassword.parser.parse_args()
 
         user = User.query.filter(
             User.email == args.email, User.is_active == True).first()
