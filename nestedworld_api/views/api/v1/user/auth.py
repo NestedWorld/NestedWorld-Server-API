@@ -89,6 +89,7 @@ class Register(Resource):
 
     result = auth.model('User', {
         'email': fields.String(required=True, description='User email'),
+        'pseudo': fields.String(required=True, description='User pseudo'),
     })
 
     @auth.doc(parser=parser)
