@@ -55,7 +55,7 @@ class Login(Resource):
         user = User.query.filter(
             User.email == args.email, User.is_active == True).first()
         if user is None or user.password != args.password:
-            auth.abort(400, 'User not found')
+            auth.abort(400, 'Cannot connect: Wrong email and/or password.')
 
         app = Application.query.filter(
             Application.token == args.app_token).first()
