@@ -51,3 +51,25 @@ def reset_password(email):
     message.send()
 
     print('Done.')
+
+@manager.command
+def import_monsters():
+    import requests
+    from nestedworld_api.db import db
+    from nestedworld_api.db import Monster
+
+    r = requests.get('http://pokeapi.co/api/v1/pokemon/?limit=42')
+    objects = r.json()['objects']
+
+    monsters = []
+    for obj in objects:
+        monster = Monster()
+        monster.name = obj['name']
+        monster.hp = obj['hp']
+        monster.attack = obj['attack']
+        monster.defense = obj['defense']
+
+        monsters.append(monster)
+
+    db.session.bulk_save_objects(monsters)
+    db.session.commit()
