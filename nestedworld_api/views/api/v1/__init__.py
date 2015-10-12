@@ -5,4 +5,4 @@ api_blueprint = Blueprint('v1', __name__)
 api = Api(api_blueprint, title='NestedWorld API', version='1.0')
 
 
-from . import user
+from . import monster, user

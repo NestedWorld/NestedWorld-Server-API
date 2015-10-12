@@ -1,5 +1,7 @@
 arrow
 flask
+flask-cors
+flask-debugtoolbar
 flask-heroku
 flask-mail
 flask-mako
@@ -8,6 +10,7 @@ flask-restful
 flask-restplus
 flask-script
 flask-sqlalchemy
+flask-wtf
 itsdangerous
 passlib
 psycopg2

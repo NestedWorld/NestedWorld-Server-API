@@ -28,3 +28,48 @@ def resetdb():
     db.create_all()
     fixtures.reset_db()
     db.session.commit()
+
+@manager.command
+def reset_password(email):
+    from nestedworld_api.app import app
+    from nestedworld_api.db import db
+    from nestedworld_api.db import User, PasswordResetRequest
+    from nestedworld_api.mail import TemplatedMessage
+
+    user = User.query.filter(
+        User.email == email, User.is_active == True).first()
+    if user is None:
+        print('User not found.')
+        return
+
+    request = PasswordResetRequest(user=user)
+    db.session.add(request)
+    db.session.commit()
+
+    message = TemplatedMessage('mail/password_reset.txt', token=request.token)
+    message.add_recipient(user.email)
+    message.send()
+
+    print('Done.')
+
+@manager.command
+def import_monsters():
+    import requests
+    from nestedworld_api.db import db
+    from nestedworld_api.db import Monster
+
+    r = requests.get('http://pokeapi.co/api/v1/pokemon/?limit=42')
+    objects = r.json()['objects']
+
+    monsters = []
+    for obj in objects:
+        monster = Monster()
+        monster.name = obj['name']
+        monster.hp = obj['hp']
+        monster.attack = obj['attack']
+        monster.defense = obj['defense']
+
+        monsters.append(monster)
+
+    db.session.bulk_save_objects(monsters)
+    db.session.commit()
