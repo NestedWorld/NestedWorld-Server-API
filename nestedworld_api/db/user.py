@@ -28,7 +28,7 @@ class User(db.Model):
 
     pseudo = db.Column(db.String(32), nullable=False, doc='User pseudo')
     city = db.Column(db.String(255), nullable=True, doc='User city')
-    birth_date = db.Column(db.Date, nullable=True, doc='User Birth Date')
+    birth_date = db.Column(sau.ArrowType, nullable=True, doc='User Birth Date')
     gender = db.Column(
         db.Enum('female', 'male', 'other', name='gender_types'),
         nullable=True, doc='User gender')
