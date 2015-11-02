@@ -12,6 +12,7 @@ flask-script
 flask-sqlalchemy
 flask-wtf
 itsdangerous
+marshmallow
 passlib
 psycopg2
 sqlalchemy-utils
