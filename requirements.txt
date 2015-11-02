@@ -15,4 +15,5 @@ itsdangerous
 marshmallow
 passlib
 psycopg2
+python-dateutil
 sqlalchemy-utils
