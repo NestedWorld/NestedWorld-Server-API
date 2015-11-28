@@ -126,7 +126,7 @@ class ResetPassword(auth.Resource):
 class Logout(auth.Resource):
 
     @login_required
-    def get(self):
+    def post(self):
         import arrow
         from nestedworld_api.db import db
 
