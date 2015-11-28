@@ -128,9 +128,14 @@ class Logout(auth.Resource):
     @login_required
     def get(self):
         import arrow
+        from nestedworld_api.db import db
 
         session = get_session()
+        if session is None:
+            auth.abort(401)
+
         session.end = arrow.utcnow()
 
-        db.session.add(session)
         db.session.commit()
+
+        return 'OK'
