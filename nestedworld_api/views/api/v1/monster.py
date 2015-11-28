@@ -1,50 +1,43 @@
-from flask.ext.restplus import Resource
-from flask.ext.restplus import fields
 from flask import jsonify, request
-from marshmallow import Schema, fields as marshmallowFields
+from marshmallow import post_dump
+from nestedworld_api.app import ma
 from . import api
 
-monster = api.namespace('monsters', description='Monster operations')
+monster = api.namespace('monsters')
 
 @monster.route('/')
-class Monster(Resource):
+class Monster(monster.Resource):
 
-    class MonsterSchema(Schema):
-        name = marshmallowFields.String();
-        hp = marshmallowFields.Float();
-        attack = marshmallowFields.Float();
-        defense = marshmallowFields.Float();
+    class Schema(ma.Schema):
+        # id = ma.Integer(dump_only=True)
+        name = ma.String()
+        hp = ma.Float()
+        attack = ma.Float()
+        defense = ma.Float()
 
-    monster_schema = MonsterSchema()
-    monsters_schema = MonsterSchema(many=True)
+        @post_dump(pass_many=True)
+        def add_envelope(self, data, many):
+            namespace = 'monsters' if many else 'monster'
+            return {namespace: data}
 
+    @monster.marshal_with(Schema(many=True))
     def get(self):
         from nestedworld_api.db import Monster as DbMonster
 
         monsters = DbMonster.query.all()
-        result = self.monsters_schema.dump(monsters);
-        return jsonify({'monsters': result.data})
+        return monsters
 
-    def post(self):
+    @monster.accept(Schema())
+    @monster.marshal_with(Schema())
+    def post(self, data):
         from nestedworld_api.db import db
         from nestedworld_api.db import Monster as DbMonster
 
-        json_data = request.get_json()
-        if not json_data:
-            return jsonify({'message': 'No input data provided'}), 400
-        data, errors = self.monster_schema.load(json_data)
-        if errors:
-            return jsonify(errors), 422
-
-        monster = DbMonster.query.filter(DbMonster.name == data.name).first()
+        monster = DbMonster.query.filter(DbMonster.name == data['name']).first()
         if monster is not None:
-            auth.abort(409, 'Monster already exists')
+            api.abort(409, message='Monster already exists')
 
-        monster = DbMonster()
-        monster.name = data.name
-        monster.hp = data.hp
-        monster.attack = data.attack
-        monster.defense = data.defense
+        monster = DbMonster(**data)
 
         db.session.add(monster)
         db.session.commit()

@@ -1,3 +1,4 @@
+apispec
 arrow
 flask
 flask-cors
@@ -5,6 +6,7 @@ flask-debugtoolbar
 flask-heroku
 flask-mail
 flask-mako
+flask-marshmallow
 flask-migrate
 flask-restful
 flask-restplus
@@ -13,6 +15,7 @@ flask-sqlalchemy
 flask-wtf
 itsdangerous
 marshmallow
+marshmallow-sqlalchemy
 passlib
 psycopg2
 python-dateutil
