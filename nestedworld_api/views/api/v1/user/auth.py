@@ -75,7 +75,7 @@ class Register(auth.Resource):
 
         user = User.query.filter(User.email == data['email']).first()
         if user is not None:
-            auth.abort(409, 'User already exists')
+            auth.abort(409, message='User already exists')
 
         user = User()
         user.email = data['email']
@@ -108,7 +108,7 @@ class ResetPassword(auth.Resource):
         user = User.query.filter(
             User.email == data['email'], User.is_active == True).first()
         if user is None:
-            auth.abort(400, 'User not found')
+            auth.abort(400, message='User not found')
 
         request = PasswordResetRequest(user=user)
         db.session.add(request)
