@@ -7,6 +7,10 @@ app.config.from_object('nestedworld_api.settings')
 from .db import db
 db.init_app(app)
 
+# Config Marshmallow
+from flask.ext.marshmallow import Marshmallow
+ma = Marshmallow(app)
+
 # Config CORS
 from flask.ext.cors import CORS
 cors = CORS(app)

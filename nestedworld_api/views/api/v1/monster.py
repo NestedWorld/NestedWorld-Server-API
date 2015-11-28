@@ -1,55 +1,46 @@
-from flask.ext.restplus import Resource
-from flask.ext.restplus import fields
+from flask import jsonify, request
+from marshmallow import post_dump
+from nestedworld_api.app import ma
 from . import api
 
-monster = api.namespace('monsters', description='Monster operations')
+monster = api.namespace('monsters')
 
 @monster.route('/')
-class Monster(Resource):
+class Monster(monster.Resource):
 
-    parser = monster.parser()
-    parser.add_argument(
-        'name', type=str, required=True, help='Monster name', location='form')
-    parser.add_argument(
-        'hp', type=float, required=True, help='Monster initial HP value', location='form')
-    parser.add_argument(
-        'attack', type=float, required=True, help='Monster initial attack value', location='form')
-    parser.add_argument(
-        'defense', type=float, required=True, help='Monster initial defense value', location='form')
+    class Schema(ma.Schema):
+        # id = ma.Integer(dump_only=True)
+        name = ma.String()
+        hp = ma.Float()
+        attack = ma.Float()
+        defense = ma.Float()
 
-    result = monster.model('Monster', {
-        'name': fields.String(required=True, description='Monster name'),
-        'hp': fields.Float(description='Monster initial HP value'),
-        'attack': fields.Float(description='Monster initial attack value'),
-        'defense': fields.Float(description='Monster initial defense value'),
-    })
+        @post_dump(pass_many=True)
+        def add_envelope(self, data, many):
+            namespace = 'monsters' if many else 'monster'
+            return {namespace: data}
 
-    @monster.marshal_with(result, envelope='monsters')
+    @monster.marshal_with(Schema(many=True))
     def get(self):
-        from nestedworld_api.db import Monster
+        from nestedworld_api.db import Monster as DbMonster
 
-        monsters = Monster.query.all()
+        monsters = DbMonster.query.all()
         return monsters
 
-    @monster.doc(parser=parser)
-    @monster.marshal_with(result, envelope='monsters')
-    def post(self):
+    @monster.accept(Schema())
+    @monster.marshal_with(Schema())
+    def post(self, data):
         from nestedworld_api.db import db
         from nestedworld_api.db import Monster as DbMonster
 
-        args = Monster.parser.parse_args()
-
-        monster = DbMonster.query.filter(DbMonster.name == args.name).first()
+        monster = DbMonster.query.filter(DbMonster.name == data['name']).first()
         if monster is not None:
-            auth.abort(409, 'Monster already exists')
+            api.abort(409, message='Monster already exists')
 
-        monster = DbMonster()
-        monster.name = args.name
-        monster.hp = args.hp
-        monster.attack = args.attack
-        monster.defense = args.defense
+        monster = DbMonster(**data)
 
         db.session.add(monster)
         db.session.commit()
 
         return monster
+

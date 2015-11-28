@@ -12,6 +12,7 @@ else:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % (DB_PATH)
 
 SQLALCHEMY_ECHO = True
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Passwords config
 PASSWORD_SCHEMES = [

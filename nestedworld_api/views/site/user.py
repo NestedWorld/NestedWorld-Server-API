@@ -23,7 +23,7 @@ def password_reset(token):
                         .filter(PasswordResetRequest.token == token)\
                         .first()
     if password_request is None:
-        abort(400, 'This password request token doesn\'t exists.')
+        abort(400, message='This password request token doesn\'t exists.')
 
     form = PasswordReset(request.form)
     if request.method == 'POST' and form.validate():

@@ -1,84 +1,52 @@
-from flask.ext.restplus import Resource, fields
+from marshmallow import post_dump
+from marshmallow.validate import OneOf
+from nestedworld_api.app import ma
 from nestedworld_api.login import login_required, current_session
 from .. import api
 
-user = api.namespace('users', description='User operations')
+user = api.namespace('users')
 
 
 from . import auth
 
 
 @user.route('/')
-class User(Resource):
+class User(user.Resource):
 
-    __apidoc__ = {
-        'params': auth.AUTH_REQUIRED_PARAMS,
-    }
+    class Schema(ma.Schema):
+        email = ma.Email()
+        pseudo = ma.String()
+        birth_date = ma.Date()
+        city = ma.String()
+        gender = ma.String(validate=[OneOf(['female', 'male', 'other'])])
+        avatar = ma.Url();
 
-    parser = user.parser()
-    parser.add_argument(
-        'email', type=str, required=False, help='User email', location='form')
-    parser.add_argument(
-        'pseudo', type=str, required=False, help='User pseudonyme', location='form')
-    parser.add_argument(
-        'birth_date', type=str, required=False, help='User birth date', location='form')
-    parser.add_argument(
-        'city', type=str, required=False, help='User city', location='form')
-    parser.add_argument(
-        'gender', type=str, required=False, help='User gender', location='form')
+        registered_at = ma.DateTime(dump_only=True)
+        is_active = ma.Boolean(dump_only=True)
 
-    result = user.model('UserResult', {
-        'email': fields.String(required=True, description='User email'),
-        'pseudo': fields.String(required=True, description='User pseudo'),
-        'birth_date': fields.String(required=True, description='User birth date'),
-        'city': fields.String(required=True, description='User city'),
-        'gender': fields.String(required=True, description='User gender'),
-    })
+        @post_dump(pass_many=True)
+        def add_envelope(self, data, many):
+            namespace = 'users' if many else 'user'
+            return {namespace: data}
 
     @login_required
+    @user.marshal_with(Schema())
     def get(self):
-        import json
+        user = current_session.user
 
-        data = {}
+        return user
 
-        data['email'] = current_session.user.email
-        data['registered_at'] = str(current_session.user.registered_at)
-        data['is_active'] = current_session.user.is_active
-        data['pseudo'] = current_session.user.pseudo
-        data['birth_date'] = str(current_session.user.birth_date)
-        data['city'] = current_session.user.city
-        data['gender'] = current_session.user.gender
-        json_data = json.dumps(data)
-        return json_data
-
-    @user.doc(parser=parser)
-    @user.marshal_with(result)
     @login_required
-    def put(self):
+    @user.accept(Schema(partial=True))
+    @user.marshal_with(Schema())
+    def put(self, data):
         from nestedworld_api.db import db
-        from nestedworld_api.db import Application, User as DbUser
-        import arrow
 
-        args = User.parser.parse_args()
+        user = current_session.user
 
-        if args.gender != 'female' and args.gender != 'male' and args.gender != 'other':
-            user.abort(400, 'User gender is incorrect')
-        try:
-            arrow.get(args.birth_date)
-        except:
-            user.abort(400, 'Date is incorrect')
-
-        if args.email is not None :
-            current_session.user.email = args.email
-        if args.pseudo is not None :
-            current_session.user.pseudo = args.pseudo
-        if args.birth_date is not None :
-            current_session.user.birth_date = arrow.get(args.birth_date)
-        if args.city is not None :
-            current_session.user.city = args.city
-        if args.gender is not None :
-            current_session.user.gender = args.gender
+        for (name, value) in data.items():
+            setattr(user, name, value)
 
         db.session.commit()
 
-        return current_session.user
+        return user
