@@ -58,9 +58,11 @@ def import_monsters():
     from nestedworld_api.db import db
     from nestedworld_api.db import Monster
 
+    print('Fetching data...')
     r = requests.get('http://pokeapi.co/api/v1/pokemon/?limit=42')
     objects = r.json()['objects']
 
+    print('Importing data...')
     monsters = []
     for obj in objects:
         monster = Monster()
