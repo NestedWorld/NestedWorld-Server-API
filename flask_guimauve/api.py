@@ -24,7 +24,7 @@ class Api(restful.Api, Shortcuts):
 
     def add_resource(self, resource, *urls, **kwargs):
         super().add_resource(resource, *urls, **kwargs)
-        swagger.process_doc(self.spec, resource, list(urls))
+        swagger.process_resource(self.spec, resource, list(urls))
 
     def swagger_view(self):
         class SwaggerView(restful.Resource):

@@ -1,7 +1,7 @@
 from apispec.ext.marshmallow import swagger
 from functools import wraps
 
-def process_doc(spec, resource, urls):
+def process_resource(spec, resource, urls):
     operations = {}
 
     for method in resource.methods:
