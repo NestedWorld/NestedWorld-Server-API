@@ -25,7 +25,6 @@ class Login(auth.Resource):
         data = ma.Raw()
 
     class SessionSchema(ma.Schema):
-
         token = ma.String()
 
     @auth.accept(UserSchema(partial=True))
@@ -100,7 +99,7 @@ class ResetPassword(auth.Resource):
         '''
             Request a password reset.
         '''
-        
+
         from nestedworld_api.db import db
         from nestedworld_api.db import User, PasswordResetRequest
         from nestedworld_api.mail import TemplatedMessage
