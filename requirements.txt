@@ -13,10 +13,12 @@ flask-restplus
 flask-script
 flask-sqlalchemy
 flask-wtf
+geoalchemy2
 itsdangerous
 marshmallow
 marshmallow-sqlalchemy
 passlib
 psycopg2
 python-dateutil
+shapely
 sqlalchemy-utils
