@@ -9,7 +9,7 @@ monster = api.namespace('monsters')
 class Monster(monster.Resource):
 
     class Schema(ma.Schema):
-        # id = ma.Integer(dump_only=True)
+        id = ma.Integer(dump_only=True)
         name = ma.String()
         hp = ma.Float()
         attack = ma.Float()

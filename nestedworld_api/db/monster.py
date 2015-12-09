@@ -14,3 +14,4 @@ class Monster(db.Model):
     hp = db.Column(db.Float, doc='Monster initial HP value')
     attack = db.Column(db.Float, doc='Monster initial attack value')
     defense = db.Column(db.Float, doc='Monster initial defense value')
+    sort = db.Column(db.Enum('water', 'fire', 'earth', 'electric', 'plant', name='monster_types'), doc='Monster type')
