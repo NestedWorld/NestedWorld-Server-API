@@ -19,9 +19,9 @@ class Login(auth.Resource):
     '''
 
     class UserSchema(ma.Schema):
-        email = ma.Email()
-        password = ma.String()
-        app_token = ma.String()
+        email = ma.Email(required=True)
+        password = ma.String(required=True)
+        app_token = ma.String(required=True)
         data = ma.Raw()
 
     class SessionSchema(ma.Schema):
@@ -58,9 +58,9 @@ class Login(auth.Resource):
 class Register(auth.Resource):
 
     class Schema(ma.Schema):
-        email = ma.Email()
-        password = ma.String()
-        pseudo = ma.String()
+        email = ma.Email(required=True)
+        password = ma.String(required=True)
+        pseudo = ma.String(required=True)
 
     @auth.accept(Schema())
     @auth.marshal_with(Schema())
@@ -92,7 +92,7 @@ class Register(auth.Resource):
 class ResetPassword(auth.Resource):
 
     class Schema(ma.Schema):
-        email = ma.Email()
+        email = ma.Email(required=True)
 
     @auth.accept(Schema())
     def post(self, data):
