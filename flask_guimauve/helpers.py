@@ -18,6 +18,9 @@ def accept(schema, force=False):
             if result.errors:
                 restful.abort(412, message=result.errors)
 
+            if result.data is None:
+                restful.abort(400, message='Wrong input data')
+
             return f(*args, data=result.data, **kwargs)
         return wrapped
     return wrapper

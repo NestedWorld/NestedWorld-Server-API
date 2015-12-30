@@ -6,5 +6,6 @@ __pycache__
 .*
 !.gitignore
 !.update.sh
+!.dummy
 *.sublime-project
 *.sublime-workspace

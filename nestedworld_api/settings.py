@@ -35,3 +35,6 @@ MAIL_PORT = 2525
 MAIL_USERNAME = '463717942f08b4fca'
 MAIL_PASSWORD = 'd87795288ee90a'
 MAIL_DEFAULT_SENDER = 'noreply@nestedworld.io'
+
+# Logging config
+LOG_FILE_PATH = PROJECT_ROOT / 'logs' / 'api.log'

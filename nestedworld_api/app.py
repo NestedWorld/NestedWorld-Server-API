@@ -27,5 +27,15 @@ mako = MakoTemplates(app)
 from flask.ext.debugtoolbar import DebugToolbarExtension
 toolbar = DebugToolbarExtension(app)
 
+# Config logging
+if not app.debug:
+    import logging
+    from logging.handlers import TimedRotatingFileHandler
+
+    handler = TimedRotatingFileHandler(str(app.config['LOG_FILE_PATH']))
+    handler.setLevel(logging.WARNING)
+
+    app.logger.addHandler(handler)
+
 # Import views
 from . import views
