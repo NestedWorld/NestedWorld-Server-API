@@ -1,6 +1,9 @@
 import arrow
 import sqlalchemy_utils as sau
-from geoalchemy2 import Geography
+from geoalchemy2 import Geometry, Geography
+from sqlalchemy import func
+from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
+from sqlalchemy.sql.expression import cast
 from . import db
 from .utils import IDColumn
 
@@ -29,4 +32,9 @@ class Region(db.Model):
 
     name = db.Column(db.String, doc='Region name')
 
-    zone = db.Column(Geography('POLYGON'), doc='Region geography polygon')
+    zone = db.Column(Geography('MULTIPOLYGON'), doc='Region geography polygon')
+
+    @hybrid_property
+    def places(self):
+        return Place.query\
+                    .filter(func.ST_intersects(self.zone, Place.point))

@@ -12,4 +12,4 @@ spec = APISpec(
 api = Api(spec, api_blueprint)
 
 
-from . import monster, user
+from . import geo, monster, user
