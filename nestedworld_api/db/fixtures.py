@@ -18,7 +18,11 @@ def reset_db():
         email='florian.faisan@epitech.eu', password='florian',
         pseudo='kassisdion', city='Seoul', birth_date=arrow.get('1993-9-12'), gender='male')
 
-    add(admin, florian)
+    alice = User(
+        email='alice@bob.com', password='bob',
+        pseudo='alice', city='CCrypto', birth_date=arrow.get('2010-10-10'), gender='female')
+
+    add(admin, florian, alice)
 
     # Reset apps
     app = Application(name='Test app', token='test')
