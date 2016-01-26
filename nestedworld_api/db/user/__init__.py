@@ -1,7 +1,7 @@
 import arrow
 import sqlalchemy_utils as sau
-from . import db
-from ..settings import PASSWORD_SCHEMES
+from nestedworld_api.db import db
+from nestedworld_api.settings import PASSWORD_SCHEMES
 
 
 from .monsters import UserMonster

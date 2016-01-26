@@ -8,7 +8,7 @@ user = api.namespace('users')
 
 
 from . import auth
-from . import monster
+from . import monsters
 
 
 @user.route('/')

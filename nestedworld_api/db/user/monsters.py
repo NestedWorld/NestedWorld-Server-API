@@ -1,6 +1,6 @@
 import arrow
 import sqlalchemy_utils as sau
-from . import db
+from nestedworld_api.db import db
 
 
 class UserMonster(db.Model):
