@@ -8,6 +8,7 @@ user = api.namespace('users')
 
 
 from . import auth
+from . import monster
 
 
 @user.route('/')
@@ -20,7 +21,7 @@ class User(user.Resource):
         city = ma.String()
         gender = ma.String(validate=[OneOf(['female', 'male', 'other'])])
         avatar = ma.Url()
-
+        background = ma.Url()
         registered_at = ma.DateTime(dump_only=True)
         is_active = ma.Boolean(dump_only=True)
 

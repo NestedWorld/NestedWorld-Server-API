@@ -34,7 +34,8 @@ class User(db.Model):
     gender = db.Column(
         db.Enum('female', 'male', 'other', name='gender_types'),
         nullable=True, doc='User gender')
-
+    avatar = db.Column(db.String(2000), nullable=True, doc='User Avatar')
+    background = db.Column(db.String(2000), nullable=True, doc='User Background')
 
 class PasswordResetRequest(db.Model):
 
