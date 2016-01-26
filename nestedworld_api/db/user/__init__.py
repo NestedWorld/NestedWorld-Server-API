@@ -3,6 +3,10 @@ import sqlalchemy_utils as sau
 from . import db
 from ..settings import PASSWORD_SCHEMES
 
+
+from .monsters import UserMonster
+
+
 PasswordType = sau.PasswordType(schemes=PASSWORD_SCHEMES)
 
 
@@ -35,7 +39,9 @@ class User(db.Model):
         db.Enum('female', 'male', 'other', name='gender_types'),
         nullable=True, doc='User gender')
     avatar = db.Column(db.String(2000), nullable=True, doc='User Avatar')
-    background = db.Column(db.String(2000), nullable=True, doc='User Background')
+    background = db.Column(db.String(2000), nullable=True,
+                           doc='User Background')
+
 
 class PasswordResetRequest(db.Model):
 

@@ -5,13 +5,13 @@ from nestedworld_api.login import login_required, current_session
 from . import user
 from nestedworld_api.db import Monster
 
-userMonster = user.namespace('monsters')
+user_monsters = user.namespace('monsters')
 
-@userMonster.route('/')
-class UserMonster(userMonster.Resource):
+
+@user_monsters.route('/')
+class UserMonster(user_monsters.Resource):
 
     class Schema(ma.Schema):
-        print(globals())
         id = ma.Integer(dump_only=True)
         monster = ma.String()
         user = ma.String()
@@ -24,15 +24,15 @@ class UserMonster(userMonster.Resource):
             namespace = 'monsters' if many else 'monster'
             return {namespace: data}
 
-    @userMonster.marshal_with(Schema(many=True))
+    @user_monsters.marshal_with(Schema(many=True))
     def get(self):
         from nestedworld_api.db import UserMonster
 
         monsters = UserMonster.query.all()
         return monsters
 
-    @userMonster.accept(Schema())
-    @userMonster.marshal_with(Schema())
+    @user_monsters.accept(Schema())
+    @user_monsters.marshal_with(Schema())
     def post(self, data):
         from nestedworld_api.db import db
         from nestedworld_api.db import UserMonster
