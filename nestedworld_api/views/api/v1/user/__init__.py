@@ -19,7 +19,7 @@ class User(user.Resource):
         birth_date = ma.Date()
         city = ma.String()
         gender = ma.String(validate=[OneOf(['female', 'male', 'other'])])
-        avatar = ma.Url();
+        avatar = ma.Url()
 
         registered_at = ma.DateTime(dump_only=True)
         is_active = ma.Boolean(dump_only=True)
