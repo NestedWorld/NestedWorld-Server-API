@@ -5,6 +5,7 @@ from ..settings import PASSWORD_SCHEMES
 
 PasswordType = sau.PasswordType(schemes=PASSWORD_SCHEMES)
 
+
 def random_token():
     import uuid
 
@@ -26,7 +27,8 @@ class User(db.Model):
     is_active = db.Column(
         db.Boolean, nullable=False, default=True, doc='Is the user active?')
 
-    pseudo = db.Column(db.String(32), nullable=False, doc='User pseudo')
+    pseudo = db.Column(db.String(32), nullable=False, unique=True,
+                       doc='User pseudo')
     city = db.Column(db.String(255), nullable=True, doc='User city')
     birth_date = db.Column(sau.ArrowType, nullable=True, doc='User Birth Date')
     gender = db.Column(
@@ -42,6 +44,7 @@ class PasswordResetRequest(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     token = db.Column(
-        db.String(32), nullable=False, default=random_token, doc='Request token', index=True)
+        db.String(32), nullable=False, default=random_token,
+        doc='Request token', index=True)
 
     user = db.relationship(User)
