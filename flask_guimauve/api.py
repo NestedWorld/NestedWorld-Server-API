@@ -26,6 +26,15 @@ class Api(restful.Api, Shortcuts):
         super().add_resource(resource, *urls, **kwargs)
         swagger.process_resource(self.spec, resource, list(urls))
 
+    def route(self, *urls, **kwargs):
+        def wrapper(resource):
+            endpoint = kwargs.pop('endpoint', None) or resource.__name__.lower()
+            self.add_resource(resource, *urls, endpoint=endpoint, **kwargs)
+
+            return resource
+
+        return wrapper
+
     def swagger_view(self):
         class SwaggerView(restful.Resource):
             api = self
