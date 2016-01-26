@@ -1,6 +1,6 @@
 apispec
 arrow
-flask
+flask==0.10.1
 flask-cors
 flask-debugtoolbar
 flask-heroku
@@ -21,4 +21,4 @@ passlib
 psycopg2
 python-dateutil
 shapely
-sqlalchemy-utils
+sqlalchemy-utils==0.31.6
