@@ -2,7 +2,6 @@ language: python
 addons:
     postgresql: 9.3
 python:
-    - 3.4
     - 3.5
 services:
     - postgresql
