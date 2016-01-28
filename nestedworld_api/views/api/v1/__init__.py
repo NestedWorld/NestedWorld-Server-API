@@ -7,6 +7,7 @@ api_blueprint = Blueprint('v1', __name__)
 spec = APISpec(
     title='Nestedworld API',
     version='0.1.0',
+    basePath='/v1',
 )
 
 api = Api(spec, api_blueprint)
