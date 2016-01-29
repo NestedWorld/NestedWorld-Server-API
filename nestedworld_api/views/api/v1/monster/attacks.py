@@ -4,6 +4,7 @@ from nestedworld_api.app import ma
 from nestedworld_api.login import login_required, current_session
 from . import monsters
 from nestedworld_api.db import Attack
+from nestedworld_api.db import Monster
 
 monster_attacks = monsters.namespace('attacks')
 
@@ -28,7 +29,15 @@ class MonsterAttack(monster_attacks.Resource):
         attacks = MonsterAttack.query.all()
         return attacks
 
-    @monster_attacks.accept(Schema())
+    class PostSchema(ma.Schema):
+        attack = ma.String()
+
+        @post_dump(pass_many=True)
+        def add_envelope(self, data, many):
+            namespace = 'attacks' if many else 'attack'
+            return {namespace: data}
+
+    @monster_attacks.accept(PostSchema())
     @monster_attacks.marshal_with(Schema())
     def post(self, monster_id, data):
         from nestedworld_api.db import db

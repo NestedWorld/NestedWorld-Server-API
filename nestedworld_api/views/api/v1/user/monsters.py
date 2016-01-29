@@ -24,6 +24,7 @@ class UserMonster(user_monsters.Resource):
             namespace = 'monsters' if many else 'monster'
             return {namespace: data}
 
+    @login_required
     @user_monsters.marshal_with(Schema(many=True))
     def get(self):
         from nestedworld_api.db import UserMonster
@@ -31,6 +32,7 @@ class UserMonster(user_monsters.Resource):
         monsters = UserMonster.query.all()
         return monsters
 
+    @login_required
     @user_monsters.accept(Schema())
     @user_monsters.marshal_with(Schema())
     def post(self, data):

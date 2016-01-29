@@ -12,7 +12,6 @@ class Attack(attack.Resource):
     class Schema(ma.Schema):
         id = ma.Integer(dump_only=True)
         name = ma.String()
-        attack = ma.Float()
         type = ma.String(validate=[OneOf(['attack', 'attacksp', 'defense', 'defensesp'])])
 
 
