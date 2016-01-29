@@ -18,7 +18,7 @@ before_script:
     - psql -U postgres -d nestedworld_tests -c "create extension postgis"
     - DATABASE_URL="postgresql://postgres@localhost/nestedworld_tests" python manage.py resetdb
 
-script: DATABASE_URL="postgresql://postgres@localhost/nestedworld_tests" nosetests --with-coverage --cover-package nestedworld_api,flask_guimauve
+script: DATABASE_URL="postgresql://postgres@localhost/nestedworld_tests" python setup.py nosetests
 
 after_success:
     - coveralls

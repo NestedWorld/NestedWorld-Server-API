@@ -1,0 +1,4 @@
+[run]
+omit =
+    nestedworld_api/db/fixtures.py
+    nestedworld_api/manager.py

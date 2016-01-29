@@ -1,12 +1,14 @@
 # Build stuff
+*.egg-info
 *.pyc
 __pycache__
 
 # Misc stuff
 .*
-!.gitignore
-!.update.sh
-!.travis.yml
+!.coveragerc
 !.dummy
+!.gitignore
+!.travis.yml
+!.update.sh
 *.sublime-project
 *.sublime-workspace
