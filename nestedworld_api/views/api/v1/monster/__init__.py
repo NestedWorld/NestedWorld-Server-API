@@ -1,12 +1,14 @@
 from flask import jsonify, request
 from marshmallow import post_dump
 from nestedworld_api.app import ma
-from . import api
+from .. import api
 
-monster = api.namespace('monsters')
+monsters = api.namespace('monsters')
 
-@monster.route('/')
-class Monster(monster.Resource):
+from . import attacks
+
+@monsters.route('/')
+class Monsters(monsters.Resource):
 
     class Schema(ma.Schema):
         id = ma.Integer(dump_only=True)
@@ -20,15 +22,15 @@ class Monster(monster.Resource):
             namespace = 'monsters' if many else 'monster'
             return {namespace: data}
 
-    @monster.marshal_with(Schema(many=True))
+    @monsters.marshal_with(Schema(many=True))
     def get(self):
         from nestedworld_api.db import Monster as DbMonster
 
         monsters = DbMonster.query.all()
         return monsters
 
-    @monster.accept(Schema())
-    @monster.marshal_with(Schema())
+    @monsters.accept(Schema())
+    @monsters.marshal_with(Schema())
     def post(self, data):
         from nestedworld_api.db import db
         from nestedworld_api.db import Monster as DbMonster
@@ -44,3 +46,17 @@ class Monster(monster.Resource):
 
         return monster
 
+@monsters.route('/<monster_id>')
+class Monster(monsters.Resource):
+
+    class Schema(Monsters.Schema):
+
+        class Meta:
+            exclude = ('url',)
+
+    @monsters.marshal_with(Schema())
+    def get(self, monster_id):
+        from nestedworld_api.db import Monster as DbMonster
+
+        monster = DbMonster.query.get_or_404(monster_id)
+        return monster
