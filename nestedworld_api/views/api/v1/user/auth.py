@@ -27,7 +27,7 @@ class Login(auth.Resource):
     class SessionSchema(ma.Schema):
         token = ma.String()
 
-    @auth.accept(UserSchema(partial=True))
+    @auth.accept(UserSchema())
     @auth.marshal_with(SessionSchema())
     def post(self, data):
         '''

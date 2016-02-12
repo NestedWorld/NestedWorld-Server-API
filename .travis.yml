@@ -1,0 +1,24 @@
+language: python
+addons:
+    postgresql: 9.3
+python:
+    - 3.5
+services:
+    - postgresql
+notifications:
+    slack:
+        secure: ClDWg8U/0HboaRUwC+kKkW9ya1wGU5Amya7iVNGHGe1n5hz1M4+MmU1rc+/z1347sVCnuWT0s6VSQDuHb0OUQ85voHKXEDg5k0/7NcMkhCyz5H+wnIFjg5InJmgzy9qQVLT6ENf1uG7mWx9qNt2Gx0vML1cLJbAVZnPGZTWhYWcKWrF7ky6Kv4lhWnb6yiLmx8/2ZUIZFeUfiXh5itl1Ft8J4hOTLMDeUjuU22rH1QPhxNNumyVd5O15z9h6127VOZQMrSZb7ao15AEX3nNKOGCCwYxmOtJ0iI5ocEuY7xmPOx5f35eA6ltY6bx8m6ardJx6fQUL6xurlfZhiZcwfhAnb1oW2CKm2CTLEoyXslyQsysq5pBORKpxjYbIfexTw7yixNuzw0AsC3cFAzY3BZiwP65SojRaMPMBla+q7S62mSXiFgUD0p2NTHa8aWD7voIcPcCIt15+BwS4EbjcH+tPwMrqe+cvFp6C6WFZDB8i6SULoLekwCQv0XCV4vofdG28Tmtik6Y2fIsEwQWlYmdI3BHe+LUHy8aAPSwtoK3Kfqiq6vKQFI+odAA6eQjCCnz3lVnJm8liigWJzQ0xqjhVNYDLXl8nAiez0sygotgPYCaMtBeMymbGto5cVxSnq4RA3Bk6eIr+YrmIILYt8zHBZWY3Ptm0tbICMX1FUVY=
+
+install:
+    - pip install -r requirements.txt
+    - pip install -r requirements_test.txt
+
+before_script:
+    - psql -U postgres -c "create database nestedworld_tests"
+    - psql -U postgres -d nestedworld_tests -c "create extension postgis"
+    - DATABASE_URL="postgresql://postgres@localhost/nestedworld_tests" python manage.py resetdb
+
+script: DATABASE_URL="postgresql://postgres@localhost/nestedworld_tests" python setup.py nosetests
+
+after_success:
+    - coveralls

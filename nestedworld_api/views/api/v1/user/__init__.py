@@ -38,7 +38,7 @@ class User(user.Resource):
         return user
 
     @login_required
-    @user.accept(Schema(partial=True))
+    @user.accept(Schema())
     @user.marshal_with(Schema())
     def put(self, data):
         from nestedworld_api.db import db
