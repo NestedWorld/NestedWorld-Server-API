@@ -1,5 +1,6 @@
 from flask import jsonify, request
 from marshmallow import post_dump
+from marshmallow.validate import OneOf
 from nestedworld_api.app import ma
 from .. import api
 
@@ -16,6 +17,8 @@ class Monsters(monsters.Resource):
         hp = ma.Float()
         attack = ma.Float()
         defense = ma.Float()
+        speed = ma.Float()
+        type = ma.String(validate=[OneOf(['water', 'fire', 'earth', 'electric', 'plant'])])
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
