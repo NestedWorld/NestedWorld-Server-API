@@ -9,7 +9,7 @@ user = api.namespace('users')
 
 from . import auth
 from . import monsters
-
+from . import friends
 
 @user.route('/')
 class User(user.Resource):
