@@ -39,12 +39,19 @@ class User(user.Resource):
     @user.marshal_with(Schema())
     def put(self, data):
         from nestedworld_api.db import db
+        from nestedworld_api.db import User
 
         user = current_session.user
+
+        conflict = User.query\
+                       .filter(User.id != user.id)\
+                       .filter((User.email == user.email) | (User.pseudo == user.pseudo))\
+                       .first()
+        if conflict is not None:
+            user.abort(400, 'An user with same email/pseudo already exists')
+
         for (name, value) in data.items():
             setattr(user, name, value)
-
-        # TODO: Check email and pseudo duplicates
 
         db.session.commit()
 
