@@ -2,6 +2,7 @@ from marshmallow import post_dump
 from nestedworld_api.app import ma
 from . import api
 
+
 class PointField(ma.Field):
 
     def _serialize(self, value, attr, obj):
@@ -12,8 +13,10 @@ class PointField(ma.Field):
 
 places = api.namespace('places')
 
+
 @places.route('/')
 class Places(places.Resource):
+    tags = ['geo']
 
     class Schema(ma.Schema):
         url = ma.UrlFor('.place', place_id='<id>')
@@ -32,8 +35,10 @@ class Places(places.Resource):
         places = DbPlace.query.all()
         return places
 
+
 @places.route('/<place_id>')
 class Place(places.Resource):
+    tags = ['geo']
 
     class Schema(Places.Schema):
 
@@ -47,8 +52,10 @@ class Place(places.Resource):
         place = DbPlace.query.get_or_404(place_id)
         return place
 
+
 @places.route('/regions')
 class Regions(places.Resource):
+    tags = ['geo']
 
     class Schema(ma.Schema):
         url = ma.UrlFor('.region', region_id='<id>')
@@ -66,8 +73,10 @@ class Regions(places.Resource):
         regions = DbRegion.query.all()
         return regions
 
+
 @places.route('/regions/<region_id>')
 class Region(places.Resource):
+    tags = ['geo']
 
     class Schema(Regions.Schema):
 

@@ -3,6 +3,9 @@
 *.pyc
 __pycache__
 
+# Swagger UI (dev)
+/swagger-ui
+
 # Misc stuff
 .*
 !.coveragerc

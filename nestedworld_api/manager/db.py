@@ -1,55 +1,33 @@
-from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
-from .app import app
-from .db import db
+from flask.ext.script import Manager
+from ..app import app
+from ..db import db
 
 migrate = Migrate(app, db)
 
-manager = Manager(app)
-manager.add_command('db', MigrateCommand)
+
+# Management
+db_manager = Manager(help='Database management commands', description='')
+db_manager.add_command('migrate', MigrateCommand)
 
 
-@manager.command
-def resetdb():
-    '''
-        Reset the database.
-    '''
-    from .db import db, fixtures
-    from .db import Application, User, Session
+@db_manager.command
+def reset():
+    '''Reset the database'''
+    from ..db import fixtures
 
     db.drop_all()
     db.create_all()
     fixtures.reset_db()
     db.session.commit()
 
-@manager.command
-def reset_password(email):
-    from nestedworld_api.app import app
-    from nestedworld_api.db import db
-    from nestedworld_api.db import User, PasswordResetRequest
-    from nestedworld_api.mail import TemplatedMessage
 
-    user = User.query.filter(
-        User.email == email, User.is_active == True).first()
-    if user is None:
-        print('User not found.')
-        return
-
-    request = PasswordResetRequest(user=user)
-    db.session.add(request)
-    db.session.commit()
-
-    message = TemplatedMessage('mail/password_reset.txt', token=request.token)
-    message.add_recipient(user.email)
-    message.send()
-
-    print('Done.')
-
-@manager.command
+@db_manager.command
 def import_monsters():
+    import random
     import requests
     from nestedworld_api.db import db
-    from nestedworld_api.db import Monster
+    from nestedworld_api.db import Monster, User, UserMonster
 
     print('Fetching data...')
     r = requests.get('http://pokeapi.co/api/v1/pokemon/?limit=42')
@@ -63,13 +41,22 @@ def import_monsters():
         monster.hp = obj['hp']
         monster.attack = obj['attack']
         monster.defense = obj['defense']
+        monster.sprite = 'http://pokeapi.co/media/img/%d.png' % (obj['national_id'])
 
-        monsters.append(monster)
+        db.session.add(monster)
+        db.session.commit()
+        monsters.append(monster.id)
 
-    db.session.bulk_save_objects(monsters)
+    for user in User.query:
+        select = random.sample(monsters, 5)
+        for monster_id in select:
+            user_monster = UserMonster(user_id=user.id, monster_id=monster_id)
+            db.session.add(user_monster)
+
     db.session.commit()
 
-@manager.command
+
+@db_manager.command
 def import_places():
     import requests
     from collections import namedtuple
@@ -122,7 +109,7 @@ def import_places():
         point_tags = point['tags']
         point_name = point_tags.get('name:en', point_tags.get('name'))
 
-        print('Importing %s...' % (point_name))
+        # print('Importing %s...' % (point_name))
         point_place = Place(name=point_name, author=admin, point=point_data)
         db.session.add(point_place)
 

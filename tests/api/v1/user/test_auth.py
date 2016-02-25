@@ -1,8 +1,8 @@
 import unittest
-from nestedworld_api import tests
+from ... import TestCase
 
 
-class LoginTestCase(tests.TestCase):
+class LoginTestCase(TestCase):
 
     def test_valid_login(self):
         rv = self.login('kokakiwi@kokakiwi.net', 'kiwi3291')
@@ -18,7 +18,7 @@ class LoginTestCase(tests.TestCase):
         self.assertNotEqual(rv.status_code, 200)
         self.assertEqual(rv.json['message'], 'Bad application token')
 
-class RegisterTestCase(tests.TestCase):
+class RegisterTestCase(TestCase):
 
     def test_valid_register(self):
         from nestedworld_api.app import app, db
@@ -37,7 +37,7 @@ class RegisterTestCase(tests.TestCase):
         self.assertEqual(rv.json['email'], 'test@bob.com')
 
 
-class LogoutTestCase(tests.TestCase):
+class LogoutTestCase(TestCase):
 
     def test_logout(self):
         rv = self.login('kokakiwi@kokakiwi.net', 'kiwi3291')

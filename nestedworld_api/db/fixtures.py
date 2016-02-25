@@ -1,6 +1,6 @@
 from nestedworld_api.db import db
 from nestedworld_api.db.token import Application
-from nestedworld_api.db.user import User
+from nestedworld_api.db.user import User, UserFriend
 from datetime import date
 import arrow
 
@@ -27,6 +27,11 @@ def reset_db():
     alice.password = 'bob'
 
     add(admin, florian, alice)
+
+    # Friends
+    add(UserFriend(user=alice, friend=florian))
+    add(UserFriend(user=admin, friend=alice))
+    add(UserFriend(user=admin, friend=florian))
 
     # Reset apps
     app = Application(name='Test app', token='test')
