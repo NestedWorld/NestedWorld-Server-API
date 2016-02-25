@@ -3,7 +3,6 @@ from marshmallow import post_dump
 from nestedworld_api.app import ma
 from nestedworld_api.login import login_required, current_session
 from . import user
-from . import User
 
 user_friend = user.namespace('friends')
 
