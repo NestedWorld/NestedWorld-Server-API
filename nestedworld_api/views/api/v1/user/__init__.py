@@ -10,6 +10,7 @@ user = api.namespace('users')
 from . import auth
 from . import monsters
 from . import friends
+from . import inventory
 
 @user.route('/')
 class User(user.Resource):

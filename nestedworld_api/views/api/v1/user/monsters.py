@@ -7,14 +7,12 @@ from nestedworld_api.db import Monster
 
 user_monsters = user.namespace('monsters')
 
-
 @user_monsters.route('/')
 class UserMonster(user_monsters.Resource):
 
     class Schema(ma.Schema):
         id = ma.Integer(dump_only=True)
         monster = ma.String()
-        user = ma.String()
         surname = ma.String()
         experience = ma.Integer()
         level = ma.Integer()
