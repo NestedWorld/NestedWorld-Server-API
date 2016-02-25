@@ -31,7 +31,7 @@ class Login(auth.Resource):
         from nestedworld_api.db import User, Application, Session
 
         user = User.query.filter(
-            User.email == data['email'], User.is_active is True).first()
+            User.email == data['email'], User.is_active).first()
         if user is None or user.password != data['password']:
             auth.abort(400, message='Cannot connect: Wrong email and/or password.')
 
@@ -94,7 +94,7 @@ class ResetPassword(auth.Resource):
         from nestedworld_api.mail import TemplatedMessage
 
         user = User.query.filter(
-            User.email == data['email'], User.is_active is True).first()
+            User.email == data['email'], User.is_active).first()
         if user is None:
             auth.abort(400, message='User not found')
 

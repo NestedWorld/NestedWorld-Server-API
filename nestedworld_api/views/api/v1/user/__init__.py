@@ -6,10 +6,6 @@ from .. import api
 
 user = api.namespace('users')
 
-from . import auth
-from . import monsters
-from . import friends
-
 
 @user.route('/')
 class User(user.Resource):
@@ -54,3 +50,7 @@ class User(user.Resource):
         db.session.commit()
 
         return user
+
+from . import auth
+from . import monsters
+from . import friends
