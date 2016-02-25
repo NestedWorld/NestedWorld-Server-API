@@ -17,4 +17,5 @@ class Monster(db.Model):
     attack = db.Column(db.Float, doc='Monster initial attack value')
     defense = db.Column(db.Float, doc='Monster initial defense value')
     type = db.Column(db.Enum('water', 'fire', 'earth', 'electric', 'plant',
-                             name='monster_types'), doc='Monster type')
+                             name='monster_type'), doc='Monster type')
+    sprite = db.Column(db.String, doc='Monster sprite')

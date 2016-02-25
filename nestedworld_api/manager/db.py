@@ -41,16 +41,16 @@ def import_monsters():
         monster.hp = obj['hp']
         monster.attack = obj['attack']
         monster.defense = obj['defense']
+        monster.sprite = 'http://pokeapi.co/media/img/%d.png' % (obj['national_id'])
 
-        monsters.append(monster)
-
-    db.session.bulk_save_objects(monsters)
-    db.session.commit()
+        db.session.add(monster)
+        db.session.commit()
+        monsters.append(monster.id)
 
     for user in User.query:
         select = random.sample(monsters, 5)
-        for monster in select:
-            user_monster = UserMonster(user=user, monster=monster)
+        for monster_id in select:
+            user_monster = UserMonster(user_id=user.id, monster_id=monster_id)
             db.session.add(user_monster)
 
     db.session.commit()
