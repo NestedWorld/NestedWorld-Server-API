@@ -14,6 +14,7 @@ flask-script
 flask-sqlalchemy
 flask-wtf
 geoalchemy2
+intervals
 itsdangerous
 marshmallow
 marshmallow-sqlalchemy

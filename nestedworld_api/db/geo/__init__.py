@@ -4,8 +4,8 @@ from geoalchemy2 import Geometry, Geography
 from sqlalchemy import func
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy.sql.expression import cast
-from . import db
-from .utils import IDColumn
+from .. import db
+from ..utils import IDColumn
 
 
 class Place(db.Model):
@@ -39,3 +39,5 @@ class Region(db.Model):
     def places(self):
         return Place.query\
                     .filter(func.ST_intersects(self.zone, Place.point))
+
+from .monsters import RegionMonster
