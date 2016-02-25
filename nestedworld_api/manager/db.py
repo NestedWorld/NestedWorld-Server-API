@@ -24,9 +24,10 @@ def reset():
 
 @db_manager.command
 def import_monsters():
+    import random
     import requests
     from nestedworld_api.db import db
-    from nestedworld_api.db import Monster
+    from nestedworld_api.db import Monster, User, UserMonster
 
     print('Fetching data...')
     r = requests.get('http://pokeapi.co/api/v1/pokemon/?limit=42')
@@ -44,6 +45,14 @@ def import_monsters():
         monsters.append(monster)
 
     db.session.bulk_save_objects(monsters)
+    db.session.commit()
+
+    for user in User.query:
+        select = random.sample(monsters, 5)
+        for monster in select:
+            user_monster = UserMonster(user=user, monster=monster)
+            db.session.add(user_monster)
+
     db.session.commit()
 
 

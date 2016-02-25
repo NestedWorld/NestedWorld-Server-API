@@ -41,7 +41,6 @@ class User(user.Resource):
         from nestedworld_api.db import db
 
         user = current_session.user
-
         for (name, value) in data.items():
             setattr(user, name, value)
 

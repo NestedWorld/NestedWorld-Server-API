@@ -63,8 +63,7 @@ class Register(auth.Resource):
         from nestedworld_api.db import db
         from nestedworld_api.db import Application, User
 
-        # TODO: Check pseudo duplicates
-        user = User.query.filter(User.email == data['email']).first()
+        user = User.query.filter(User.email == data['email'] or User.pseudo == data['pseudo']).first()
         if user is not None:
             auth.abort(409, message='User already exists')
 

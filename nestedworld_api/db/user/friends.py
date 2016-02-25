@@ -12,5 +12,5 @@ class UserFriend(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     friend_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    friend = db.relationship('User', foreign_keys='UserFriend.user_id')
+    friend = db.relationship('User', foreign_keys='UserFriend.friend_id')
     user = db.relationship('User', foreign_keys='UserFriend.user_id')
