@@ -24,6 +24,7 @@ class Place(db.Model):
 
     author = db.relationship('User')
 
+
 class Region(db.Model):
 
     __tablename__ = 'regions'
