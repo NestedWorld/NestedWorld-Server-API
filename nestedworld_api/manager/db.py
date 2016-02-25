@@ -100,7 +100,7 @@ def import_places():
         point_tags = point['tags']
         point_name = point_tags.get('name:en', point_tags.get('name'))
 
-        print('Importing %s...' % (point_name))
+        # print('Importing %s...' % (point_name))
         point_place = Place(name=point_name, author=admin, point=point_data)
         db.session.add(point_place)
 
