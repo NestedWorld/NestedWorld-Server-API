@@ -1,8 +1,8 @@
 import unittest
-from nestedworld_api import tests
+from ... import TestCase
 
 
-class UsersTestCase(tests.TestCase):
+class UsersTestCase(TestCase):
 
     def test_infos(self):
         rv = self.login('kokakiwi@kokakiwi.net', 'kiwi3291')

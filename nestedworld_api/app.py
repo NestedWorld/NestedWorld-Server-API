@@ -24,8 +24,8 @@ from flask.ext.mako import MakoTemplates
 mako = MakoTemplates(app)
 
 # Config debug toolbar
-from flask.ext.debugtoolbar import DebugToolbarExtension
-toolbar = DebugToolbarExtension(app)
+# from flask.ext.debugtoolbar import DebugToolbarExtension
+# toolbar = DebugToolbarExtension(app)
 
 # Config logging
 if not app.debug:

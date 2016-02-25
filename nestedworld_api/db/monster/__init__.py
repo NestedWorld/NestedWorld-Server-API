@@ -4,6 +4,7 @@ from nestedworld_api.db import db
 
 from .attacks import MonsterAttack
 
+
 class Monster(db.Model):
 
     __tablename__ = 'monsters'
@@ -17,4 +18,5 @@ class Monster(db.Model):
     defense = db.Column(db.Float, doc='Monster initial defense value')
     speed = db.Column(db.Float, doc='Monster initial speed value')
     type = db.Column(db.Enum('water', 'fire', 'earth', 'electric', 'plant',
-                             name='monster_types'), doc='Monster type')
+                             name='monster_type'), doc='Monster type')
+    sprite = db.Column(db.String, doc='Monster sprite')

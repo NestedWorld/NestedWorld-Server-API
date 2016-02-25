@@ -11,6 +11,7 @@ monster_attacks = monsters.namespace('attacks')
 
 @monsters.route('/<monster_id>/attacks')
 class MonsterAttack(monster_attacks.Resource):
+    tags = ['monsters']
 
     class Schema(ma.Schema):
         id = ma.Integer(dump_only=True)

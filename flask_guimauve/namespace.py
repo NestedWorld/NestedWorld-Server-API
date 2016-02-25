@@ -1,6 +1,7 @@
 from flask.ext import restful
 from .shortcuts import Shortcuts
 
+
 class Namespace(Shortcuts):
 
     def __init__(self, api, parent, name):
