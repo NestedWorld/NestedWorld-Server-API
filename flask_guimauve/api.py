@@ -2,6 +2,7 @@ from flask.ext import restful
 from . import swagger
 from .shortcuts import Shortcuts
 
+
 class Api(restful.Api, Shortcuts):
 
     def __init__(self, spec, app=None, **kwargs):

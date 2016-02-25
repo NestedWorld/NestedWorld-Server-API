@@ -4,6 +4,7 @@ from nestedworld_api.db import db
 
 from .attacks import MonsterAttack
 
+
 class Monster(db.Model):
 
     __tablename__ = 'monsters'

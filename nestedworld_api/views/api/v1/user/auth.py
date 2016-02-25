@@ -1,3 +1,4 @@
+from flask import jsonify
 from marshmallow import post_dump
 from nestedworld_api.app import ma
 from nestedworld_api.login import get_session, login_required
@@ -12,11 +13,7 @@ auth = user.namespace('auth')
 
 @auth.route('/login/simple')
 class Login(auth.Resource):
-
-    '''
-        Simple login endpoint.
-        Only use user/password pair and the application token.
-    '''
+    tags = ['users.auth']
 
     class UserSchema(ma.Schema):
         email = ma.Email(required=True)
@@ -30,14 +27,11 @@ class Login(auth.Resource):
     @auth.accept(UserSchema())
     @auth.marshal_with(SessionSchema())
     def post(self, data):
-        '''
-            Simple login with user/password pair and the application token.
-        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import User, Application, Session
 
         user = User.query.filter(
-            User.email == data['email'], User.is_active == True).first()
+            User.email == data['email'], User.is_active is True).first()
         if user is None or user.password != data['password']:
             auth.abort(400, message='Cannot connect: Wrong email and/or password.')
 
@@ -52,10 +46,11 @@ class Login(auth.Resource):
 
         return session
 
-# Register
 
+# Register
 @auth.route('/register')
 class Register(auth.Resource):
+    tags = ['users.auth']
 
     class Schema(ma.Schema):
         email = ma.Email(required=True)
@@ -65,13 +60,10 @@ class Register(auth.Resource):
     @auth.accept(Schema())
     @auth.marshal_with(Schema())
     def post(self, data):
-        '''
-            Register a user.
-        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Application, User
 
-
+        # TODO: Check pseudo duplicates
         user = User.query.filter(User.email == data['email']).first()
         if user is not None:
             auth.abort(409, message='User already exists')
@@ -86,26 +78,23 @@ class Register(auth.Resource):
 
         return user
 
-# Lost password
 
+# Lost password
 @auth.route('/resetpassword')
 class ResetPassword(auth.Resource):
+    tags = ['users.auth']
 
     class Schema(ma.Schema):
         email = ma.Email(required=True)
 
     @auth.accept(Schema())
     def post(self, data):
-        '''
-            Request a password reset.
-        '''
-
         from nestedworld_api.db import db
         from nestedworld_api.db import User, PasswordResetRequest
         from nestedworld_api.mail import TemplatedMessage
 
         user = User.query.filter(
-            User.email == data['email'], User.is_active == True).first()
+            User.email == data['email'], User.is_active is True).first()
         if user is None:
             auth.abort(400, message='User not found')
 
@@ -117,12 +106,13 @@ class ResetPassword(auth.Resource):
         message.add_recipient(user.email)
         message.send()
 
-        return 'OK'
+        return jsonify(message='Password reset request sent')
+
 
 # Logout
-
 @auth.route('/logout')
 class Logout(auth.Resource):
+    tags = ['users.auth']
 
     @login_required
     def post(self):
@@ -137,4 +127,4 @@ class Logout(auth.Resource):
 
         db.session.commit()
 
-        return 'OK'
+        return jsonify(message='Successfully logged out')

@@ -1,51 +1,28 @@
-from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
-from .app import app
-from .db import db
+from flask.ext.script import Manager
+from ..app import app
+from ..db import db
 
 migrate = Migrate(app, db)
 
-manager = Manager(app)
-manager.add_command('db', MigrateCommand)
+
+# Management
+db_manager = Manager(help='Database management commands', description='')
+db_manager.add_command('migrate', MigrateCommand)
 
 
-@manager.command
-def resetdb():
-    '''
-        Reset the database.
-    '''
-    from .db import db, fixtures
-    from .db import Application, User, Session
+@db_manager.command
+def reset():
+    '''Reset the database'''
+    from ..db import fixtures
 
     db.drop_all()
     db.create_all()
     fixtures.reset_db()
     db.session.commit()
 
-@manager.command
-def reset_password(email):
-    from nestedworld_api.app import app
-    from nestedworld_api.db import db
-    from nestedworld_api.db import User, PasswordResetRequest
-    from nestedworld_api.mail import TemplatedMessage
 
-    user = User.query.filter(
-        User.email == email, User.is_active == True).first()
-    if user is None:
-        print('User not found.')
-        return
-
-    request = PasswordResetRequest(user=user)
-    db.session.add(request)
-    db.session.commit()
-
-    message = TemplatedMessage('mail/password_reset.txt', token=request.token)
-    message.add_recipient(user.email)
-    message.send()
-
-    print('Done.')
-
-@manager.command
+@db_manager.command
 def import_monsters():
     import requests
     from nestedworld_api.db import db
@@ -69,7 +46,8 @@ def import_monsters():
     db.session.bulk_save_objects(monsters)
     db.session.commit()
 
-@manager.command
+
+@db_manager.command
 def import_places():
     import requests
     from collections import namedtuple

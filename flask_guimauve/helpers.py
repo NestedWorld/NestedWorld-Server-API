@@ -1,6 +1,7 @@
 from flask import request
 from functools import wraps
 
+
 def accept(schema, force=False):
     def wrapper(f):
         f.__accept__ = {
@@ -16,10 +17,10 @@ def accept(schema, force=False):
             result = schema.load(data)
 
             if result.errors:
-                restful.abort(412, message=result.errors)
+                restful.abort(412, message='Invalid input data', errors=result.errors)
 
             if result.data is None:
-                restful.abort(400, message='Wrong input data')
+                restful.abort(400, message='Invalid input data')
 
             return f(*args, data=result.data, **kwargs)
         return wrapped

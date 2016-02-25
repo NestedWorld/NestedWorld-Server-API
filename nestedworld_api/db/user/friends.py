@@ -5,7 +5,7 @@ from nestedworld_api.db import db
 
 class UserFriend(db.Model):
 
-    __tablename__ = 'userFriends'
+    __tablename__ = 'user_friends'
 
     id = db.Column(db.Integer, primary_key=True, doc='UserFriend ID')
 

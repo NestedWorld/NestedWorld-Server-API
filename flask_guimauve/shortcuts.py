@@ -1,10 +1,12 @@
 from flask.ext import restful
 from . import helpers
 
+
 def _make_shortcut(f):
     def wrapper(self, *args, **kwarg):
         return f(*args, **kwarg)
     return wrapper
+
 
 class Shortcuts(object):
 

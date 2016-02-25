@@ -6,6 +6,7 @@ from . import api
 
 attack = api.namespace('attacks')
 
+
 @attack.route('/')
 class Attack(attack.Resource):
 
@@ -13,7 +14,6 @@ class Attack(attack.Resource):
         id = ma.Integer(dump_only=True)
         name = ma.String()
         type = ma.String(validate=[OneOf(['attack', 'attacksp', 'defense', 'defensesp'])])
-
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):

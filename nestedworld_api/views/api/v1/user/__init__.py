@@ -6,13 +6,14 @@ from .. import api
 
 user = api.namespace('users')
 
-
 from . import auth
 from . import monsters
 from . import friends
 
+
 @user.route('/')
 class User(user.Resource):
+    tags = ['users']
 
     class Schema(ma.Schema):
         email = ma.Email()
@@ -47,6 +48,8 @@ class User(user.Resource):
 
         for (name, value) in data.items():
             setattr(user, name, value)
+
+        # TODO: Check email and pseudo duplicates
 
         db.session.commit()
 

@@ -10,6 +10,7 @@ user_monsters = user.namespace('monsters')
 
 @user_monsters.route('/')
 class UserMonster(user_monsters.Resource):
+    tags = ['users']
 
     class Schema(ma.Schema):
         id = ma.Integer(dump_only=True)

@@ -9,6 +9,7 @@ user_friend = user.namespace('friends')
 
 @user_friend.route('/')
 class UserFriend(user_friend.Resource):
+    tags = ['users']
 
     class Schema(ma.Schema):
         id = ma.Integer(dump_only=True)

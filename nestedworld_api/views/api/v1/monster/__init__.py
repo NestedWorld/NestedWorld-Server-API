@@ -7,8 +7,10 @@ monsters = api.namespace('monsters')
 
 from . import attacks
 
+
 @monsters.route('/')
 class Monsters(monsters.Resource):
+    tags = ['monsters']
 
     class Schema(ma.Schema):
         id = ma.Integer(dump_only=True)
@@ -46,8 +48,10 @@ class Monsters(monsters.Resource):
 
         return monster
 
+
 @monsters.route('/<monster_id>')
 class Monster(monsters.Resource):
+    tags = ['monsters']
 
     class Schema(Monsters.Schema):
 

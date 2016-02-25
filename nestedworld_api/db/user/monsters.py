@@ -5,7 +5,7 @@ from nestedworld_api.db import db
 
 class UserMonster(db.Model):
 
-    __tablename__ = 'userMonsters'
+    __tablename__ = 'user_moinsters'
 
     id = db.Column(db.Integer, primary_key=True, doc='UserMonster ID')
 
