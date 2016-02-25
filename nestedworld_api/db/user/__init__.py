@@ -6,6 +6,7 @@ from nestedworld_api.settings import PASSWORD_SCHEMES
 
 from .monsters import UserMonster
 from .friends import UserFriend
+from .inventory import Inventory
 
 
 PasswordType = sau.PasswordType(schemes=PASSWORD_SCHEMES)

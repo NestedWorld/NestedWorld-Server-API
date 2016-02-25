@@ -2,6 +2,7 @@ from flask import jsonify, request
 from marshmallow import post_dump
 from marshmallow.validate import OneOf
 from nestedworld_api.app import ma
+from nestedworld_api.login import login_required
 from . import api
 
 attack = api.namespace('attacks')
@@ -27,6 +28,7 @@ class Attack(attack.Resource):
         attacks = DbAttack.query.all()
         return attacks
 
+    @login_required
     @attack.accept(Schema())
     @attack.marshal_with(Schema())
     def post(self, data):
