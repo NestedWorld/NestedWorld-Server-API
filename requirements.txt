@@ -14,12 +14,9 @@ flask-script
 flask-sqlalchemy
 flask-wtf
 geoalchemy2
-intervals
 itsdangerous
 marshmallow
 marshmallow-sqlalchemy
-passlib
 psycopg2
-python-dateutil
 shapely
-sqlalchemy-utils==0.31.6
+sqlalchemy-utils[arrow, intervals, password, timezone] ==0.31.6
