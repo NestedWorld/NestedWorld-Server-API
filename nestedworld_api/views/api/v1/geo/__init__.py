@@ -1,6 +1,6 @@
 from marshmallow import post_dump
 from nestedworld_api.app import ma
-from . import api
+from .. import api
 
 
 class PointField(ma.Field):
@@ -80,8 +80,6 @@ class Region(places.Resource):
 
     class Schema(Regions.Schema):
 
-        places = ma.List(ma.Nested(Places.Schema))
-
         class Meta:
             exclude = ('url',)
 
@@ -91,3 +89,18 @@ class Region(places.Resource):
 
         region = DbRegion.query.get_or_404(region_id)
         return region
+
+
+@places.route('/regions/<region_id>/places')
+class RegionPlaces(places.Resource):
+    tags = ['geo']
+
+    @places.marshal_with(Places.Schema(many=True))
+    def get(self, region_id):
+        from nestedworld_api.db import Region
+
+        region = Region.query.get_or_404(region_id)
+        return region.places
+
+
+from . import monsters
