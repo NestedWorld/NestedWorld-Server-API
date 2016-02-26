@@ -7,4 +7,4 @@ from .geo import Place, Region
 from .token import Application, Session
 from .monster import Monster, MonsterAttack
 from .user import User, PasswordResetRequest, UserMonster, UserFriend, Inventory
-from .object import Object
+from .object import Object, Plant
