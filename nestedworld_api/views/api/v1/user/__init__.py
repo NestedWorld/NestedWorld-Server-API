@@ -60,7 +60,3 @@ class User(user.Resource):
         db.session.commit()
 
         return user
-
-from . import auth
-from . import monsters
-from . import friends
