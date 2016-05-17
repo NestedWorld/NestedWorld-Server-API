@@ -49,7 +49,7 @@ class User(user.Resource):
 
         conflict = User.query\
                        .filter(User.id != user.id)\
-                       .filter((User.email == user.email) | (User.pseudo == user.pseudo))\
+                       .filter((User.email == data['email']) | (User.pseudo == data['pseudo']))\
                        .first()
         if conflict is not None:
             user.abort(400, 'An user with same email/pseudo already exists')
