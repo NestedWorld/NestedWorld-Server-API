@@ -52,6 +52,27 @@ class Place(places.Resource):
         place = DbPlace.query.get_or_404(place_id)
         return place
 
+    @places.accept(Schema())
+    @places.marshal_with(Schema())
+    def put(self, data, place_id):
+        from nestedworld_api.db import db
+        from nestedworld_api.db import Place as DbPlace
+
+        place = DbPlace.query.get_or_404(place_id)
+        conflict = DbPlace.query\
+                       .filter(DbPlace.id != place_id)\
+                       .filter(DbPlace.name == data['name'])\
+                       .first()
+
+        if conflict is not None:
+            places.abort(400, 'A place with same name already exists')
+
+        for (name, value) in data.items():
+            setattr(place, name, value)
+
+        db.session.commit()
+
+        return place
 
 @places.route('/regions')
 class Regions(places.Resource):
@@ -90,6 +111,27 @@ class Region(places.Resource):
         region = DbRegion.query.get_or_404(region_id)
         return region
 
+    @places.accept(Schema())
+    def put(self, data, region_id):
+        from nestedworld_api.db import db
+        from nestedworld_api.db import Region as DbRegion
+
+        region = DbRegion.query.get_or_404(region_id)
+
+        conflict = DbRegion.query\
+                       .filter(DbRegion.id != region_id)\
+                       .filter(DbRegion.name == data['name'])\
+                       .first()
+
+        if conflict is not None:
+            region.abort(400, 'A region with same name already exists')
+
+        for (name, value) in data.items():
+            setattr(region, name, value)
+
+        db.session.commit()
+
+        return region
 
 @places.route('/regions/<region_id>/places')
 class RegionPlaces(places.Resource):
