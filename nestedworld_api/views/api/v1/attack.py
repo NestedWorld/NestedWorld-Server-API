@@ -5,11 +5,12 @@ from nestedworld_api.app import ma
 from nestedworld_api.login import login_required
 from . import api
 
-attack = api.namespace('attacks')
+attacks = api.namespace('attacks')
 
 
-@attack.route('/')
-class Attack(attack.Resource):
+@attacks.route('/')
+class Attacks(attacks.Resource):
+    tags = ['attacks']
 
     class Schema(ma.Schema):
         id = ma.Integer(dump_only=True)
@@ -21,7 +22,7 @@ class Attack(attack.Resource):
             namespace = 'attacks' if many else 'attack'
             return {namespace: data}
 
-    @attack.marshal_with(Schema(many=True))
+    @attacks.marshal_with(Schema(many=True))
     def get(self):
         from nestedworld_api.db import Attack as DbAttack
 
@@ -29,8 +30,8 @@ class Attack(attack.Resource):
         return attacks
 
     @login_required
-    @attack.accept(Schema())
-    @attack.marshal_with(Schema())
+    @attacks.accept(Schema())
+    @attacks.marshal_with(Schema())
     def post(self, data):
         from nestedworld_api.db import db
         from nestedworld_api.db import Attack as DbAttack
@@ -42,6 +43,46 @@ class Attack(attack.Resource):
         attack = DbAttack(**data)
 
         db.session.add(attack)
+        db.session.commit()
+
+        return attack
+
+
+@attacks.route('/<attack_id>')
+class Attack(attacks.Resource):
+    tags = ['attacks']
+
+    class Schema(Attacks.Schema):
+
+        class Meta:
+            exclude = ('url',)
+
+    @attacks.marshal_with(Schema())
+    def get(self, attack_id):
+        from nestedworld_api.db import Attack as DbAttack
+
+        attack = DbAttack.query.get_or_404(attack_id)
+        return attack
+
+    @attacks.accept(Schema())
+    @attacks.marshal_with(Schema())
+    def put(self, data, attack_id):
+        from nestedworld_api.db import db
+        from nestedworld_api.db import Attack as DbAttack
+
+        attack = DbAttack.query.get_or_404(attack_id)
+
+        conflict = DbAttack.query\
+                       .filter(DbAttack.id != attack_id)\
+                       .filter(DbAttack.name == data['name'])\
+                       .first()
+
+        if conflict is not None:
+            attacks.abort(400, 'An attack with same name already exists')
+
+        for (name, value) in data.items():
+            setattr(attack, name, value)
+
         db.session.commit()
 
         return attack
