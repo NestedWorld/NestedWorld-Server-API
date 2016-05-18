@@ -112,6 +112,7 @@ class Region(places.Resource):
         return region
 
     @places.accept(Schema())
+    @places.marshal_with(Schema())
     def put(self, data, region_id):
         from nestedworld_api.db import db
         from nestedworld_api.db import Region as DbRegion
@@ -124,7 +125,7 @@ class Region(places.Resource):
                        .first()
 
         if conflict is not None:
-            region.abort(400, 'A region with same name already exists')
+            places.abort(400, 'A region with same name already exists')
 
         for (name, value) in data.items():
             setattr(region, name, value)
