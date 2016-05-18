@@ -76,7 +76,7 @@ def import_places():
     from collections import namedtuple
     from geoalchemy2.shape import from_shape
     from shapely.geometry import Point
-    from . import Monster, Place, Region, RegionMonster
+    from . import Monster, Place, Region, RegionMonster, PlaceMonster
 
     admin = db.session.query(User)\
                       .filter(User.email == 'kokakiwi@kokakiwi.net')\
@@ -131,5 +131,11 @@ def import_places():
             region_monster.ratio = random.random()
             region_monster.level = [10, 60]
             db.session.add(region_monster)
+
+    for place in Place.query:
+        select = random.sample(monsters, 4)
+        for monster in select:
+            place_monster = PlaceMonster(place=place, monster=monster)
+            db.session.add(place_monster)
 
     db.session.commit()

@@ -41,3 +41,4 @@ class Region(db.Model):
                     .filter(func.ST_intersects(self.zone, Place.point))
 
 from .monsters import RegionMonster
+from .monsters import PlaceMonster

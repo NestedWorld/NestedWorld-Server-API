@@ -67,3 +67,26 @@ class Monster(monsters.Resource):
 
         monster = DbMonster.query.get_or_404(monster_id)
         return monster
+
+    @monsters.accept(Schema())
+    @monsters.marshal_with(Schema())
+    def put(self, data, monster_id):
+        from nestedworld_api.db import db
+        from nestedworld_api.db import Monster as DbMonster
+
+        monster = DbMonster.query.get_or_404(monster_id)
+
+        conflict = DbMonster.query\
+                       .filter(DbMonster.id != monster_id)\
+                       .filter(DbMonster.name == data['name'])\
+                       .first()
+
+        if conflict is not None:
+            monsters.abort(400, 'An monster with same name already exists')
+
+        for (name, value) in data.items():
+            setattr(monster, name, value)
+
+        db.session.commit()
+
+        return monster
