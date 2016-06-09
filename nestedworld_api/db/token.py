@@ -5,7 +5,7 @@ from . import db
 from ..settings import SECRET_KEY
 
 
-serializer = Serializer(SECRET_KEY)
+serializer = Serializer(SECRET_KEY, algorithm_name='HS256')
 
 
 def random_token():
@@ -34,8 +34,8 @@ class Session(db.Model):
     application_id = db.Column(db.Integer, db.ForeignKey('applications.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    start = db.Column(sau.ArrowType, nullable=False, default=arrow.utcnow)
-    end = db.Column(sau.ArrowType, nullable=True)
+    start = db.Column(sau.ArrowType(timezone=True), nullable=False, default=arrow.utcnow)
+    end = db.Column(sau.ArrowType(timezone=True), nullable=True)
 
     data = db.Column(sau.JSONType, nullable=True)
 
