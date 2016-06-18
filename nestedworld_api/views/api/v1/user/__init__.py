@@ -58,5 +58,40 @@ class User(user.Resource):
             setattr(user, name, value)
 
         db.session.commit()
+        return user
+
+
+@user.route('/<user_id>')
+class UserId(user.Resource):
+    tags=['users']
+
+    class Schema(User.Schema):
+        pass
+
+    @user.marshal_with(Schema())
+    def get(self, user_id):
+        from nestedworld_api.db import User as DbUser
+
+        user = DbUser.query.get_or_404(user_id)
+        return user
+
+    @user.marshal_with(Schema())
+    def put(self, data, user_id):
+        from nestedworld_api.db import db
+        from nestedworld_api.db import User as DbUser
+
+        user = DbUser.query.get_or_404(user_id)
+        conflict = DbUser.query\
+                .filter(DbPlace.id != place_id)\
+                .filter(DbPlace.pseudo == data['pseudo'])\
+                .first()
+
+        if conflict is not None:
+            places.abort(400, 'A user have already the same pseudonyme')
+
+        for (name, value) in data.items():
+            setattr(user, name, value)
+
+        db.session.commit()
 
         return user
