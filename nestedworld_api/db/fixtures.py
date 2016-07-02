@@ -86,12 +86,12 @@ def import_monsters():
     for user in User.query:
         select = random.sample(monsters, 5)
         for monster in select:
-            user_monster = UserMonster(user=user, monster=monster)
+            user_monster = UserMonster(user=user, monster=monster, \
+            level=0, experience=0, surname="IAMTOTORO")
             db.session.add(user_monster)
 
     db.session.commit()
-
-
+    
 def import_places():
     import requests
     from collections import namedtuple
