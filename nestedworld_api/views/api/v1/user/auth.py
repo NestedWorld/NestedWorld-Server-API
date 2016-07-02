@@ -40,6 +40,7 @@ class Login(auth.Resource):
         if app is None:
             auth.abort(400, message='Bad application token')
 
+        setattr(user, "is_connected", True)
         session = Session(application=app, user=user, data=data.get('data'))
         db.session.add(session)
         db.session.commit()
@@ -123,6 +124,7 @@ class Logout(auth.Resource):
             auth.abort(401)
 
         session.end = arrow.utcnow()
+        setattr(user, "is_connected", False)
 
         db.session.commit()
 
