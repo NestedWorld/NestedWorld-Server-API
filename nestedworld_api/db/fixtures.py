@@ -17,6 +17,7 @@ def reset_db():
         email='kokakiwi@kokakiwi.net', pseudo='kokakiwi', city='Seoul',
         birth_date=arrow.get('1992-08-10').datetime.date(), gender='male')
     admin.password = 'kiwi3291'
+
     florian = User(
         email='florian.faisan@epitech.eu', pseudo='kassisdion', city='Seoul',
         birth_date=arrow.get('1993-09-12').datetime.date(), gender='male')
@@ -26,10 +27,10 @@ def reset_db():
         email='alice@bob.com', pseudo='alice', city='CCrypto',
         birth_date=arrow.get('2010-10-10').datetime.date(), gender='female')
     alice.password = 'bob'
+
     thomas = User(
         email='thomas.caron@epitech.eu', pseudo='barbu', city='Lille',
-        birth_date=arrow.get('1994-07-06'), gender='male'
-    )
+        birth_date=arrow.get('1994-07-06'), gender='male')
     thomas.password = 'mexico'
 
     add(admin, florian, alice, thomas)
@@ -91,7 +92,45 @@ def import_monsters():
             db.session.add(user_monster)
 
     db.session.commit()
-    
+
+def import_attacks():
+    import requests
+    from . import Monster, Attack, MonsterAttack
+
+    print('Fetching data...')
+    r = requests.get('http://pokeapi.co/api/v1/ability/?limit=168')
+    objects = r.json()['objects']
+
+    print('Importing data...')
+    attacks = []
+    for obj in objects:
+        attack = Attack()
+        attack.name = obj['name']
+        if obj['id'] % 4 == 0:
+            attack.type = 'attack'
+        elif obj['id'] % 3 == 0:
+            attack.type = 'defense'
+        elif obj['id'] % 2 == 0:
+            attack.type = 'defensesp'
+        else:
+            attack.type = 'attacksp'
+
+        db.session.add(attack)
+        db.session.commit()
+        attacks.append(attack)
+
+    for monster in Monster.query:
+        select = random.sample({attack for attack in attacks if attack.type == 'attack'}, 1)
+        select += random.sample({attack for attack in attacks if attack.type == 'attacksp'}, 1)
+        select += random.sample({attack for attack in attacks if attack.type == 'defense'}, 1)
+        select += random.sample({attack for attack in attacks if attack.type == 'defensesp'}, 1)
+
+        for attack in select:
+            monster_attack = MonsterAttack(attack=attack, monster=monster)
+            db.session.add(monster_attack)
+
+    db.session.commit()
+
 def import_places():
     import requests
     from collections import namedtuple

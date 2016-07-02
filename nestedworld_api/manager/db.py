@@ -29,3 +29,7 @@ def import_monsters():
 @db_manager.command
 def import_places():
     fixtures.import_places()
+
+@db_manager.command
+def import_attacks():
+    fixtures.import_attacks()
