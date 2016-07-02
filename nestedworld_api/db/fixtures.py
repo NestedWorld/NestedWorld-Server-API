@@ -30,7 +30,7 @@ def reset_db():
 
     thomas = User(
         email='thomas.caron@epitech.eu', pseudo='barbu', city='Lille',
-        birth_date=arrow.get('1994-07-06'), gender='male')
+        birth_date=arrow.get('1994-07-06').datetime.date(), gender='male')
     thomas.password = 'mexico'
 
     add(admin, florian, alice, thomas)

@@ -1,6 +1,6 @@
 apispec
 arrow
-flask==0.10.1
+flask>=0.10,<0.11
 flask-cors
 flask-debugtoolbar
 flask-heroku
@@ -19,4 +19,4 @@ marshmallow
 marshmallow-sqlalchemy
 psycopg2
 shapely
-sqlalchemy-utils[arrow, intervals, password, timezone] ==0.31.6
+sqlalchemy-utils[arrow, intervals, password, timezone]>=0.13
