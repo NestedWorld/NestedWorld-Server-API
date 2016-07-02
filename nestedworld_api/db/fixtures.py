@@ -26,13 +26,20 @@ def reset_db():
         email='alice@bob.com', pseudo='alice', city='CCrypto',
         birth_date=arrow.get('2010-10-10'), gender='female')
     alice.password = 'bob'
+    thomas = User(
+        email='thomas.caron@epitech.eu', pseudo='barbu', city='Lille',
+        birth_date=arrow.get('1994-07-06'), gender='male'
+    )
+    thomas.password = 'mexico'
 
-    add(admin, florian, alice)
+    add(admin, florian, alice, thomas)
 
     # Friends
     add(UserFriend(user=alice, friend=florian))
     add(UserFriend(user=admin, friend=alice))
     add(UserFriend(user=admin, friend=florian))
+    add(UserFriend(user=thomas, friend=florian))
+    add(UserFriend(user=thomas, friend=alice))
 
     # Reset apps
     app = Application(name='Test app', token='test')
@@ -56,6 +63,20 @@ def import_monsters():
         monster.hp = obj['hp']
         monster.attack = obj['attack']
         monster.defense = obj['defense']
+        monster.speed = obj['speed']
+        if obj['types'][0]['name'] == 'electric':
+            monster.type = 'electric'
+        elif obj['types'][0]['name'] == 'grass':
+            monster.type = 'plant'
+        elif obj['types'][0]['name'] == 'rock' or obj['types'][0]['name'] == 'ground':
+            monster.type = 'earth'
+        elif obj['types'][0]['name'] == 'fire':
+            monster.type = 'fire'
+        elif obj['types'][0]['name'] == 'water':
+            monster.type = 'water'
+        else :
+            monster.type = 'plant'
+
         monster.sprite = 'http://pokeapi.co/media/img/%d.png' % (obj['national_id'])
 
         db.session.add(monster)
