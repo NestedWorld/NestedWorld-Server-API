@@ -120,7 +120,11 @@ def import_attacks():
         attacks.append(attack)
 
     for monster in Monster.query:
-        select = random.sample(attacks, 4)
+        select = random.sample({attack for attack in attacks if attack.type == 'attack'}, 1)
+        select += random.sample({attack for attack in attacks if attack.type == 'attacksp'}, 1)
+        select += random.sample({attack for attack in attacks if attack.type == 'defense'}, 1)
+        select += random.sample({attack for attack in attacks if attack.type == 'defensesp'}, 1)
+
         for attack in select:
             monster_attack = MonsterAttack(attack=attack, monster=monster)
             db.session.add(monster_attack)
