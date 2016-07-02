@@ -33,6 +33,9 @@ class User(db.Model):
     is_active = db.Column(
         db.Boolean, nullable=False, default=True, doc='Is the user active?')
 
+    is_connected = db.Column(
+        db.Boolean, nullable=False, default=False, doc="Is the user connected?")
+
     pseudo = db.Column(db.String(32), nullable=False, unique=True,
                        doc='User pseudo')
     city = db.Column(db.String(255), nullable=True, doc='User city')

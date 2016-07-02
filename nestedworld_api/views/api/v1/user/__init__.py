@@ -27,6 +27,8 @@ class User(user.Resource):
         registered_at = ma.DateTime(dump_only=True)
         is_active = ma.Boolean(dump_only=True)
         level = ma.Integer()
+        is_connected = ma.Boolean()
+
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
