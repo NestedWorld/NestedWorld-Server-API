@@ -25,6 +25,7 @@ class User(user.Resource):
         background = ma.Url()
         registered_at = ma.DateTime(dump_only=True)
         is_active = ma.Boolean(dump_only=True)
+        level = ma.Integer()
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
