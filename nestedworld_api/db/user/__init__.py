@@ -43,6 +43,7 @@ class User(db.Model):
     avatar = db.Column(db.String(2000), nullable=True, doc='User Avatar')
     background = db.Column(db.String(2000), nullable=True,
                            doc='User Background')
+    level = db.Column(db.Integer, doc="User level", default=0)
 
 
 class PasswordResetRequest(db.Model):
