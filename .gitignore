@@ -15,3 +15,6 @@ __pycache__
 !.update.sh
 *.sublime-project
 *.sublime-workspace
+
+#config files
+config.toml

@@ -83,18 +83,18 @@ class UserId(user.Resource):
         from nestedworld_api.db import db
         from nestedworld_api.db import User as DbUser
 
-        user = DbUser.query.get_or_404(user_id)
+        user_result = DbUser.query.get_or_404(user_id)
         conflict = DbUser.query\
                          .filter(DbPlace.id != place_id)\
                          .filter(DbPlace.pseudo == data['pseudo'])\
                          .first()
 
         if conflict is not None:
-            places.abort(400, 'A user have already the same pseudonyme')
+            user.abort(400, 'A user have already the same pseudonyme')
 
         for (name, value) in data.items():
-            setattr(user, name, value)
+            setattr(user_result, name, value)
 
         db.session.commit()
 
-        return user
+        return user_result

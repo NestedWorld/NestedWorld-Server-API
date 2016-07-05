@@ -62,7 +62,7 @@ class UserMonster(user_monsters.Resource):
         choosedMonster = Monster.query.filter(
             Monster.name == data['monster']).first()
         if choosedMonster is None:
-            auth.abort(400, message='Monster not found')
+            user_monsters.abort(400, message='Monster not found')
 
         monster = UserMonster()
         monster.user = current_session.user

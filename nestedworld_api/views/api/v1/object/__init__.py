@@ -40,7 +40,7 @@ class Object(object.Resource):
 
         Object = DbObject.query.filter(DbObject.name == data['name']).first()
         if Object is not None:
-            api.abort(409, message='Object already exists')
+            object.abort(409, message='Object already exists')
 
         Object = DbObject(**data)
 

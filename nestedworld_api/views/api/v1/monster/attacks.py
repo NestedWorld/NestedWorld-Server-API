@@ -47,7 +47,7 @@ class MonsterAttack(monster_attacks.Resource):
         choosedAttack = Attack.query.filter(
             Attack.name == data['attack']).first()
         if choosedAttack is None:
-            auth.abort(400, message='Attack not found')
+            monster_attacks.abort(400, message='Attack not found')
 
         choosedMonster = Monster.query.get_or_404(monster_id)
 

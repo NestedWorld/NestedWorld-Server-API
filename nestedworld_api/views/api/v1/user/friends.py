@@ -57,10 +57,17 @@ class UserFriend(user_friend.Resource):
         friend = User.query.filter(
             User.pseudo == data['pseudo']).first()
         if friend is None:
-            user.abort(400, message='Friend not found')
+            user_friend.abort(400, message='Friend not found')
 
-        user_friend = UserFriend(user=current_session.user, friend=friend)
-        db.session.add(user_friend)
+        friends = UserFriend.query\
+                            .filter((UserFriend.user_id == current_session.user.id) |
+                                    (UserFriend.friend_id == friend.id))\
+                                    .all()
+        if friends is not None:
+            user_friend.abort(400, message='Friend already added')
+
+        result = UserFriend(user=current_session.user, friend=friend)
+        db.session.add(result)
         db.session.commit()
 
-        return user_friend
+        return result

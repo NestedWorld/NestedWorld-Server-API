@@ -37,7 +37,7 @@ class Plant(plant.Resource):
 
         Plant = DbPlant.query.filter(DbPlant.name == data['name']).first()
         if Plant is not None:
-            api.abort(409, message='Plant already exists')
+            plant.abort(409, message='Plant already exists')
 
         Plant = DbPlant(**data)
 

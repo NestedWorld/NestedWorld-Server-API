@@ -37,13 +37,13 @@ class Inventory(inventory.Resource):
         choosedObject = Object.query.filter(
             Object.name == data['object']).first()
         if choosedObject is None:
-            auth.abort(400, message='Object not found')
+            inventory.abort(400, message='Object not found')
 
-        inventory = Inventory()
-        inventory.user = current_session.user
-        inventory.object = choosedObject
+        result = Inventory()
+        result.user = current_session.user
+        result.object = choosedObject
 
         db.session.add(inventory)
         db.session.commit()
 
-        return inventory
+        return result
