@@ -34,6 +34,7 @@ class UserMonster(user_monsters.Resource):
             attack = ma.Float()
             defense = ma.Float()
 
+        id = ma.Integer(dump_only=True)
         infos = ma.Nested(Infos, attribute='monster')
         surname = ma.String()
         experience = ma.Integer()
