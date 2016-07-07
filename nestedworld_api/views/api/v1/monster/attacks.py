@@ -27,7 +27,7 @@ class MonsterAttack(monster_attacks.Resource):
     def get(self, monster_id):
         from nestedworld_api.db import MonsterAttack
 
-        attacks = MonsterAttack.query.all()
+        attacks = MonsterAttack.query.filter(MonsterAttack.monster == Monster.query.filter(Monster.id == monster_id).first());
         return attacks
 
     class PostSchema(ma.Schema):
