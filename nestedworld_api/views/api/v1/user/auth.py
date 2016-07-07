@@ -62,7 +62,8 @@ class Register(auth.Resource):
     @auth.marshal_with(Schema())
     def post(self, data):
         from nestedworld_api.db import db
-        from nestedworld_api.db import Application, User
+        from nestedworld_api.db import Application, User, UserMonster, Monster
+        import random
 
         user = User.query.filter(User.email == data['email'] or User.pseudo == data['pseudo']).first()
         if user is not None:
@@ -73,7 +74,15 @@ class Register(auth.Resource):
         user.password = data['password']
         user.pseudo = data['pseudo']
 
+        monster = UserMonster()
+        monster.user = user
+        monster.monster = random.sample(list(Monster.query), 1)[0]
+        monster.surname = "Starter"
+        monster.experience = 0
+        monster.level = 1
+
         db.session.add(user)
+        db.session.add(monster)
         db.session.commit()
 
         return user

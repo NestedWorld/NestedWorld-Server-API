@@ -94,12 +94,11 @@ def import_monsters():
     db.session.commit()
 
 def import_attacks():
-    import requests
+    import json
     from . import Monster, Attack, MonsterAttack
 
-    print('Fetching data...')
-    r = requests.get('http://pokeapi.co/api/v1/ability/?limit=168')
-    objects = r.json()['objects']
+    data = json.load(open('attacks.json'))
+    objects = data['objects']
 
     print('Importing data...')
     attacks = []
