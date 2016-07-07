@@ -49,12 +49,12 @@ def reset_db():
 
 
 def import_monsters():
-    import requests
+    import json
     from . import Monster, UserMonster
 
     print('Fetching data...')
-    r = requests.get('http://pokeapi.co/api/v1/pokemon/?limit=42')
-    objects = r.json()['objects']
+    data = json.load(open('monsters.json'))
+    objects = data['objects']
 
     print('Importing data...')
     monsters = []
