@@ -29,6 +29,11 @@ class Monsters(monsters.Resource):
 
     @monsters.marshal_with(Schema(many=True))
     def get(self):
+        '''
+            Retrieve a list of all existing monsters
+
+            This request is used for retrieve the list of all the existing monster.
+        '''
         from nestedworld_api.db import Monster as DbMonster
 
         monsters = DbMonster.query.all()
@@ -37,6 +42,11 @@ class Monsters(monsters.Resource):
     @monsters.accept(Schema())
     @monsters.marshal_with(Schema())
     def post(self, data):
+        '''
+            Create a new monster
+
+            This request is used for create a new monster (Only used by the admin through the admin interface).
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Monster as DbMonster
 
@@ -63,6 +73,11 @@ class Monster(monsters.Resource):
 
     @monsters.marshal_with(Schema())
     def get(self, monster_id):
+        '''
+            Retrieve a monster's informations
+
+            This request is used for retrieve the information of a specific monster.
+        '''
         from nestedworld_api.db import Monster as DbMonster
 
         monster = DbMonster.query.get_or_404(monster_id)
@@ -71,15 +86,21 @@ class Monster(monsters.Resource):
     @monsters.accept(Schema())
     @monsters.marshal_with(Schema())
     def put(self, data, monster_id):
+        '''
+            Update a monster's informations
+
+            This request is used for update the information of a specific monster
+            (Only used by the admin through the admin interface).
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Monster as DbMonster
 
         monster = DbMonster.query.get_or_404(monster_id)
 
         conflict = DbMonster.query\
-                       .filter(DbMonster.id != monster_id)\
-                       .filter(DbMonster.name == data['name'])\
-                       .first()
+                            .filter(DbMonster.id != monster_id)\
+                            .filter(DbMonster.name == data['name'])\
+                            .first()
 
         if conflict is not None:
             monsters.abort(400, 'An monster with same name already exists')

@@ -41,6 +41,9 @@ class Api(restful.Api, Shortcuts):
             api = self
 
             def get(self):
+                '''
+                    The Swagger/OpenAPI JSON spec file
+                '''
                 return self.api.spec.to_dict()
 
         return SwaggerView

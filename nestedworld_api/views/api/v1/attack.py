@@ -24,6 +24,11 @@ class Attacks(attacks.Resource):
 
     @attacks.marshal_with(Schema(many=True))
     def get(self):
+        '''
+            Retrieve all attacks
+
+            This request is used for retrieve all the existing attacks (linked or not to a monster).
+        '''
         from nestedworld_api.db import Attack as DbAttack
 
         attacks = DbAttack.query.all()
@@ -33,6 +38,12 @@ class Attacks(attacks.Resource):
     @attacks.accept(Schema())
     @attacks.marshal_with(Schema())
     def post(self, data):
+        '''
+            Add a new attack
+
+            This request is used for create a new attack that will not be linked to any existing monster
+            (Only used by the admin through the admin interface).
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Attack as DbAttack
 
@@ -59,6 +70,11 @@ class Attack(attacks.Resource):
 
     @attacks.marshal_with(Schema())
     def get(self, attack_id):
+        '''
+            Retrieve an attack's informations
+
+            This request is used for retrieve the information of a specific attack.
+        '''
         from nestedworld_api.db import Attack as DbAttack
 
         attack = DbAttack.query.get_or_404(attack_id)
@@ -67,15 +83,21 @@ class Attack(attacks.Resource):
     @attacks.accept(Schema())
     @attacks.marshal_with(Schema())
     def put(self, data, attack_id):
+        '''
+            Update an attack's informations
+
+            This request is used for update the information of a specific attack
+            (Only used by the admin through the admin interface).
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Attack as DbAttack
 
         attack = DbAttack.query.get_or_404(attack_id)
 
         conflict = DbAttack.query\
-                       .filter(DbAttack.id != attack_id)\
-                       .filter(DbAttack.name == data['name'])\
-                       .first()
+                           .filter(DbAttack.id != attack_id)\
+                           .filter(DbAttack.name == data['name'])\
+                           .first()
 
         if conflict is not None:
             attacks.abort(400, 'An attack with same name already exists')

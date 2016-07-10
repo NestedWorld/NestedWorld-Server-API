@@ -27,6 +27,12 @@ class Login(auth.Resource):
     @auth.accept(UserSchema())
     @auth.marshal_with(SessionSchema())
     def post(self, data):
+        '''
+            Connect an user.
+
+            This request authenticate an user with a simple combination of
+            email/password.
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import User, Application, Session
 
@@ -61,6 +67,11 @@ class Register(auth.Resource):
     @auth.accept(Schema())
     @auth.marshal_with(Schema())
     def post(self, data):
+        '''
+            Register a new user.
+
+            This request is used for create/register a new user.
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Application, User, UserMonster, Monster
         import random
@@ -98,6 +109,12 @@ class ResetPassword(auth.Resource):
 
     @auth.accept(Schema())
     def post(self, data):
+        '''
+            Reset a user's password.
+
+            This request is used for reset a user’s password by sending a mail
+            on the e-mail address registered by the user.
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import User, PasswordResetRequest
         from nestedworld_api.mail import TemplatedMessage
@@ -125,6 +142,11 @@ class Logout(auth.Resource):
 
     @login_required
     def post(self):
+        '''
+            Logout a logged-in user.
+
+            This request is used for logout (disconnect) a user on the API.
+        '''
         import arrow
         from nestedworld_api.db import db
 

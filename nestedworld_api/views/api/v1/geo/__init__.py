@@ -30,6 +30,11 @@ class Places(places.Resource):
 
     @places.marshal_with(Schema(many=True))
     def get(self):
+        '''
+            Retrieve places
+
+            This request is used for retrieve the list of all the existing places.
+        '''
         from nestedworld_api.db import Place as DbPlace
 
         places = DbPlace.query.all()
@@ -47,6 +52,11 @@ class Place(places.Resource):
 
     @places.marshal_with(Schema())
     def get(self, place_id):
+        '''
+            Retrieve a place's informations
+
+            This request is used for retrieve a specific place.
+        '''
         from nestedworld_api.db import Place as DbPlace
 
         place = DbPlace.query.get_or_404(place_id)
@@ -55,14 +65,20 @@ class Place(places.Resource):
     @places.accept(Schema())
     @places.marshal_with(Schema())
     def put(self, data, place_id):
+        '''
+            Update a place's informations.
+
+            This request is used for update a specific place
+            (Only used by the admin through the admin interface).
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Place as DbPlace
 
         place = DbPlace.query.get_or_404(place_id)
         conflict = DbPlace.query\
-                       .filter(DbPlace.id != place_id)\
-                       .filter(DbPlace.name == data['name'])\
-                       .first()
+                          .filter(DbPlace.id != place_id)\
+                          .filter(DbPlace.name == data['name'])\
+                          .first()
 
         if conflict is not None:
             places.abort(400, 'A place with same name already exists')
@@ -73,6 +89,7 @@ class Place(places.Resource):
         db.session.commit()
 
         return place
+
 
 @places.route('/regions')
 class Regions(places.Resource):
@@ -89,6 +106,11 @@ class Regions(places.Resource):
 
     @places.marshal_with(Schema(many=True))
     def get(self):
+        '''
+            Retrieve all regions
+
+            This request is used for retrieve the list of all the existing regions.
+        '''
         from nestedworld_api.db import Region as DbRegion
 
         regions = DbRegion.query.all()
@@ -106,6 +128,11 @@ class Region(places.Resource):
 
     @places.marshal_with(Schema())
     def get(self, region_id):
+        '''
+            Retrieve a region's informations
+
+            This request is used for retrieve the information of a specific region.
+        '''
         from nestedworld_api.db import Region as DbRegion
 
         region = DbRegion.query.get_or_404(region_id)
@@ -114,15 +141,21 @@ class Region(places.Resource):
     @places.accept(Schema())
     @places.marshal_with(Schema())
     def put(self, data, region_id):
+        '''
+            Update a region's informations
+
+            This request is used for update the information of a specific region
+            (Only used by the admin through the admin interface).
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Region as DbRegion
 
         region = DbRegion.query.get_or_404(region_id)
 
         conflict = DbRegion.query\
-                       .filter(DbRegion.id != region_id)\
-                       .filter(DbRegion.name == data['name'])\
-                       .first()
+                           .filter(DbRegion.id != region_id)\
+                           .filter(DbRegion.name == data['name'])\
+                           .first()
 
         if conflict is not None:
             places.abort(400, 'A region with same name already exists')
@@ -134,12 +167,18 @@ class Region(places.Resource):
 
         return region
 
+
 @places.route('/regions/<region_id>/places')
 class RegionPlaces(places.Resource):
     tags = ['geo']
 
     @places.marshal_with(Places.Schema(many=True))
     def get(self, region_id):
+        '''
+            Retrieve all region's places
+
+            This request is used for retrieve the list of places in a specific region.
+        '''
         from nestedworld_api.db import Region
 
         region = Region.query.get_or_404(region_id)

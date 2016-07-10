@@ -39,6 +39,11 @@ class User(user.Resource):
     @login_required
     @user.marshal_with(Schema())
     def get(self):
+        '''
+            Retrieve current user informations
+
+            This request is used by a user for retrieve his own information.
+        '''
         user = current_session.user
 
         return user
@@ -47,6 +52,11 @@ class User(user.Resource):
     @user.accept(Schema())
     @user.marshal_with(Schema())
     def put(self, data):
+        '''
+            Update current user informations
+
+            This request is used by a user for update his own information.
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import User
 
@@ -73,6 +83,12 @@ class UserId(user.Resource):
 
     @user.marshal_with(Schema())
     def get(self, user_id):
+        '''
+            Retrieve user informations
+
+            This request is used by a user for retrieve the information
+            of a specific user (like a friend) or himself.
+        '''
         from nestedworld_api.db import User as DbUser
 
         user = DbUser.query.get_or_404(user_id)
@@ -80,6 +96,12 @@ class UserId(user.Resource):
 
     @user.marshal_with(Schema())
     def put(self, data, user_id):
+        '''
+            Update user informations
+
+            This request is used by a user for update the information
+            of a specific user (like a friend) or himself.
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import User as DbUser
 

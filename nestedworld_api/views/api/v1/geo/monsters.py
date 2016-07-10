@@ -20,6 +20,11 @@ class PlaceMonsters(places.Resource):
 
     @places.marshal_with(Schema(many=True))
     def get(self, place_id):
+        '''
+            Retrieve all place's monsters
+
+            This request is used for retrieve the list of all the existing monsters in a specific place.
+        '''
         from nestedworld_api.db import PlaceMonster
         from sqlalchemy.orm import joinedload
 
@@ -56,6 +61,11 @@ class RegionMonsters(places.Resource):
 
     @places.marshal_with(Schema(many=True))
     def get(self, region_id):
+        '''
+            Retrieve all region's monsters
+
+            This request is used for retrieve the list of all the monsters in a specific region.
+        '''
         from nestedworld_api.db import RegionMonster
         from sqlalchemy.orm import joinedload
 

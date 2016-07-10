@@ -48,6 +48,11 @@ class UserMonster(user_monsters.Resource):
     @login_required
     @user_monsters.marshal_with(MonsterResult(many=True))
     def get(self):
+        '''
+            Retrieve current user's monsters list
+
+            This request is used by a user for retrieve his own monsters list.
+        '''
         from nestedworld_api.db import UserMonster
 
         monsters = UserMonster.query.all()
@@ -57,6 +62,11 @@ class UserMonster(user_monsters.Resource):
     @user_monsters.accept(Schema())
     @user_monsters.marshal_with(Schema())
     def post(self, data):
+        '''
+            Add a monster to current user's monsters list.
+
+            This request is used by a user for add an existing monster to his monsters list.
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import UserMonster
 

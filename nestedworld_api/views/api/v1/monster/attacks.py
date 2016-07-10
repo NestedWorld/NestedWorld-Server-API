@@ -25,6 +25,11 @@ class MonsterAttack(monster_attacks.Resource):
 
     @monster_attacks.marshal_with(Schema(many=True))
     def get(self, monster_id):
+        '''
+            Retrieve a monster's attacks
+
+            This request is used for retrieve the attacks of a specific monster.
+        '''
         from nestedworld_api.db import MonsterAttack
 
         attacks = MonsterAttack.query.all()
@@ -41,6 +46,12 @@ class MonsterAttack(monster_attacks.Resource):
     @monster_attacks.accept(PostSchema())
     @monster_attacks.marshal_with(Schema())
     def post(self, monster_id, data):
+        '''
+            Add an attack to a monster
+
+            This request is used for link an existing attack to an existing monster
+            (Only used by the admin through the admin interface).
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import MonsterAttack
 

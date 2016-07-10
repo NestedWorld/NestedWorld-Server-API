@@ -7,6 +7,7 @@ from nestedworld_api.db import Object
 
 inventory = user.namespace('inventory')
 
+
 @inventory.route('/')
 class Inventory(inventory.Resource):
 
@@ -22,6 +23,12 @@ class Inventory(inventory.Resource):
     @login_required
     @inventory.marshal_with(Schema(many=True))
     def get(self):
+        '''
+            Retrieve current user's inventory
+
+            This request is used by a user for retrieve the list
+            of all objects in his inventory.
+        '''
         from nestedworld_api.db import Inventory
 
         inventory = Inventory.query.all()
@@ -31,6 +38,11 @@ class Inventory(inventory.Resource):
     @inventory.accept(Schema())
     @inventory.marshal_with(Schema())
     def post(self, data):
+        '''
+            Add an object in current user's inventory
+
+            This request is used by a user for add an existing object to his inventory.
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Inventory
 

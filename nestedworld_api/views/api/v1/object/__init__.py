@@ -9,6 +9,7 @@ from . import plant
 
 object = api.namespace('objects')
 
+
 @object.route('/')
 class Object(object.Resource):
 
@@ -18,7 +19,6 @@ class Object(object.Resource):
         premium = ma.Boolean()
         price = ma.Integer()
 
-
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
             namespace = 'Objects' if many else 'Object'
@@ -26,6 +26,11 @@ class Object(object.Resource):
 
     @object.marshal_with(Schema(many=True))
     def get(self):
+        '''
+            Retrieve all objects
+
+            This request is used for retrieve the list of all the existing objects.
+        '''
         from nestedworld_api.db import Object as DbObject
 
         Objects = DbObject.query.all()
@@ -35,6 +40,12 @@ class Object(object.Resource):
     @object.accept(Schema())
     @object.marshal_with(Schema())
     def post(self, data):
+        '''
+            Create a new object
+
+            This request is used for create a new object
+            (Only used by the admin through the admin interface).
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Object as DbObject
 

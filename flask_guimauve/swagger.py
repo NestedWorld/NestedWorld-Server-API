@@ -17,7 +17,22 @@ def process_resource(spec, resource, urls):
         }
 
         if hasattr(method_view, '__doc__'):
-            operation['description'] = method_view.__doc__
+            doc = method_view.__doc__
+            if doc is not None:
+                doc = doc.strip()
+                if '\n\n' in doc:
+                    (summary, description) = doc.split('\n\n', 1)
+                elif len(doc) < 120:
+                    summary = doc
+                    description = None
+                else:
+                    summary = None
+                    description = doc
+
+                if summary is not None:
+                    operation['summary'] = summary.strip()
+                if description is not None:
+                    operation['description'] = description.strip()
 
         if hasattr(resource, 'tags'):
             operation['tags'] = resource.tags

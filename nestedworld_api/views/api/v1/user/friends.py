@@ -39,6 +39,11 @@ class UserFriend(user_friend.Resource):
     @login_required
     @user_friend.marshal_with(FriendResult(many=True))
     def get(self):
+        '''
+            Retrieve current user's friends list.
+
+            This request is used by a user for retrieve his own friends list.
+        '''
         from nestedworld_api.db import UserFriend
 
         friends = UserFriend.query\
@@ -51,6 +56,12 @@ class UserFriend(user_friend.Resource):
     @user_friend.accept(FriendRequest())
     @user_friend.marshal_with(FriendResult())
     def post(self, data):
+        '''
+            Add an user in to current user's friends list
+
+            This request is used by a user for create a link between him
+            and another existing user as friend.
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import User, UserFriend
 
@@ -62,7 +73,7 @@ class UserFriend(user_friend.Resource):
         friends = UserFriend.query\
                             .filter((UserFriend.user_id == current_session.user.id) |
                                     (UserFriend.friend_id == friend.id))\
-                                    .all()
+                            .all()
         if friends is not None:
             user_friend.abort(400, message='Friend already added')
 

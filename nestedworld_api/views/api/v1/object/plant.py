@@ -7,6 +7,7 @@ from . import api
 
 plant = api.namespace('plants')
 
+
 @plant.route('/')
 class Plant(plant.Resource):
 
@@ -23,6 +24,11 @@ class Plant(plant.Resource):
 
     @plant.marshal_with(Schema(many=True))
     def get(self):
+        '''
+            Retrieve all plants
+
+            This request is used for retrieve the list of all the existing plants.
+        '''
         from nestedworld_api.db import Plant as DbPlant
 
         Plants = DbPlant.query.all()
@@ -32,6 +38,12 @@ class Plant(plant.Resource):
     @plant.accept(Schema())
     @plant.marshal_with(Schema())
     def post(self, data):
+        '''
+            Create a new plant
+
+            This request is used for create a new plant
+            (Only used by the admin through the admin interface).
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Plant as DbPlant
 
