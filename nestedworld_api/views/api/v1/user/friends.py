@@ -70,11 +70,11 @@ class UserFriend(user_friend.Resource):
         if friend is None:
             user_friend.abort(400, message='Friend not found')
 
-        friends = UserFriend.query\
-                            .filter((UserFriend.user_id == current_session.user.id) |
-                                    (UserFriend.friend_id == friend.id))\
-                            .all()
-        if friends is not None:
+        friends_count = UserFriend.query\
+                                  .filter((UserFriend.user_id == current_session.user.id) &
+                                          (UserFriend.friend_id == friend.id))\
+                                  .all()
+        if friends > 0:
             user_friend.abort(400, message='Friend already added')
 
         result = UserFriend(user=current_session.user, friend=friend)
