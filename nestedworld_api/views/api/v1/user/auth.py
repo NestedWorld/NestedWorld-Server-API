@@ -85,15 +85,17 @@ class Register(auth.Resource):
         user.password = data['password']
         user.pseudo = data['pseudo']
 
-        monster = UserMonster()
-        monster.user = user
-        monster.monster = random.sample(list(Monster.query), 1)[0]
-        monster.surname = "Starter"
-        monster.experience = 0
-        monster.level = 1
+        monsters = list(Monster.query)
+        if len(monsters) > 0:
+            monster = random.sample(monsters, 1)[0]
+            user_monster = UserMonster(user=user, monster=monster)
+            user_monster.surname = "Starter"
+            user_monster.experience = 0
+            user_monster.level = 1
+
+            db.session.add(user_monster)
 
         db.session.add(user)
-        db.session.add(monster)
         db.session.commit()
 
         return user
