@@ -13,7 +13,7 @@ class UserFriend(user_friend.Resource):
 
     class FriendResult(ma.Schema):
 
-        #TODO : Maybe use the User.Schema ?
+        # TODO : Maybe use the User.Schema ?
         class User(ma.Schema):
             pseudo = ma.String()
             birth_date = ma.Date()
@@ -73,7 +73,7 @@ class UserFriend(user_friend.Resource):
                                   .filter((UserFriend.user_id == current_session.user.id) &
                                           (UserFriend.friend_id == friend.id))\
                                   .all()
-        if friends > 0:
+        if friends_count > 0:
             user_friend.abort(400, message='Friend already added')
 
         result = UserFriend(user=current_session.user, friend=friend)
