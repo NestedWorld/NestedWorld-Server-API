@@ -47,8 +47,7 @@ class UserFriend(user_friend.Resource):
         from nestedworld_api.db import UserFriend
 
         friends = UserFriend.query\
-                            .filter((UserFriend.user_id == current_session.user.id) |
-                                    (UserFriend.friend_id == current_session.user.id))\
+                            .filter(UserFriend.user_id == current_session.user.id)\
                             .all()
         return friends
 
