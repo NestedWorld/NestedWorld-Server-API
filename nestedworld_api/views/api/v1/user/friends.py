@@ -72,7 +72,7 @@ class UserFriend(user_friend.Resource):
         friends_count = UserFriend.query\
                                   .filter((UserFriend.user_id == current_session.user.id) &
                                           (UserFriend.friend_id == friend.id))\
-                                  .all()
+                                  .count()
         if friends_count > 0:
             user_friend.abort(400, message='Friend already added')
 
