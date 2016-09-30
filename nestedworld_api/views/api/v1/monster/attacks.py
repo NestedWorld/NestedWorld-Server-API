@@ -1,5 +1,6 @@
 from flask import jsonify, request
 from marshmallow import post_dump
+from marshmallow.validate import OneOf
 from nestedworld_api.app import ma
 from nestedworld_api.login import login_required, current_session
 from . import monsters
@@ -23,7 +24,24 @@ class MonsterAttack(monster_attacks.Resource):
             namespace = 'attacks' if many else 'attack'
             return {namespace: data}
 
-    @monster_attacks.marshal_with(Schema(many=True))
+    class AttackResult(ma.Schema):
+
+        class Infos(ma.Schema):
+            id = ma.Integer(dump_only=True)
+            url = ma.UrlFor('api.v1.attacks.attack', attack_id='<id>')
+
+            name = ma.String()
+            type = ma.String(validate=[OneOf(['attack', 'attacksp', 'defense', 'defensesp'])])
+
+        id = ma.Integer(dump_only=True)
+        infos = ma.Nested(Infos, attribute="attack")
+
+        @post_dump(pass_many=True)
+        def add_envelope(self, data, many):
+            namespace = 'attacks' if many else 'attack'
+            return {namespace: data}
+
+    @monster_attacks.marshal_with(AttackResult(many=True))
     def get(self, monster_id):
         '''
             Retrieve a monster's attacks
@@ -35,15 +53,7 @@ class MonsterAttack(monster_attacks.Resource):
         attacks = MonsterAttack.query.filter(MonsterAttack.monster == Monster.query.filter(Monster.id == monster_id).first());
         return attacks
 
-    class PostSchema(ma.Schema):
-        attack = ma.String()
-
-        @post_dump(pass_many=True)
-        def add_envelope(self, data, many):
-            namespace = 'attacks' if many else 'attack'
-            return {namespace: data}
-
-    @monster_attacks.accept(PostSchema())
+    @monster_attacks.accept(Schema())
     @monster_attacks.marshal_with(Schema())
     def post(self, monster_id, data):
         '''
