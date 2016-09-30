@@ -2,6 +2,7 @@ from flask import jsonify, request
 from marshmallow import post_dump
 from nestedworld_api.app import ma
 from nestedworld_api.db import Monster
+from nestedworld_api.db import User
 from nestedworld_api.login import login_required, current_session
 from . import user
 
@@ -55,7 +56,7 @@ class UserMonster(user_monsters.Resource):
         '''
         from nestedworld_api.db import UserMonster
 
-        monsters = UserMonster.query.all()
+        monsters = UserMonster.query.filter(UserMonster.user == User.query.filter(User.id == current_session.user.id).first());
         return monsters
 
     @login_required
