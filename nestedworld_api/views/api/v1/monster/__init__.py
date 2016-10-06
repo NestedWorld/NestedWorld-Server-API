@@ -111,3 +111,21 @@ class Monster(monsters.Resource):
         db.session.commit()
 
         return monster
+
+    @monsters.marshal_with(Schema())
+    def delete(self, monster_id):
+        '''
+            Delete a monster
+
+            This request is userd for delete the information of a specific monster
+            (Only user by the admin through the admin interface).
+        '''
+        from nestedworld_api.db import db
+        from nestedworld_api.db import Monster as DbMonster
+
+        monster = DbMonster.query.get_or_404(monster_id)
+
+        db.session.delete(monster)
+        db.session.commit()
+
+        return monster
