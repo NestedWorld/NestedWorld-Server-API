@@ -19,8 +19,8 @@ class PlaceMonster(db.Model):
     place_id = db.Column(db.Integer, db.ForeignKey('places.id'))
     monster_id = db.Column(db.Integer, db.ForeignKey('monsters.id'))
 
-    place = db.relationship('Place', cascade="all, delete", backref=db.backref('place_monsters'))
-    monster = db.relationship('Monster', cascade="all, delete", backref=db.backref('place_monsters'))
+    place = db.relationship('Place', cascade="all, delete-orphan", single_parent=True, backref=db.backref('place_monsters'))
+    monster = db.relationship('Monster', cascade="all, delete-orphan", single_parent=True, backref=db.backref('place_monsters'))
 
 class RegionMonster(db.Model):
 
@@ -34,5 +34,5 @@ class RegionMonster(db.Model):
     ratio = db.Column(db.Float, doc='Spawn rate')
     level = db.Column(sau.IntRangeType)
 
-    region = db.relationship('Region', cascade="all, delete", backref=db.backref('region_monsters'))
-    monster = db.relationship('Monster', cascade="all, delete", backref=db.backref('region_monsters'))
+    region = db.relationship('Region', cascade="all, delete-orphan", single_parent=True, backref=db.backref('region_monsters'))
+    monster = db.relationship('Monster', cascade="all, delete-orphan", single_parent=True, backref=db.backref('region_monsters'))
