@@ -127,5 +127,3 @@ class Monster(monsters.Resource):
 
         db.session.delete(monster)
         db.session.commit()
-
-        return monster

@@ -83,7 +83,6 @@ class MonsterAttacks(monster_attacks.Resource):
 @monsters.route('/<monster_id>/attacks/<attack_id>')
 class MonsterAttack(monster_attacks.Resource):
 
-    @monster_attacks.marshal_with(MonsterAttacks.Schema())
     def delete(self, monster_id, attack_id):
         '''
             Delete an attack to a monster
@@ -92,16 +91,7 @@ class MonsterAttack(monster_attacks.Resource):
             (Only user by the admin through the admin interface).
         '''
         from nestedworld_api.db import db
-        from nestedworld_api.db import Monster
-        from nestedworld_api.db import Attack
         from nestedworld_api.db import MonsterAttack as DbMonsterAttack
-        from flask import abort
 
-        attack = DbMonsterAttack.query.filter(DbMonsterAttack.monster_id == monster_id).filter(DbMonsterAttack.id == attack_id).delete()
-
-        if attack is None:
-            abort(404)
-
+        DbMonsterAttack.query.filter(DbMonsterAttack.monster_id == monster_id).filter(DbMonsterAttack.id == attack_id).delete()
         db.session.commit()
-
-        return attack
