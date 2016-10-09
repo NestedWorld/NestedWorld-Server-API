@@ -63,9 +63,9 @@ class User(user.Resource):
         user = current_session.user
 
         if 'email' in data and User.query.filter(User.email == data['email']).count() > 0:
-            user.abort(400, 'An user with same email/pseudo already exists')
+            users.abort(400, 'An user with same email/pseudo already exists')
         if 'pseudo' in data and User.query.filter(User.pseudo == data['pseudo']).count() > 0:
-            user.abort(400, 'An user with same email/pseudo already exists')
+            users.abort(400, 'An user with same email/pseudo already exists')
 
         for (name, value) in data.items():
             setattr(user, name, value)
