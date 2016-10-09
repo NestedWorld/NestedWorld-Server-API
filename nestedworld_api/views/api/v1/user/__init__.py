@@ -5,7 +5,7 @@ from nestedworld_api.login import login_required, current_session
 from .. import api
 from ..geo import PointField
 
-user = api.namespace('users')
+users = api.namespace('users')
 
 from . import auth
 from . import monsters
@@ -13,8 +13,8 @@ from . import friends
 from . import inventory
 
 
-@user.route('/')
-class User(user.Resource):
+@users.route('/')
+class User(users.Resource):
     tags = ['users']
 
     class Schema(ma.Schema):
@@ -37,20 +37,18 @@ class User(user.Resource):
             return {namespace: data}
 
     @login_required
-    @user.marshal_with(Schema())
+    @users.marshal_with(Schema())
     def get(self):
         '''
             Retrieve current user informations
 
             This request is used by a user for retrieve his own information.
         '''
-        user = current_session.user
-
-        return user
+        return current_session.user
 
     @login_required
-    @user.accept(Schema())
-    @user.marshal_with(Schema())
+    @users.accept(Schema())
+    @users.marshal_with(Schema())
     def put(self, data):
         '''
             Update current user informations
@@ -74,14 +72,14 @@ class User(user.Resource):
         return user
 
 
-@user.route('/<user_id>')
-class UserId(user.Resource):
+@users.route('/<user_id>')
+class UserId(users.Resource):
     tags = ['users']
 
     class Schema(User.Schema):
         pass
 
-    @user.marshal_with(Schema())
+    @users.marshal_with(Schema())
     def get(self, user_id):
         '''
             Retrieve user informations
@@ -94,7 +92,7 @@ class UserId(user.Resource):
         user = DbUser.query.get_or_404(user_id)
         return user
 
-    @user.marshal_with(Schema())
+    @users.marshal_with(Schema())
     def put(self, data, user_id):
         '''
             Update user informations
@@ -105,18 +103,18 @@ class UserId(user.Resource):
         from nestedworld_api.db import db
         from nestedworld_api.db import User as DbUser
 
-        user_result = DbUser.query.get_or_404(user_id)
+        user = DbUser.query.get_or_404(user_id)
         conflict = DbUser.query\
                          .filter(DbPlace.id != place_id)\
                          .filter(DbPlace.pseudo == data['pseudo'])\
                          .first()
 
         if conflict is not None:
-            user.abort(400, 'A user have already the same pseudonyme')
+            users.abort(400, 'A user have already the same pseudonyme')
 
         for (name, value) in data.items():
-            setattr(user_result, name, value)
+            setattr(user, name, value)
 
         db.session.commit()
 
-        return user_result
+        return user

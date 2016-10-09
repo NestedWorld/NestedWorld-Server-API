@@ -2,10 +2,10 @@ from flask import jsonify, request
 from marshmallow import post_dump
 from nestedworld_api.app import ma
 from nestedworld_api.login import login_required, current_session
-from . import user
+from . import users
 from nestedworld_api.db import Object
 
-inventory = user.namespace('inventory')
+inventory = users.namespace('inventory')
 
 
 @inventory.route('/')

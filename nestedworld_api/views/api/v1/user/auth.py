@@ -2,9 +2,9 @@ from flask import jsonify
 from marshmallow import post_dump
 from nestedworld_api.app import ma
 from nestedworld_api.login import get_session, login_required
-from . import user
+from . import users
 
-auth = user.namespace('auth')
+auth = users.namespace('auth')
 
 # Login
 

@@ -4,9 +4,10 @@ from nestedworld_api.app import ma
 from nestedworld_api.db import Monster
 from nestedworld_api.db import User
 from nestedworld_api.login import login_required, current_session
-from . import user
+from . import users
 
-user_monsters = user.namespace('monsters')
+user_monsters = users.namespace('monsters')
+
 
 @user_monsters.route('/')
 class UserMonster(user_monsters.Resource):

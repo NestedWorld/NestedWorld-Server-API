@@ -2,9 +2,9 @@ from flask import jsonify, request
 from marshmallow import post_dump
 from nestedworld_api.app import ma
 from nestedworld_api.login import login_required, current_session
-from . import user
+from . import users
 
-user_friend = user.namespace('friends')
+user_friend = users.namespace('friends')
 
 
 @user_friend.route('/')
