@@ -61,9 +61,9 @@ class User(users.Resource):
         user = current_session.user
 
         if 'email' in data and User.query.filter(User.email == data['email']).count() > 0:
-            users.abort(400, 'An user with same email/pseudo already exists')
+            users.abort(400, message='An user with same email/pseudo already exists')
         if 'pseudo' in data and User.query.filter(User.pseudo == data['pseudo']).count() > 0:
-            users.abort(400, 'An user with same email/pseudo already exists')
+            users.abort(400, message='An user with same email/pseudo already exists')
 
         for (name, value) in data.items():
             setattr(user, name, value)
@@ -110,7 +110,7 @@ class UserId(users.Resource):
                          .first()
 
         if conflict is not None:
-            users.abort(400, 'A user have already the same pseudonyme')
+            users.abort(400, message='A user have already the same pseudonyme')
 
         for (name, value) in data.items():
             setattr(user, name, value)
