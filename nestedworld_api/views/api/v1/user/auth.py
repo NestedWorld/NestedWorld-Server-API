@@ -156,8 +156,8 @@ class Logout(auth.Resource):
         if session is None:
             auth.abort(401)
 
+        session.user.is_connected = False
         session.end = arrow.utcnow()
-        current_session.user.is_connected = False
 
         db.session.commit()
 
