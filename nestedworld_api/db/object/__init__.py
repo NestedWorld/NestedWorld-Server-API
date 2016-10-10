@@ -12,9 +12,11 @@ class Object(db.Model):
     id = db.Column(db.Integer, primary_key=True, doc='Object ID')
 
     name = db.Column(db.String, doc='Object name')
+    description = db.Column(db.String, doc='Object description')
     premium = db.Column(db.Boolean, doc='Object is premium or not')
     price = db.Column(db.Integer, doc='Object price')
     type = db.Column(db.String, doc='Object type')
+    image = db.Column(db.String(2000), nullable=True, doc='Object image')
 
     __mapper_args__ = {
         'polymorphic_identity': 'object',
@@ -25,7 +27,7 @@ class Plant(Object):
 
     __tablename__ = 'plant'
 
-    id = db.Column(db.Integer, db.ForeignKey('objects.id'), primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('objects.id', ondelete="CASCADE"), primary_key=True, doc='Plant ID')
     point = db.Column(Geography('POINT'), doc='Plant geography point')
 
     __mapper_args__ = {

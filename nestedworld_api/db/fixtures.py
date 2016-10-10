@@ -4,6 +4,7 @@ from datetime import date
 from . import db
 from .token import Application
 from .user import User, UserFriend
+from .object import Plant
 
 
 def add(*objects):
@@ -198,3 +199,15 @@ def import_places():
             db.session.add(place_monster)
 
     db.session.commit()
+
+def import_objects():
+        fire = Plant(
+            name='fire flower', description='a fire flower. Use it for fire monster.', premium=False,
+            price=25, image='http://www.mariowiki.com/images/thumb/6/6a/FireFlowerMK8.png/200px-FireFlowerMK8.png', type='plant')
+
+        water = Plant(
+            name='water flower', description='a water flower. Use it for water monster.', premium=True,
+            price=25, image='http://www.androidfreeware.net/software_images/water-flower.thumb.jpg', type='plant')
+
+        db.session.add(fire, water)
+        db.session.commit()
