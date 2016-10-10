@@ -1,10 +1,10 @@
 from flask import jsonify
 from marshmallow import post_dump
 from nestedworld_api.app import ma
-from nestedworld_api.login import get_session, login_required
-from . import user
+from nestedworld_api.login import current_session, get_session, login_required
+from . import users
 
-auth = user.namespace('auth')
+auth = users.namespace('auth')
 
 # Login
 
@@ -46,7 +46,7 @@ class Login(auth.Resource):
         if app is None:
             auth.abort(400, message='Bad application token')
 
-        setattr(user, "is_connected", True)
+        user.is_connected = True
         session = Session(application=app, user=user, data=data.get('data'))
         db.session.add(session)
         db.session.commit()
@@ -156,8 +156,8 @@ class Logout(auth.Resource):
         if session is None:
             auth.abort(401)
 
+        session.user.is_connected = False
         session.end = arrow.utcnow()
-        setattr(user, "is_connected", False)
 
         db.session.commit()
 
