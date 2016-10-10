@@ -80,6 +80,7 @@ class Attack(attacks.Resource):
         attack = DbAttack.query.get_or_404(attack_id)
         return attack
 
+    @login_required
     @attacks.accept(Schema())
     @attacks.marshal_with(Schema())
     def put(self, data, attack_id):
@@ -108,3 +109,18 @@ class Attack(attacks.Resource):
         db.session.commit()
 
         return attack
+
+    @login_required
+    def delete(self, attack_id):
+        '''
+            Delete an attack
+
+            This request is used for delete a specific attack
+            (Only used by the admin through the admin interface).
+        '''
+
+        from nestedworld_api.db import db
+        from nestedworld_api.db import Attack as DbAttack
+
+        DbAttack.query.filter(DbAttack.id == attack_id).delete()
+        db.session.commit()
