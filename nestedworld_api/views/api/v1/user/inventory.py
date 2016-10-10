@@ -55,7 +55,24 @@ class Inventory(inventory.Resource):
         result.user = current_session.user
         result.object = choosedObject
 
-        db.session.add(inventory)
+        db.session.add(result)
         db.session.commit()
 
         return result
+
+@inventory.route('/<object_id>')
+class ObjectInventory(inventory.Resource):
+
+    @login_required
+    def delete(self, object_id):
+        '''
+            Delete an object in current user's inventory
+
+            This request is user by a user for deleting an existing object to his inventory
+        '''
+
+        from nestedworld_api.db import db
+        from nestedworld_api.db import Inventory
+
+        Inventory.query.filter(Inventory.id == object_id).delete()
+        db.session.commit()
