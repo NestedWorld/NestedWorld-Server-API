@@ -33,3 +33,7 @@ def import_places():
 @db_manager.command
 def import_attacks():
     fixtures.import_attacks()
+
+@db_manager.command
+def import_objects():
+    fixtures.import_objects()

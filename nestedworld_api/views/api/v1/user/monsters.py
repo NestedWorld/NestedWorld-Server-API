@@ -10,7 +10,7 @@ user_monsters = users.namespace('monsters')
 
 
 @user_monsters.route('/')
-class UserMonster(user_monsters.Resource):
+class UserMonsters(user_monsters.Resource):
     tags = ['users']
 
     class Schema(ma.Schema):
@@ -55,9 +55,9 @@ class UserMonster(user_monsters.Resource):
 
             This request is used by a user for retrieve his own monsters list.
         '''
-        from nestedworld_api.db import UserMonster
+        from nestedworld_api.db import UserMonster as DbUserMonster
 
-        monsters = UserMonster.query.filter(UserMonster.user == User.query.filter(User.id == current_session.user.id).first());
+        monsters = DbUserMonster.query.filter(DbUserMonster.user_id == current_session.user.id);
         return monsters
 
     @login_required
@@ -70,14 +70,13 @@ class UserMonster(user_monsters.Resource):
             This request is used by a user for add an existing monster to his monsters list.
         '''
         from nestedworld_api.db import db
-        from nestedworld_api.db import UserMonster
 
         choosedMonster = Monster.query.filter(
             Monster.name == data['monster']).first()
         if choosedMonster is None:
             user_monsters.abort(400, message='Monster not found')
 
-        monster = UserMonster()
+        monster = UserMonsters()
         monster.user = current_session.user
         monster.monster = choosedMonster
         monster.surname = data['surname']
@@ -88,3 +87,19 @@ class UserMonster(user_monsters.Resource):
         db.session.commit()
 
         return monster
+
+@user_monsters.route('/<monster_id>')
+class UserMonster(user_monsters.Resource):
+
+    @login_required
+    def delete(self, monster_id):
+        '''
+            Delete a monster to current user's monsters list.
+
+            This request is used by a user for deleting an existing monster to his monsters list.
+        '''
+        from nestedworld_api.db import db
+        from nestedworld_api.db import UserMonster as DbUserMonster
+
+        DbUserMonster.query.filter(DbUserMonster.id == monster_id).filter(DbUserMonster.user_id == current_session.user.id).delete()
+        db.session.commit()

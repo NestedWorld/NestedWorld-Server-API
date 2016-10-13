@@ -5,53 +5,43 @@ from nestedworld_api.app import ma
 from nestedworld_api.login import login_required
 from .. import api
 
-from . import plant
+objects = api.namespace('objects')
 
-object = api.namespace('objects')
-
-
-@object.route('/')
-class Object(object.Resource):
+@objects.route('/')
+class Objects(objects.Resource):
 
     class Schema(ma.Schema):
         id = ma.Integer(dump_only=True)
         name = ma.String()
+        description = ma.String()
         premium = ma.Boolean()
         price = ma.Integer()
+        image = ma.Url()
+        kind = ma.String()
+
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
             namespace = 'Objects' if many else 'Object'
             return {namespace: data}
 
-    @object.marshal_with(Schema(many=True))
+    @objects.marshal_with(Schema(many=True))
     def get(self):
-        '''
-            Retrieve all objects
-
-            This request is used for retrieve the list of all the existing objects.
-        '''
         from nestedworld_api.db import Object as DbObject
 
         Objects = DbObject.query.all()
         return Objects
 
     @login_required
-    @object.accept(Schema())
-    @object.marshal_with(Schema())
+    @objects.accept(Schema())
+    @objects.marshal_with(Schema())
     def post(self, data):
-        '''
-            Create a new object
-
-            This request is used for create a new object
-            (Only used by the admin through the admin interface).
-        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Object as DbObject
 
         Object = DbObject.query.filter(DbObject.name == data['name']).first()
         if Object is not None:
-            object.abort(409, message='Object already exists')
+            api.abort(409, message='Object already exists')
 
         Object = DbObject(**data)
 
@@ -59,3 +49,14 @@ class Object(object.Resource):
         db.session.commit()
 
         return Object
+
+@objects.route('/<object_id>')
+class Object(objects.Resource):
+
+    @login_required
+    def delete(self, object_id):
+        from nestedworld_api.db import db
+        from nestedworld_api.db import Object as DbObject
+
+        DbObject.query.filter(DbObject.id == object_id).delete()
+        db.session.commit()

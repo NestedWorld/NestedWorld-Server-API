@@ -16,5 +16,5 @@ class UserMonster(db.Model):
     experience = db.Column(db.Integer, doc="Monster experience")
     level = db.Column(db.Integer, doc="Monster level")
 
-    monster = db.relationship('Monster')
-    user = db.relationship('User')
+    monster = db.relationship('Monster', cascade="all", backref=db.backref('user_monsters'))
+    user = db.relationship('User', cascade="all", backref=db.backref('user_monsters'))

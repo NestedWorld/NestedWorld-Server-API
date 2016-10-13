@@ -9,9 +9,8 @@ from nestedworld_api.db import Monster
 
 monster_attacks = monsters.namespace('attacks')
 
-
 @monsters.route('/<monster_id>/attacks')
-class MonsterAttack(monster_attacks.Resource):
+class MonsterAttacks(monster_attacks.Resource):
     tags = ['monsters']
 
     class Schema(ma.Schema):
@@ -48,9 +47,9 @@ class MonsterAttack(monster_attacks.Resource):
 
             This request is used for retrieve the attacks of a specific monster.
         '''
-        from nestedworld_api.db import MonsterAttack
+        from nestedworld_api.db import MonsterAttack as DbMonsterAttack
 
-        attacks = MonsterAttack.query.filter(MonsterAttack.monster == Monster.query.filter(Monster.id == monster_id).first());
+        attacks = DbMonsterAttack.query.filter(DbMonsterAttack.monster_id  == monster_id);
         return attacks
 
     @monster_attacks.accept(Schema())
@@ -80,3 +79,19 @@ class MonsterAttack(monster_attacks.Resource):
         db.session.commit()
 
         return attack
+
+@monsters.route('/<monster_id>/attacks/<attack_id>')
+class MonsterAttack(monster_attacks.Resource):
+
+    def delete(self, monster_id, attack_id):
+        '''
+            Delete an attack to a monster
+
+            This request is used for delete an existing link between an attack and a monster
+            (Only user by the admin through the admin interface).
+        '''
+        from nestedworld_api.db import db
+        from nestedworld_api.db import MonsterAttack as DbMonsterAttack
+
+        DbMonsterAttack.query.filter(DbMonsterAttack.monster_id == monster_id).filter(DbMonsterAttack.id == attack_id).delete()
+        db.session.commit()

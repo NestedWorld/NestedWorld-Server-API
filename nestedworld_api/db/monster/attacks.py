@@ -12,5 +12,5 @@ class MonsterAttack(db.Model):
     monster_id = db.Column(db.Integer, db.ForeignKey('monsters.id'))
     attack_id = db.Column(db.Integer, db.ForeignKey('attacks.id'))
 
-    monster = db.relationship('Monster')
-    attack = db.relationship('Attack')
+    monster = db.relationship('Monster', cascade="all", backref=db.backref('monster_attacks'))
+    attack = db.relationship('Attack', cascade="all", backref=db.backref('monster_attacks'))
