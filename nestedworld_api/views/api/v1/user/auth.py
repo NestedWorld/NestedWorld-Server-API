@@ -85,6 +85,11 @@ class Register(auth.Resource):
         user.password = data['password']
         user.pseudo = data['pseudo']
 
+        if data['avatar'] is None:
+            user.avatar = "https://s3-eu-west-1.amazonaws.com/nestedworld/UserImage/user_defaultImage.png"
+        if data['background'] is None:
+            user.background = "https://s3-eu-west-1.amazonaws.com/nestedworld/UserBackground/abstract-mosaic-background.png"
+            
         monsters = list(Monster.query)
         if len(monsters) > 0:
             monster = random.sample(monsters, 1)[0]
