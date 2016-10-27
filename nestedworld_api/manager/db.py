@@ -1,5 +1,5 @@
-from flask.ext.migrate import Migrate, MigrateCommand
-from flask.ext.script import Manager
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager
 from ..app import app
 from ..db import db, fixtures
 
@@ -30,9 +30,11 @@ def import_monsters():
 def import_places():
     fixtures.import_places()
 
+
 @db_manager.command
 def import_attacks():
     fixtures.import_attacks()
+
 
 @db_manager.command
 def import_objects():

@@ -1,18 +1,19 @@
+import os
 from flask import Flask
 
 app = Flask(__name__)
-app.config.from_object('nestedworld_api.settings')
+app.config.from_object(os.environ.get('NESTEDWORLD_API_SETTINGS', 'nestedworld_api.settings.dev'))
 
 # Config DB
 from .db import db
 db.init_app(app)
 
 # Config Marshmallow
-from flask.ext.marshmallow import Marshmallow
+from flask_marshmallow import Marshmallow
 ma = Marshmallow(app)
 
 # Config CORS
-from flask.ext.cors import CORS
+from flask_cors import CORS
 cors = CORS(app)
 
 # Config mail
@@ -20,11 +21,11 @@ from .mail import mail
 mail.init_app(app)
 
 # Config mako
-from flask.ext.mako import MakoTemplates
+from flask_mako import MakoTemplates
 mako = MakoTemplates(app)
 
 # Config debug toolbar
-# from flask.ext.debugtoolbar import DebugToolbarExtension
+# from flask_debugtoolbar import DebugToolbarExtension
 # toolbar = DebugToolbarExtension(app)
 
 # Config logging

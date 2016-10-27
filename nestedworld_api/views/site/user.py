@@ -1,6 +1,6 @@
 from flask import abort, request
-from flask.ext.mako import render_template
-from flask.ext.wtf import Form
+from flask_mako import render_template
+from flask_wtf import Form
 from nestedworld_api.views.utils import NestableBlueprint as Blueprint
 from wtforms import PasswordField
 from wtforms.validators import Required, EqualTo
@@ -9,10 +9,12 @@ user = Blueprint('user', __name__)
 
 # Password reset
 
+
 class PasswordReset(Form):
 
     password = PasswordField('Password', [Required(), EqualTo('confirm', message='Passwords must match')])
-    confirm =  PasswordField('Repeat password')
+    confirm = PasswordField('Repeat password')
+
 
 @user.route('/password_reset/<token>', endpoint='password_reset', methods=['GET', 'POST'])
 def password_reset(token):
@@ -20,8 +22,8 @@ def password_reset(token):
     from nestedworld_api.db import PasswordResetRequest
 
     password_request = PasswordResetRequest.query\
-                        .filter(PasswordResetRequest.token == token)\
-                        .first()
+                                           .filter(PasswordResetRequest.token == token)\
+                                           .first()
     if password_request is None:
         abort(400, message='This password request token doesn\'t exists.')
 
