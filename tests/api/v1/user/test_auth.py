@@ -5,7 +5,7 @@ from ... import TestCase
 class LoginTestCase(TestCase):
 
     def test_valid_login(self):
-        rv = self.login('kokakiwi@kokakiwi.net', 'kiwi3291', app_token='test')
+        rv = self.login('kokakiwi@kokakiwi.net', 'kiwi3291')
         self.assertEqual(rv.status_code, 200)
 
     def test_bad_password(self):
@@ -40,7 +40,7 @@ class RegisterTestCase(TestCase):
 class LogoutTestCase(TestCase):
 
     def test_logout(self):
-        rv = self.login('kokakiwi@kokakiwi.net', 'kiwi3291', app_token='test')
+        rv = self.login('kokakiwi@kokakiwi.net', 'kiwi3291')
         token = rv.json['token']
 
         rv = self.logout(token)
