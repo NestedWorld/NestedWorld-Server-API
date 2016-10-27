@@ -8,7 +8,7 @@ class UsersTestCase(TestCase):
         rv = self.login('kokakiwi@kokakiwi.net', 'kiwi3291')
         token = rv.json['token']
 
-        rv = self.tester.get('/users/', headers={
+        rv = self.tester.get('/users/me', headers={
             self.AUTH_HEADER_NAME: self.AUTH_HEADER_VALUE.format(token),
         })
         print(rv)
