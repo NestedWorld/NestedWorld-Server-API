@@ -12,3 +12,4 @@ class Attack(db.Model):
     name = db.Column(db.String, doc='Attack name')
     type = db.Column(db.Enum('attack', 'attacksp', 'defense', 'defensesp',
                              name='attack_types'), doc='Attack type')
+    sprite = db.Column(db.String(2000), nullable=True, doc='Attack spriter')
