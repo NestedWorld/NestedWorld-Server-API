@@ -41,7 +41,7 @@ class Places(places.Resource):
         return places
 
 
-@places.route('/<place_id>')
+@places.route('/<place_id>/')
 class Place(places.Resource):
     tags = ['geo']
 
@@ -91,7 +91,7 @@ class Place(places.Resource):
         return place
 
 
-@places.route('/regions')
+@places.route('/regions/')
 class Regions(places.Resource):
     tags = ['geo']
 
@@ -117,7 +117,7 @@ class Regions(places.Resource):
         return regions
 
 
-@places.route('/regions/<region_id>')
+@places.route('/regions/<region_id>/')
 class Region(places.Resource):
     tags = ['geo']
 

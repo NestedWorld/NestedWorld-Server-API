@@ -69,7 +69,7 @@ class UserFriends(user_friends.Resource):
         if friend is None:
             user_friend.abort(400, message='Friend not found')
 
-        friends_count = UserFriend.query\
+        friends_count = DbUserFriend.query\
                                   .filter((DbUserFriend.user_id == current_session.user.id) &
                                           (DbUserFriend.friend_id == friend.id))\
                                   .count()
@@ -84,6 +84,16 @@ class UserFriends(user_friends.Resource):
 
 @user_friends.route('/<friend_id>')
 class UserFriend(user_friends.Resource):
+
+    @login_required
+    @user_friends.marshal_with(UserFriends.FriendResult())
+    def get(self, friend_id):
+        from nestedworld_api.db import UserFriend as DbUserFriend
+
+        friend = DbUserFriend.query.filter(DbUserFriend.id == friend_id).first()
+        return friend
+
+    @login_required
     def delete(self, friend_id):
         '''
             delete an user in to current user's friends list
@@ -92,7 +102,7 @@ class UserFriend(user_friends.Resource):
             and another existing user as friend.
         '''
         from nestedworld_api.db import db
-        from nestedworld_api.db import UserFriend as DbUserMonster
+        from nestedworld_api.db import UserFriend as DbUserFriend
 
-        DbUserMonster.query.filter(DbUserMonster.id == friend_id).delete()
+        DbUserFriend.query.filter(DbUserFriend.id == friend_id).delete()
         db.session.commit()
