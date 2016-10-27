@@ -1,3 +1,4 @@
+import flask_restful as restful
 from flask import request
 from functools import wraps
 
@@ -11,8 +12,6 @@ def accept(schema, force=False):
 
         @wraps(f)
         def wrapped(*args, **kwargs):
-            from flask.ext import restful
-
             data = request.get_json(force=force)
             result = schema.load(data)
 

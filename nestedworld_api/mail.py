@@ -1,7 +1,8 @@
-from flask.ext.mail import Mail, Message
-from flask.ext.mako import render_template
+from flask_mail import Mail, Message
+from flask_mako import render_template
 
 mail = Mail()
+
 
 class TemplatedMessage(Message):
 
