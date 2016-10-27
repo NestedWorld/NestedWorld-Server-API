@@ -1,6 +1,8 @@
 import os
 from .base import *
 
+SECRET_KEY = 'changeme'
+
 # Database config
 SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 
