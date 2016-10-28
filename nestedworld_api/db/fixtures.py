@@ -207,29 +207,29 @@ def import_objects():
 
     plants = []
     fire = Plant(
-        name='fire flower', description='a fire flower. Use it for fire monster.', premium=False,
-        price=25, image='http://www.mariowiki.com/images/thumb/6/6a/FireFlowerMK8.png/200px-FireFlowerMK8.png', type='plant')
+        name='fire flower', description='a fire flower. Use it for up your attacksp.', premium=False,
+        price=25, image='http://www.mariowiki.com/images/thumb/6/6a/FireFlowerMK8.png/200px-FireFlowerMK8.png', type='plant', kind="attsp-up", power="1")
 
     water = Plant(
-        name='water flower', description='a water flower. Use it for water monster.', premium=True,
-        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/flowerFire.png', type='plant')
+        name='water flower', description='a water flower. Use it for up your defensesp.', premium=True,
+        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/flowerFire.png', type='plant', kind="defsp-up", power="1")
 
     electric = Plant(
-        name='electric flower', description='a electric flower. Use it for electric monster.', premium=True,
-        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/flowerElec.png', type='plant')
+        name='electric flower', description='a electric flower. Use it for for up your attack.', premium=True,
+        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/flowerElec.png', type='plant', kind="att-up", power="1")
 
     grass = Plant(
-        name='grass flower', description='a grass flower. Use it for grass monster.', premium=True,
-        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/flowerGrass.png', type='plant')
+        name='grass flower', description='a grass flower. Use it for for up your defense.', premium=True,
+        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/flowerGrass.png', type='plant', kind="def-up", power="1")
 
     dirt = Plant(
-        name='dirt flower', description='a dirt flower. Use it for dirt monster.', premium=True,
-        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/flowerDirt.png', type='plant')
+        name='dirt flower', description='a dirt flower. Use it for up your defense.', premium=True,
+        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/flowerDirt.png', type='plant', kind="def-up", power="1")
 
 
     flower = Plant(
-        name='flower', description='a simple flower. Use it for all monsters.', premium=True,
-        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/Flower.png', type='plant')
+        name='flower', description='a simple flower. Use it for healing monster.', premium=True,
+        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/Flower.png', type='plant', kind="heal", power="50")
 
 
     plants.append(fire)

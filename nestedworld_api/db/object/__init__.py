@@ -17,6 +17,9 @@ class Object(db.Model):
     price = db.Column(db.Integer, doc='Object price')
     type = db.Column(db.String, doc='Object type')
     image = db.Column(db.String(2000), nullable=True, doc='Object image')
+    kind = db.Column(db.Enum('heal', 'att-up', 'attsp-up', 'def-up', 'defsp-up',
+                             name='object_kind'), doc='Object kind')
+    power = db.Column(db.Integer, doc='Object power')
 
     __mapper_args__ = {
         'polymorphic_identity': 'object',
