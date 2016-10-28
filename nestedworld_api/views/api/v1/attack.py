@@ -16,6 +16,7 @@ class Attacks(attacks.Resource):
         id = ma.Integer(dump_only=True)
         name = ma.String()
         type = ma.String(validate=[OneOf(['attack', 'attacksp', 'defense', 'defensesp'])])
+        sprite = ma.Url()
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
