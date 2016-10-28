@@ -88,8 +88,22 @@ class UserMonsters(user_monsters.Resource):
 
         return monster
 
-@user_monsters.route('/<monster_id>')
+@user_monsters.route('/<monster_id>/')
 class UserMonster(user_monsters.Resource):
+
+    @login_required
+    @user_monsters.marshal_with(UserMonsters.MonsterResult())
+    def get(self, monster_id):
+        '''
+            Retrieve a specific monster of the user
+
+            This request is used by a user for retrieve his own monster.
+        '''
+        from nestedworld_api.db import UserMonster as DbUserMonster
+
+        monster = DbUserMonster.query.filter(DbUserMonster.user_id == current_session.user.id, DbUserMonster.id == monster_id).first()
+        return monster
+
 
     @login_required
     def delete(self, monster_id):
@@ -101,5 +115,5 @@ class UserMonster(user_monsters.Resource):
         from nestedworld_api.db import db
         from nestedworld_api.db import UserMonster as DbUserMonster
 
-        DbUserMonster.query.filter(DbUserMonster.id == monster_id).filter(DbUserMonster.user_id == current_session.user.id).delete()
+        DbUserMonster.query.filter(DbUserMonster.id == monster_id, DbUserMonster.user_id == current_session.user.id).delete()
         db.session.commit()

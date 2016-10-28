@@ -14,7 +14,7 @@ from . import inventory
 
 
 @users.route('/')
-class User(users.Resource):
+class Users(users.Resource):
     tags = ['users']
 
     class Schema(ma.Schema):
@@ -36,6 +36,26 @@ class User(users.Resource):
             namespace = 'users' if many else 'user'
             return {namespace: data}
 
+    @users.marshal_with(Schema(many=True))
+    def get(self):
+        '''
+            Retrieve all users
+
+            This request is used by a user for retrieve all users.
+        '''
+
+        from nestedworld_api.db import User as DbUser
+
+        users = DbUser.query.all()
+
+        return users
+
+@users.route('/me/')
+class Me(users.Resource):
+
+    class Schema(Users.Schema):
+        pass
+
     @login_required
     @users.marshal_with(Schema())
     def get(self):
@@ -44,6 +64,7 @@ class User(users.Resource):
 
             This request is used by a user for retrieve his own information.
         '''
+
         return current_session.user
 
     @login_required
@@ -56,13 +77,13 @@ class User(users.Resource):
             This request is used by a user for update his own information.
         '''
         from nestedworld_api.db import db
-        from nestedworld_api.db import User
+        from nestedworld_api.db import User as DbUser
 
         user = current_session.user
 
-        if 'email' in data and User.query.filter(User.email == data['email']).count() > 0:
+        if 'email' in data and DbUser.query.filter(User.email == data['email']).count() > 0:
             users.abort(400, message='An user with same email/pseudo already exists')
-        if 'pseudo' in data and User.query.filter(User.pseudo == data['pseudo']).count() > 0:
+        if 'pseudo' in data and DbUser.query.filter(User.pseudo == data['pseudo']).count() > 0:
             users.abort(400, message='An user with same email/pseudo already exists')
 
         for (name, value) in data.items():
@@ -73,10 +94,10 @@ class User(users.Resource):
 
 
 @users.route('/<user_id>')
-class UserId(users.Resource):
+class User(users.Resource):
     tags = ['users']
 
-    class Schema(User.Schema):
+    class Schema(Users.Schema):
         pass
 
     @users.marshal_with(Schema())
@@ -92,6 +113,7 @@ class UserId(users.Resource):
         user = DbUser.query.get_or_404(user_id)
         return user
 
+    @login_required
     @users.marshal_with(Schema())
     def put(self, data, user_id):
         '''
