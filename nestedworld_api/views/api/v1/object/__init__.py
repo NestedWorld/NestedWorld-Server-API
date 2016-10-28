@@ -18,6 +18,7 @@ class Objects(objects.Resource):
         price = ma.Integer()
         image = ma.Url()
         kind = ma.String()
+        power = ma.Integer()
 
 
         @post_dump(pass_many=True)
