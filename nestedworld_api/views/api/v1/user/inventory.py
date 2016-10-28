@@ -5,7 +5,7 @@ from nestedworld_api.login import login_required, current_session
 from . import users
 from nestedworld_api.db import Object
 
-inventory = users.namespace('inventory')
+inventory = users.namespace('me/inventory')
 
 
 @inventory.route('/')

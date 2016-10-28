@@ -50,7 +50,7 @@ class Users(users.Resource):
 
         return users
 
-@users.route('/me')
+@users.route('/me/')
 class Me(users.Resource):
 
     class Schema(Users.Schema):
