@@ -1,13 +1,14 @@
 import arrow
 import sqlalchemy_utils as sau
 from geoalchemy2 import Geography
+from nestedworld_api.app import app
 from nestedworld_api.db import db
-from nestedworld_api.settings import PASSWORD_SCHEMES
-
 
 from .monsters import UserMonster
 from .friends import UserFriend
 from .inventory import Inventory
+
+PASSWORD_SCHEMES = app.config['PASSWORD_SCHEMES']
 
 
 PasswordType = sau.PasswordType(schemes=PASSWORD_SCHEMES)
@@ -50,6 +51,7 @@ class User(db.Model):
     level = db.Column(db.Integer, doc="User level", default=0)
 
     actual_localisation = db.Column(Geography('POINT'), doc='User Actual position')
+
 
 class PasswordResetRequest(db.Model):
 

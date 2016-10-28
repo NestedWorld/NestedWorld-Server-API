@@ -1,5 +1,5 @@
-from flask.ext.script import Manager
-from ..app import app
+from flask_script import Manager
+from nestedworld_api.app import app
 from .db import db_manager
 
 manager = Manager(app)

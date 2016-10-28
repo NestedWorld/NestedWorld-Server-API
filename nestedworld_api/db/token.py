@@ -1,9 +1,10 @@
 import arrow
 import sqlalchemy_utils as sau
 from itsdangerous import JSONWebSignatureSerializer as Serializer
-from . import db
-from ..settings import SECRET_KEY
+from nestedworld_api.app import app
+from nestedworld_api.db import db
 
+SECRET_KEY = app.config['SECRET_KEY']
 
 serializer = Serializer(SECRET_KEY, algorithm_name='HS256')
 
