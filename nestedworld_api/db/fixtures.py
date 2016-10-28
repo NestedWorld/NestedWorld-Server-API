@@ -79,7 +79,8 @@ def import_monsters():
         else :
             monster.type = 'plant'
 
-        monster.sprite = 'http://pokeapi.co/media/img/%d.png' % (obj['national_id'])
+        monster.base_sprite = 'http://pokeapi.co/media/img/%d.png' % (obj['national_id'])
+        monster.enraged_sprite = 'http://pokeapi.co/media/img/%d.png' % (obj['national_id'])
 
         db.session.add(monster)
         db.session.commit()

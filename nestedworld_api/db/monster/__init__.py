@@ -19,4 +19,5 @@ class Monster(db.Model):
     speed = db.Column(db.Float, doc='Monster initial speed value')
     type = db.Column(db.Enum('water', 'fire', 'earth', 'electric', 'plant',
                              name='monster_type'), doc='Monster type')
-    sprite = db.Column(db.String, doc='Monster sprite')
+    base_sprite = db.Column(db.String, doc='Monster base sprite')
+    enraged_sprite = db.Column(db.String(2000), nullable=True, doc='Monster enraged sprite')
