@@ -31,7 +31,7 @@ class Inventory(inventory.Resource):
         '''
         from nestedworld_api.db import Inventory
 
-        inventory = Inventory.query.all()
+        inventory = Inventory.query.filter(Inventory.user == current_session.user)
         return inventory
 
     @login_required

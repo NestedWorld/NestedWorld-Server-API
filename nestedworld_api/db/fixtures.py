@@ -4,7 +4,6 @@ from datetime import date
 from . import db
 from .token import Application
 from .user import User, UserFriend
-from .object import Plant
 
 
 def add(*objects):
@@ -201,13 +200,49 @@ def import_places():
     db.session.commit()
 
 def import_objects():
-        fire = Plant(
-            name='fire flower', description='a fire flower. Use it for fire monster.', premium=False,
-            price=25, image='http://www.mariowiki.com/images/thumb/6/6a/FireFlowerMK8.png/200px-FireFlowerMK8.png', type='plant')
 
-        water = Plant(
-            name='water flower', description='a water flower. Use it for water monster.', premium=True,
-            price=25, image='http://www.androidfreeware.net/software_images/water-flower.thumb.jpg', type='plant')
+    from . import Plant
+    from . import Inventory
 
-        db.session.add(fire, water)
-        db.session.commit()
+    plants = []
+    fire = Plant(
+        name='fire flower', description='a fire flower. Use it for fire monster.', premium=False,
+        price=25, image='http://www.mariowiki.com/images/thumb/6/6a/FireFlowerMK8.png/200px-FireFlowerMK8.png', type='plant')
+
+    water = Plant(
+        name='water flower', description='a water flower. Use it for water monster.', premium=True,
+        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/flowerFire.png', type='plant')
+
+    electric = Plant(
+        name='electric flower', description='a electric flower. Use it for electric monster.', premium=True,
+        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/flowerElec.png', type='plant')
+
+    grass = Plant(
+        name='grass flower', description='a grass flower. Use it for grass monster.', premium=True,
+        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/flowerGrass.png', type='plant')
+
+    dirt = Plant(
+        name='dirt flower', description='a dirt flower. Use it for dirt monster.', premium=True,
+        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/flowerDirt.png', type='plant')
+
+
+    flower = Plant(
+        name='flower', description='a simple flower. Use it for all monsters.', premium=True,
+        price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/Flower.png', type='plant')
+
+
+    plants.append(fire)
+    plants.append(water)
+    plants.append(dirt)
+    plants.append(electric)
+    plants.append(grass)
+    plants.append(flower)
+    add(fire, water, dirt, electric, grass, flower)
+    db.session.commit()
+
+    for user in User.query:
+        select = random.sample(plants, 5)
+        for plant in select:
+            object = Inventory(user=user, object=plant)
+            db.session.add(object)
+    db.session.commit()
