@@ -9,7 +9,7 @@ from nestedworld_api.db import Monster
 
 monster_attacks = monsters.namespace('attacks')
 
-@monsters.route('/<monster_id>/attacks')
+@monsters.route('/<monster_id>/attacks/')
 class MonsterAttacks(monster_attacks.Resource):
     tags = ['monsters']
 
@@ -83,6 +83,19 @@ class MonsterAttacks(monster_attacks.Resource):
 @monsters.route('/<monster_id>/attacks/<attack_id>')
 class MonsterAttack(monster_attacks.Resource):
 
+    @monsters.marshal_with(MonsterAttacks.AttackResult())
+    def get(self, monster_id, attack_id):
+        '''
+            Retrieve a specific monster of the user
+
+            This request is used by a user for retrieve his own monster.
+        '''
+        from nestedworld_api.db import MonsterAttack as DbMonsterAttack
+
+        monster = DbMonsterAttack.query.filter(DbMonsterAttack.monster_id == monster_id, DbMonsterAttack.id == attack_id).first()
+        return monster
+
+    @login_required
     def delete(self, monster_id, attack_id):
         '''
             Delete an attack to a monster

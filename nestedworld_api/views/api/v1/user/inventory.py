@@ -5,7 +5,7 @@ from nestedworld_api.login import login_required, current_session
 from . import users
 from nestedworld_api.db import Object
 
-inventory = users.namespace('inventory')
+inventory = users.namespace('me/inventory')
 
 
 @inventory.route('/')
@@ -17,7 +17,7 @@ class Inventory(inventory.Resource):
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
-            namespace = 'inventory'
+            namespace = 'inventory' if many else 'object'
             return {namespace: data}
 
     @login_required
@@ -63,12 +63,25 @@ class Inventory(inventory.Resource):
 @inventory.route('/<object_id>')
 class ObjectInventory(inventory.Resource):
 
+    @inventory.marshal_with(Inventory.Schema())
+    def get(self, object_id):
+        '''
+            Get a specific object in current user's inventory
+
+            This request is use by a user for getting an existing object to his inventory
+        '''
+
+        from nestedworld_api.db import Inventory
+
+        result = Inventory.query.filter(Inventory.id == object_id).first()
+        return result
+
     @login_required
     def delete(self, object_id):
         '''
             Delete an object in current user's inventory
 
-            This request is user by a user for deleting an existing object to his inventory
+            This request is use by a user for deleting an existing object to his inventory
         '''
 
         from nestedworld_api.db import db

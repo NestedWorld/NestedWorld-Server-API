@@ -5,6 +5,7 @@ __pycache__
 
 # Swagger UI (dev)
 /swagger-ui
+/logs
 
 # Misc stuff
 .*

@@ -53,6 +53,13 @@ class Objects(objects.Resource):
 @objects.route('/<object_id>')
 class Object(objects.Resource):
 
+    @objects.marshal_with(Objects.Schema())
+    def get(self, object_id):
+        from nestedworld_api.db import Object as DbObject
+
+        Object = DbObject.query.filter(DbObject.id == object_id).first()
+        return Object
+
     @login_required
     def delete(self, object_id):
         from nestedworld_api.db import db
