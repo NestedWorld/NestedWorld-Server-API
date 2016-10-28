@@ -21,7 +21,8 @@ class Monsters(monsters.Resource):
         defense = ma.Float()
         speed = ma.Float()
         type = ma.String(validate=[OneOf(['water', 'fire', 'earth', 'electric', 'plant'])])
-        sprite = ma.Url()
+        base_sprite = ma.Url()
+        enraged_sprite = ma.Url()
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
