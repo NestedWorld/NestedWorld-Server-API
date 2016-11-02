@@ -102,13 +102,14 @@ class Monster(monsters.Resource):
 
         monster = DbMonster.query.get_or_404(monster_id)
 
-        conflict = DbMonster.query\
-                            .filter(DbMonster.id != monster_id)\
-                            .filter(DbMonster.name == data['name'])\
-                            .first()
+        if 'name' in data:
+            conflict = DbMonster.query\
+                                .filter(DbMonster.id != monster_id)\
+                                .filter(DbMonster.name == data['name'])\
+                                .first()
 
-        if conflict is not None:
-            monsters.abort(400, 'An monster with same name already exists')
+            if conflict is not None:
+                monsters.abort(400, 'An monster with same name already exists')
 
         for (name, value) in data.items():
             setattr(monster, name, value)
