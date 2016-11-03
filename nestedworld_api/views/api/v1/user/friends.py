@@ -1,10 +1,9 @@
-from flask import jsonify, request
-from marshmallow import post_dump
 from nestedworld_api.app import ma
 from nestedworld_api.login import login_required, current_session
 from . import users
 
 user_friends = users.namespace('friends')
+
 
 @user_friends.route('/')
 class UserFriends(user_friends.Resource):
@@ -47,8 +46,8 @@ class UserFriends(user_friends.Resource):
         from nestedworld_api.db import UserFriend as DbUserFriend
 
         friends = DbUserFriend.query\
-                            .filter(DbUserFriend.user_id == current_session.user.id)\
-                            .all()
+                              .filter(DbUserFriend.user_id == current_session.user.id)\
+                              .all()
         return friends
 
     @login_required
@@ -62,17 +61,18 @@ class UserFriends(user_friends.Resource):
             and another existing user as friend.
         '''
         from nestedworld_api.db import db
-        from nestedworld_api.db import User as DbUserFriend
+        from nestedworld_api.db import User as DbUser
+        from nestedworld_api.db import UserFriend as DbUserFriend
 
-        friend = User.query.filter(
-            User.pseudo == data['pseudo']).first()
+        friend = DbUser.query.filter(
+            DbUser.pseudo == data['pseudo']).first()
         if friend is None:
             user_friend.abort(400, message='Friend not found')
 
         friends_count = DbUserFriend.query\
-                                  .filter((DbUserFriend.user_id == current_session.user.id) &
-                                          (DbUserFriend.friend_id == friend.id))\
-                                  .count()
+                                    .filter((DbUserFriend.user_id == current_session.user.id) &
+                                            (DbUserFriend.friend_id == friend.id))\
+                                    .count()
         if friends_count > 0:
             user_friend.abort(400, message='Friend already added')
 
@@ -81,6 +81,7 @@ class UserFriends(user_friends.Resource):
         db.session.commit()
 
         return result
+
 
 @user_friends.route('/<friend_id>')
 class UserFriend(user_friends.Resource):
