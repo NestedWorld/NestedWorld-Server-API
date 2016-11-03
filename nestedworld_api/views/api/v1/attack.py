@@ -96,13 +96,14 @@ class Attack(attacks.Resource):
 
         attack = DbAttack.query.get_or_404(attack_id)
 
-        conflict = DbAttack.query\
-                           .filter(DbAttack.id != attack_id)\
-                           .filter(DbAttack.name == data['name'])\
-                           .first()
+        if 'name' in data:
+            conflict = DbAttack.query\
+                               .filter(DbAttack.id != attack_id)\
+                               .filter(DbAttack.name == data['name'])\
+                               .first()
 
-        if conflict is not None:
-            attacks.abort(400, 'An attack with same name already exists')
+            if conflict is not None:
+                attacks.abort(400, 'An attack with same name already exists')
 
         for (name, value) in data.items():
             setattr(attack, name, value)
