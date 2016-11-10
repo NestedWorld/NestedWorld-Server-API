@@ -78,8 +78,8 @@ def import_monsters():
         else :
             monster.type = 'plant'
 
-        monster.base_sprite = 'http://pokeapi.co/media/img/%d.png' % (obj['national_id'])
-        monster.enraged_sprite = 'http://pokeapi.co/media/img/%d.png' % (obj['national_id'])
+        monster.base_sprite = 'https://s3-eu-west-1.amazonaws.com/nestedworld/Monsters/default_monster.png'
+        monster.enraged_sprite = 'https://s3-eu-west-1.amazonaws.com/nestedworld/Monsters/default_monster.png'
 
         db.session.add(monster)
         db.session.commit()
@@ -131,7 +131,7 @@ def import_attacks():
 
     db.session.commit()
 
-def import_places():
+def import_portals():
     import requests
     from collections import namedtuple
     from geoalchemy2.shape import from_shape
@@ -180,8 +180,8 @@ def import_places():
         point_name = point_tags.get('name:en', point_tags.get('name'))
 
         # print('Importing %s...' % (point_name))
-        point_place = Portal(name=point_name, author=admin, point=point_data)
-        db.session.add(point_place)
+        point_portal = Portal(name=point_name, author=admin, point=point_data)
+        db.session.add(point_portal)
 
     monsters = Monster.query.all()
     for region in Region.query:
@@ -204,7 +204,7 @@ def import_objects():
 
     from . import Plant
     from . import Inventory
-
+.
     plants = []
     fire = Plant(
         name='fire flower', description='a fire flower. Use it for up your attacksp.', premium=False,
