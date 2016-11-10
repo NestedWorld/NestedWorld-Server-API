@@ -27,8 +27,8 @@ def import_monsters():
 
 
 @db_manager.command
-def import_places():
-    fixtures.import_portails()
+def import_portals():
+    fixtures.import_portals()
 
 
 @db_manager.command
