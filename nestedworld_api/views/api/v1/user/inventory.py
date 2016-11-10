@@ -20,8 +20,32 @@ class Inventory(inventory.Resource):
             namespace = 'inventory' if many else 'object'
             return {namespace: data}
 
+    class InventoryResult(ma.Schema):
+
+        class Infos(ma.Schema):
+            id = ma.Integer(dump_only=True)
+            url = ma.UrlFor('api.v1.objects.object', object_id='<id>')
+
+            name = ma.String()
+            description = ma.String()
+            premium = ma.Boolean()
+            price = ma.Integer()
+            image = ma.Url()
+            kind = ma.String()
+            power = ma.Integer()
+
+        id = ma.Integer(dump_only=True)
+        infos = ma.Nested(Infos, attribute="object")
+
+        @post_dump(pass_many=True)
+        def add_envelope(self, data, many):
+            namespace = 'inventory' if many else 'object'
+            return {namespace: data}
+
+
+
     @login_required
-    @inventory.marshal_with(Schema(many=True))
+    @inventory.marshal_with(InventoryResult(many=True))
     def get(self):
         '''
             Retrieve current user's inventory
@@ -63,7 +87,7 @@ class Inventory(inventory.Resource):
 @inventory.route('/<object_id>')
 class ObjectInventory(inventory.Resource):
 
-    @inventory.marshal_with(Inventory.Schema())
+    @inventory.marshal_with(Inventory.InventoryResult())
     def get(self, object_id):
         '''
             Get a specific object in current user's inventory
