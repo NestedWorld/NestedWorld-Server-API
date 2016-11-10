@@ -204,7 +204,7 @@ def import_objects():
 
     from . import Plant
     from . import Inventory
-.
+
     plants = []
     fire = Plant(
         name='fire flower', description='a fire flower. Use it for up your attacksp.', premium=False,
