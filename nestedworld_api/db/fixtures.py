@@ -136,7 +136,7 @@ def import_places():
     from collections import namedtuple
     from geoalchemy2.shape import from_shape
     from shapely.geometry import Point
-    from . import Monster, Place, Region, RegionMonster, PlaceMonster
+    from . import Monster, Portal, Region, RegionMonster, PortalMonster
 
     admin = db.session.query(User)\
                       .filter(User.email == 'kokakiwi@kokakiwi.net')\
@@ -180,7 +180,7 @@ def import_places():
         point_name = point_tags.get('name:en', point_tags.get('name'))
 
         # print('Importing %s...' % (point_name))
-        point_place = Place(name=point_name, author=admin, point=point_data)
+        point_place = Portal(name=point_name, author=admin, point=point_data)
         db.session.add(point_place)
 
     monsters = Monster.query.all()
@@ -192,11 +192,11 @@ def import_places():
             region_monster.level = [10, 60]
             db.session.add(region_monster)
 
-    for place in Place.query:
+    for portal in Portal.query:
         select = random.sample(monsters, 4)
         for monster in select:
-            place_monster = PlaceMonster(place=place, monster=monster)
-            db.session.add(place_monster)
+            portal_monster = PortalMonster(portal=portal, monster=monster)
+            db.session.add(portal_monster)
 
     db.session.commit()
 

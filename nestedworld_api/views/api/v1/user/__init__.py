@@ -127,8 +127,8 @@ class User(users.Resource):
 
         user = DbUser.query.get_or_404(user_id)
         conflict = DbUser.query\
-                         .filter(DbPlace.id != place_id)\
-                         .filter(DbPlace.pseudo == data['pseudo'])\
+                         .filter(DbPortal.id != portal_id)\
+                         .filter(DbPortal.pseudo == data['pseudo'])\
                          .first()
 
         if conflict is not None:

@@ -1,7 +1,7 @@
 import intervals
 import sqlalchemy_utils as sau
 from . import Region
-from . import Place
+from . import Portal
 from .. import db
 from ..monster import Monster
 from ..utils import IDColumn
@@ -10,17 +10,17 @@ from ..utils import IDColumn
 if not hasattr(intervals, 'canonicalize'):
     intervals.canonicalize = intervals.interval.canonicalize
 
-class PlaceMonster(db.Model):
+class PortalMonster(db.Model):
 
-    __tablename__ = 'place_monsters'
+    __tablename__ = 'portal_monsters'
 
     id = IDColumn()
 
-    place_id = db.Column(db.Integer, db.ForeignKey('places.id'))
+    portal_id = db.Column(db.Integer, db.ForeignKey('portals.id'))
     monster_id = db.Column(db.Integer, db.ForeignKey('monsters.id'))
 
-    place = db.relationship('Place', cascade="all, delete", backref=db.backref('place_monsters'))
-    monster = db.relationship('Monster', cascade="all, delete", backref=db.backref('place_monsters'))
+    portal = db.relationship('Portal', cascade="all, delete", backref=db.backref('portal_monsters'))
+    monster = db.relationship('Monster', cascade="all, delete", backref=db.backref('portal_monsters'))
 
 class RegionMonster(db.Model):
 

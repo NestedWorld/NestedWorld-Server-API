@@ -8,19 +8,19 @@ from .. import db
 from ..utils import IDColumn
 
 
-class Place(db.Model):
+class Portal(db.Model):
 
-    __tablename__ = 'places'
+    __tablename__ = 'portals'
 
-    id = IDColumn(doc='Place ID')
+    id = IDColumn(doc='Portal ID')
 
-    name = db.Column(db.String, doc='Place name')
-    description = db.Column(db.Text, doc='Place description')
+    name = db.Column(db.String, doc='Portal name')
+    description = db.Column(db.Text, doc='Portal description')
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     added_at = db.Column(
-        sau.ArrowType, default=arrow.utcnow, doc='Place addition date')
+        sau.ArrowType, default=arrow.utcnow, doc='Portal addition date')
 
-    point = db.Column(Geography('POINT'), doc='Place geography point')
+    point = db.Column(Geography('POINT'), doc='Portal geography point')
 
     author = db.relationship('User')
 
@@ -36,9 +36,9 @@ class Region(db.Model):
     zone = db.Column(Geography('MULTIPOLYGON'), doc='Region geography polygon')
 
     @hybrid_property
-    def places(self):
-        return Place.query\
-                    .filter(func.ST_intersects(self.zone, Place.point))
+    def portals(self):
+        return Portal.query\
+                    .filter(func.ST_intersects(self.zone, Portal.point))
 
 from .monsters import RegionMonster
-from .monsters import PlaceMonster
+from .monsters import PortalMonster

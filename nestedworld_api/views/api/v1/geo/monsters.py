@@ -1,8 +1,8 @@
 from nestedworld_api.app import ma
-from . import places
+from . import portals
 
-@places.route('/<place_id>/monsters')
-class PlaceMonsters(places.Resource):
+@portals.route('/<portal_id>/monsters')
+class PortalMonsters(portals.Resource):
     tags = ['geo']
 
     class Schema(ma.Schema):
@@ -18,25 +18,25 @@ class PlaceMonsters(places.Resource):
 
         infos = ma.Nested(Infos, attribute='monster')
 
-    @places.marshal_with(Schema(many=True))
-    def get(self, place_id):
+    @portals.marshal_with(Schema(many=True))
+    def get(self, portal_id):
         '''
-            Retrieve all place's monsters
+            Retrieve all portal's monsters
 
-            This request is used for retrieve the list of all the existing monsters in a specific place.
+            This request is used for retrieve the list of all the existing monsters in a specific portal.
         '''
-        from nestedworld_api.db import PlaceMonster
+        from nestedworld_api.db import PortalMonster
         from sqlalchemy.orm import joinedload
 
-        monsters = PlaceMonster.query\
-                                .filter(PlaceMonster.place_id == place_id)\
+        monsters = PortalMonster.query\
+                                .filter(PortalMonster.portal_id == portal_id)\
                                 .options(joinedload('monster'))\
                                 .all()
         return monsters
 
 
-@places.route('/regions/<region_id>/monsters')
-class RegionMonsters(places.Resource):
+@portals.route('/regions/<region_id>/monsters')
+class RegionMonsters(portals.Resource):
     tags = ['geo']
 
     class Schema(ma.Schema):
@@ -59,7 +59,7 @@ class RegionMonsters(places.Resource):
         ratio = ma.Float()
         level = ma.Nested(Interval)
 
-    @places.marshal_with(Schema(many=True))
+    @portals.marshal_with(Schema(many=True))
     def get(self, region_id):
         '''
             Retrieve all region's monsters

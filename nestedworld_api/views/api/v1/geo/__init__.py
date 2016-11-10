@@ -11,88 +11,88 @@ class PointField(ma.Field):
 
         return [point.x, point.y]
 
-places = api.namespace('places')
+portals = api.namespace('portals')
 
 
-@places.route('/')
-class Places(places.Resource):
+@portals.route('/')
+class Portals(portals.Resource):
     tags = ['geo']
 
     class Schema(ma.Schema):
-        url = ma.UrlFor('.place', place_id='<id>')
+        url = ma.UrlFor('.portal', portal_id='<id>')
         name = ma.String()
         position = PointField(attribute='point')
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
-            namespace = 'places' if many else 'place'
+            namespace = 'portals' if many else 'portal'
             return {namespace: data}
 
-    @places.marshal_with(Schema(many=True))
+    @portals.marshal_with(Schema(many=True))
     def get(self):
         '''
-            Retrieve places
+            Retrieve portals
 
-            This request is used for retrieve the list of all the existing places.
+            This request is used for retrieve the list of all the existing portals.
         '''
-        from nestedworld_api.db import Place as DbPlace
+        from nestedworld_api.db import Portal as DbPortal
 
-        places = DbPlace.query.all()
-        return places
+        portals = DbPortal.query.all()
+        return portals
 
 
-@places.route('/<place_id>/')
-class Place(places.Resource):
+@portals.route('/<portal_id>/')
+class Portal(portals.Resource):
     tags = ['geo']
 
-    class Schema(Places.Schema):
+    class Schema(Portals.Schema):
 
         class Meta:
             exclude = ('url',)
 
-    @places.marshal_with(Schema())
-    def get(self, place_id):
+    @portals.marshal_with(Schema())
+    def get(self, portal_id):
         '''
-            Retrieve a place's informations
+            Retrieve a portal's informations
 
-            This request is used for retrieve a specific place.
+            This request is used for retrieve a specific portal.
         '''
-        from nestedworld_api.db import Place as DbPlace
+        from nestedworld_api.db import Portal as DbPortal
 
-        place = DbPlace.query.get_or_404(place_id)
-        return place
+        portal = DbPortal.query.get_or_404(portal_id)
+        return portal
 
-    @places.accept(Schema())
-    @places.marshal_with(Schema())
-    def put(self, data, place_id):
+    @portals.accept(Schema())
+    @portals.marshal_with(Schema())
+    def put(self, data, portal_id):
         '''
-            Update a place's informations.
+            Update a portal's informations.
 
-            This request is used for update a specific place
+            This request is used for update a specific portal
             (Only used by the admin through the admin interface).
         '''
         from nestedworld_api.db import db
-        from nestedworld_api.db import Place as DbPlace
+        from nestedworld_api.db import Portal as DbPortal
 
-        place = DbPlace.query.get_or_404(place_id)
-        conflict = DbPlace.query\
-                          .filter(DbPlace.id != place_id)\
-                          .filter(DbPlace.name == data['name'])\
+        portal = DbPortal.query.get_or_404(portal_id)
+        conflict = DbPortal.query\
+                          .filter(DbPortal.id != portal_id)\
+                          .filter(DbPortal.name == data['name'])\
                           .first()
 
         if conflict is not None:
-            places.abort(400, 'A place with same name already exists')
+            portals.abort(400, 'A portal with same name already exists')
 
         for (name, value) in data.items():
-            setattr(place, name, value)
+            setattr(portal, name, value)
 
         db.session.commit()
 
-        return place
+        return portal
 
 
-@places.route('/regions/')
-class Regions(places.Resource):
+@portals.route('/regions/')
+class Regions(portals.Resource):
     tags = ['geo']
 
     class Schema(ma.Schema):
@@ -104,7 +104,7 @@ class Regions(places.Resource):
             namespace = 'regions' if many else 'region'
             return {namespace: data}
 
-    @places.marshal_with(Schema(many=True))
+    @portals.marshal_with(Schema(many=True))
     def get(self):
         '''
             Retrieve all regions
@@ -117,8 +117,8 @@ class Regions(places.Resource):
         return regions
 
 
-@places.route('/regions/<region_id>/')
-class Region(places.Resource):
+@portals.route('/regions/<region_id>/')
+class Region(portals.Resource):
     tags = ['geo']
 
     class Schema(Regions.Schema):
@@ -126,7 +126,7 @@ class Region(places.Resource):
         class Meta:
             exclude = ('url',)
 
-    @places.marshal_with(Schema())
+    @portals.marshal_with(Schema())
     def get(self, region_id):
         '''
             Retrieve a region's informations
@@ -138,8 +138,8 @@ class Region(places.Resource):
         region = DbRegion.query.get_or_404(region_id)
         return region
 
-    @places.accept(Schema())
-    @places.marshal_with(Schema())
+    @portals.accept(Schema())
+    @portals.marshal_with(Schema())
     def put(self, data, region_id):
         '''
             Update a region's informations
@@ -158,7 +158,7 @@ class Region(places.Resource):
                            .first()
 
         if conflict is not None:
-            places.abort(400, 'A region with same name already exists')
+            portals.abort(400, 'A region with same name already exists')
 
         for (name, value) in data.items():
             setattr(region, name, value)
@@ -168,21 +168,21 @@ class Region(places.Resource):
         return region
 
 
-@places.route('/regions/<region_id>/places')
-class RegionPlaces(places.Resource):
+@portals.route('/regions/<region_id>/portals')
+class RegionPlaces(portals.Resource):
     tags = ['geo']
 
-    @places.marshal_with(Places.Schema(many=True))
+    @portals.marshal_with(Portals.Schema(many=True))
     def get(self, region_id):
         '''
-            Retrieve all region's places
+            Retrieve all region's portals
 
-            This request is used for retrieve the list of places in a specific region.
+            This request is used for retrieve the list of portals in a specific region.
         '''
         from nestedworld_api.db import Region
 
         region = Region.query.get_or_404(region_id)
-        return region.places
+        return region.portals
 
 
 from . import monsters
