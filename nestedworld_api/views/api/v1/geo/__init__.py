@@ -11,10 +11,10 @@ class PointField(ma.Field):
 
         return [point.x, point.y]
 
-portals = api.namespace('portals')
+portals = api.namespace('geo')
 
 
-@portals.route('/')
+@portals.route('/portals')
 class Portals(portals.Resource):
     tags = ['geo']
 
@@ -41,7 +41,7 @@ class Portals(portals.Resource):
         return portals
 
 
-@portals.route('/<portal_id>/')
+@portals.route('/portals/<portal_id>/')
 class Portal(portals.Resource):
     tags = ['geo']
 
