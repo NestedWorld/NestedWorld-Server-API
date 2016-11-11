@@ -98,6 +98,7 @@ class Regions(portals.Resource):
     class Schema(ma.Schema):
         url = ma.UrlFor('.region', region_id='<id>')
         name = ma.String()
+        type = ma.validate=[OneOf(['water', 'fire', 'earth', 'electric', 'plant'])]
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):

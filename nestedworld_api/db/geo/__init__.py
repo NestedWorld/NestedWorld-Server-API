@@ -35,6 +35,9 @@ class Region(db.Model):
 
     zone = db.Column(Geography('MULTIPOLYGON'), doc='Region geography polygon')
 
+    type = db.Column(db.Enum('water', 'fire', 'earth', 'electric', 'plant',
+                             name='region_type'), doc='Region type')
+
     @hybrid_property
     def portals(self):
         return Portal.query\
