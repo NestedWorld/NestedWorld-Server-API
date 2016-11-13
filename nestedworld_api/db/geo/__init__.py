@@ -24,6 +24,8 @@ class Portal(db.Model):
 
     author = db.relationship('User')
 
+    type = db.Column(db.Enum('water', 'fire', 'earth', 'electric', 'plant',
+                             name='portal_type'), doc='portal type')
 
 class Region(db.Model):
 

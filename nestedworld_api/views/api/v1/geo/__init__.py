@@ -1,5 +1,6 @@
 from marshmallow import post_dump
 from nestedworld_api.app import ma
+from marshmallow.validate import OneOf
 from .. import api
 
 
@@ -22,6 +23,7 @@ class Portals(portals.Resource):
         url = ma.UrlFor('.portal', portal_id='<id>')
         name = ma.String()
         position = PointField(attribute='point')
+        type = ma.String(validate=[OneOf(['water', 'fire', 'earth', 'electric', 'plant'])])
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
@@ -89,6 +91,22 @@ class Portal(portals.Resource):
         db.session.commit()
 
         return portal
+
+@portals.route('/portals/<x>/<y>')
+class PortalsNear(portals.Resource):
+
+    class Schema(Portals.Schema):
+
+        class Meta:
+            exclude = ('url',)
+
+    @portals.marshal_with(Schema())
+    def get(self, x ,y):
+        from nestedworld_api.db import Portal as DbPortal
+
+        portals = DbPortal.query.filter(Db.portal.point.x < x).filter(Db.portal.point.y < y)
+
+        return portals
 
 
 @portals.route('/regions/')
