@@ -1,13 +1,13 @@
 from marshmallow import post_dump
 from nestedworld_api.app import ma
 from marshmallow.validate import OneOf
+from geoalchemy2.shape import to_shape
 from .. import api
 
 
 class PointField(ma.Field):
 
     def _serialize(self, value, attr, obj):
-        from geoalchemy2.shape import to_shape
         point = to_shape(value)
 
         return [point.x, point.y]
@@ -100,13 +100,19 @@ class PortalsNear(portals.Resource):
         class Meta:
             exclude = ('url',)
 
-    @portals.marshal_with(Schema())
+    @portals.marshal_with(Schema(many=True))
     def get(self, x ,y):
         from nestedworld_api.db import Portal as DbPortal
 
-        portals = DbPortal.query.filter(Db.portal.point.x < x).filter(Db.portal.point.y < y)
-
-        return portals
+        portals = DbPortal.query.all()
+        result = []
+        affin = 0.002
+        for portal in portals:
+            point = to_shape(portal.point)
+            if point.x >= float(x) - affin and point.x <= float(x) + affin and \
+            point.y >= float(y) - affin and point.y <= float(y) + affin :
+                result.append(portal)
+        return result
 
 
 @portals.route('/regions/')
