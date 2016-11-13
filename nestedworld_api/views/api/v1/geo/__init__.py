@@ -23,7 +23,7 @@ class Portals(portals.Resource):
         url = ma.UrlFor('.portal', portal_id='<id>')
         name = ma.String()
         position = PointField(attribute='point')
-        type = ma.validate=[OneOf(['water', 'fire', 'earth', 'electric', 'plant'])]
+        type = ma.String(validate=[OneOf(['water', 'fire', 'earth', 'electric', 'plant'])])
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
@@ -93,7 +93,7 @@ class Portal(portals.Resource):
         return portal
 
 @portals.route('/portals/<x>/<y>')
-class PortalsNear():
+class PortalsNear(portals.Resource):
 
     class Schema(Portals.Schema):
 

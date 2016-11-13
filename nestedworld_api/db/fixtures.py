@@ -157,16 +157,14 @@ def import_portals():
         return r.json()['elements']
 
     print('Querying...')
-    r = query_overpass('area["name:en"="Seoul"];out;node(area)[name];out 200 body;')
-    city = r[0]
-    points = r[1:]
+    r = query_overpass('area(3600058404)->.searchArea;(node["amenity"](area.searchArea););out body;')
+    points = r[0:]
 
     # City
-    city_rel_id = int(city['id'] - 3.6e9)
+    city_rel_id = int(3600058404 - 3.6e9)
     city_polygon = get_polygon(city_rel_id)
 
-    city_tags = city['tags']
-    city_name = city_tags.get('name:en', city_tags.get('name'))
+    city_name = "Lille"
 
     print('Importing %s...' % (city_name))
     city_region = Region(name=city_name, zone=city_polygon)
@@ -179,9 +177,11 @@ def import_portals():
         point_tags = point['tags']
         point_name = point_tags.get('name:en', point_tags.get('name'))
 
+        type = ['water', 'fire', 'earth', 'electric', 'plant']
+        if point_name is not None :
         # print('Importing %s...' % (point_name))
-        point_portal = Portal(name=point_name, author=admin, point=point_data)
-        db.session.add(point_portal)
+            point_portal = Portal(name=point_name, author=admin, point=point_data, type=random.sample(type, 1)[0])
+            db.session.add(point_portal)
 
     monsters = Monster.query.all()
     for region in Region.query:
