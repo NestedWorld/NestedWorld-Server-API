@@ -24,6 +24,8 @@ class Portal(db.Model):
 
     author = db.relationship('User')
 
+    type = db.Column(db.Enum('water', 'fire', 'earth', 'electric', 'plant',
+                             name='region_type'), doc='Region type')
 
 class Region(db.Model):
 
@@ -34,9 +36,6 @@ class Region(db.Model):
     name = db.Column(db.String, doc='Region name')
 
     zone = db.Column(Geography('MULTIPOLYGON'), doc='Region geography polygon')
-
-    type = db.Column(db.Enum('water', 'fire', 'earth', 'electric', 'plant',
-                             name='region_type'), doc='Region type')
 
     @hybrid_property
     def portals(self):
