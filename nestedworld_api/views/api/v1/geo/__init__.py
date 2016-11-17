@@ -117,7 +117,7 @@ class PortalsNear(portals.Resource):
             .label('distance')
         portals = DbPortal.query\
             .add_columns(distance)\
-            .filter(distance < 500)\
+            .filter(distance < 250)\
             .order_by(distance)\
             .all()
         for (portal, distance) in portals:
