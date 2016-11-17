@@ -94,7 +94,7 @@ class Portal(portals.Resource):
         return portal
 
 
-@portals.route('/portals/<x>/<y>')
+@portals.route('/portals/<float:x>/<float:y>')
 class PortalsNear(portals.Resource):
 
     class Schema(Portals.Schema):
@@ -209,3 +209,5 @@ class RegionPlaces(portals.Resource):
 
         region = Region.query.get_or_404(region_id)
         return region.portals
+
+from . import monsters

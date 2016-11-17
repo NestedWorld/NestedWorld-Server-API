@@ -1,7 +1,9 @@
+from marshmallow import post_dump
 from nestedworld_api.app import ma
 from . import portals
 
-@portals.route('/<portal_id>/monsters')
+
+@portals.route('/portals/<int:portal_id>/monsters')
 class PortalMonsters(portals.Resource):
     tags = ['geo']
 
@@ -17,6 +19,11 @@ class PortalMonsters(portals.Resource):
             defense = ma.Float()
 
         infos = ma.Nested(Infos, attribute='monster')
+
+        @post_dump(pass_many=True)
+        def add_envelope(self, data, many):
+            namespace = 'monsters' if many else 'monster'
+            return {namespace: data}
 
     @portals.marshal_with(Schema(many=True))
     def get(self, portal_id):
