@@ -94,27 +94,36 @@ class Portal(portals.Resource):
         return portal
 
 
-@portals.route('/portals/<x>/<y>')
+@portals.route('/portals/<float:long>/<float:lat>')
 class PortalsNear(portals.Resource):
 
     class Schema(Portals.Schema):
+
+        distance = ma.Float()
 
         class Meta:
             exclude = ('url',)
 
     @portals.marshal_with(Schema(many=True))
-    def get(self, x, y):
+    def get(self, long, lat):
+        from geoalchemy2 import Geography
+        from geoalchemy2 import functions, shape
         from nestedworld_api.db import Portal as DbPortal
+        from shapely.geometry import Point
+        from sqlalchemy import cast
 
-        portals = DbPortal.query.all()
-        result = []
-        affin = 0.002
-        for portal in portals:
-            point = to_shape(portal.point)
-            if point.x >= float(x) - affin and point.x <= float(x) + affin and \
-               point.y >= float(y) - affin and point.y <= float(y) + affin:
-                result.append(portal)
-        return result
+        point = shape.from_shape(Point(lat, long))
+        distance = functions.ST_Distance(DbPortal.point, point)\
+            .label('distance')
+        portals = DbPortal.query\
+            .add_columns(distance)\
+            .filter(distance < 500)\
+            .order_by(distance)\
+            .all()
+        for (portal, distance) in portals:
+            portal.distance = distance
+
+        return (entry[0] for entry in portals)
 
 
 @portals.route('/regions/')
