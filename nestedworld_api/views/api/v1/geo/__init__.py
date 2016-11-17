@@ -20,6 +20,7 @@ class Portals(portals.Resource):
     tags = ['geo']
 
     class Schema(ma.Schema):
+        id = ma.Integer(dump_only=True)
         url = ma.UrlFor('.portal', portal_id='<id>')
         name = ma.String()
         position = PointField(attribute='point')
@@ -78,9 +79,9 @@ class Portal(portals.Resource):
 
         portal = DbPortal.query.get_or_404(portal_id)
         conflict = DbPortal.query\
-                          .filter(DbPortal.id != portal_id)\
-                          .filter(DbPortal.name == data['name'])\
-                          .first()
+                           .filter(DbPortal.id != portal_id)\
+                           .filter(DbPortal.name == data['name'])\
+                           .first()
 
         if conflict is not None:
             portals.abort(400, 'A portal with same name already exists')
@@ -92,6 +93,7 @@ class Portal(portals.Resource):
 
         return portal
 
+
 @portals.route('/portals/<x>/<y>')
 class PortalsNear(portals.Resource):
 
@@ -101,7 +103,7 @@ class PortalsNear(portals.Resource):
             exclude = ('url',)
 
     @portals.marshal_with(Schema(many=True))
-    def get(self, x ,y):
+    def get(self, x, y):
         from nestedworld_api.db import Portal as DbPortal
 
         portals = DbPortal.query.all()
@@ -110,7 +112,7 @@ class PortalsNear(portals.Resource):
         for portal in portals:
             point = to_shape(portal.point)
             if point.x >= float(x) - affin and point.x <= float(x) + affin and \
-            point.y >= float(y) - affin and point.y <= float(y) + affin :
+               point.y >= float(y) - affin and point.y <= float(y) + affin:
                 result.append(portal)
         return result
 
@@ -207,6 +209,3 @@ class RegionPlaces(portals.Resource):
 
         region = Region.query.get_or_404(region_id)
         return region.portals
-
-
-from . import monsters
