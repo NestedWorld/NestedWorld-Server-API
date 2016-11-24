@@ -75,11 +75,11 @@ def import_monsters():
             monster.type = 'fire'
         elif obj['types'][0]['name'] == 'water':
             monster.type = 'water'
-        else :
+        else:
             monster.type = 'plant'
 
         monster.base_sprite = 'https://s3-eu-west-1.amazonaws.com/nestedworld/Monsters/default_monster.png'
-        monster.enraged_sprite = 'https://s3-eu-west-1.amazonaws.com/nestedworld/Monsters/default_monster.png'
+        monster.enraged_sprite = 'https://s3-eu-west-1.amazonaws.com/nestedworld/Monsters/bad.png'
 
         db.session.add(monster)
         db.session.commit()
@@ -88,11 +88,12 @@ def import_monsters():
     for user in User.query:
         select = random.sample(monsters, 5)
         for monster in select:
-            user_monster = UserMonster(user=user, monster=monster, \
-            level=0, experience=0, surname="IAMTOTORO")
+            user_monster = UserMonster(user=user, monster=monster,
+                                       level=0, experience=0, surname="IAMTOTORO")
             db.session.add(user_monster)
 
     db.session.commit()
+
 
 def import_attacks():
     import json
@@ -130,6 +131,7 @@ def import_attacks():
             db.session.add(monster_attack)
 
     db.session.commit()
+
 
 def import_portals():
     import requests
@@ -178,8 +180,8 @@ def import_portals():
         point_name = point_tags.get('name:en', point_tags.get('name'))
 
         type = ['water', 'fire', 'earth', 'electric', 'plant']
-        if point_name is not None :
-        # print('Importing %s...' % (point_name))
+        if point_name is not None:
+            # print('Importing %s...' % (point_name))
             point_portal = Portal(name=point_name, author=admin, point=point_data, type=random.sample(type, 1)[0])
             db.session.add(point_portal)
 
@@ -199,6 +201,7 @@ def import_portals():
             db.session.add(portal_monster)
 
     db.session.commit()
+
 
 def import_objects():
 
@@ -226,11 +229,9 @@ def import_objects():
         name='dirt flower', description='a dirt flower. Use it for up your defense.', premium=True,
         price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/flowerDirt.png', type='plant', kind="def-up", power="1")
 
-
     flower = Plant(
         name='flower', description='a simple flower. Use it for healing monster.', premium=True,
         price=25, image='https://s3-eu-west-1.amazonaws.com/nestedworld/Items/Flower.png', type='plant', kind="heal", power="50")
-
 
     plants.append(fire)
     plants.append(water)
