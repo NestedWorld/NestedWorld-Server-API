@@ -33,7 +33,13 @@ def reset_db():
         birth_date=arrow.get('1994-07-06').datetime.date(), gender='male')
     thomas.password = 'mexico'
 
-    add(admin, florian, alice, thomas)
+    hannot = User(
+        email='thannot@gmail.com', pseudo='cazheer', city='Lille',
+        birth_date=arrow.get('1994-13-07').datetime.date(), gender='male'
+    )
+    hannot.password = 'toto'
+
+    add(admin, florian, alice, thomas, hannot)
 
     # Friends
     add(UserFriend(user=alice, friend=florian))
@@ -41,6 +47,10 @@ def reset_db():
     add(UserFriend(user=admin, friend=florian))
     add(UserFriend(user=thomas, friend=florian))
     add(UserFriend(user=thomas, friend=alice))
+    add(UserFriend(user=hannot, friend=florian))
+    add(UserFriend(user=hannot, friend=alice))
+    add(UserFriend(user=florian, friend=thomas))
+    add(UserFriend(user=florian, friend=hannot))
 
     # Reset apps
     app = Application(name='Test app', token='test')
