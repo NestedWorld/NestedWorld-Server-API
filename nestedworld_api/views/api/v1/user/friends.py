@@ -68,7 +68,7 @@ class UserFriends(user_friends.Resource):
         friend = DbUser.query.filter(
             DbUser.pseudo == data['pseudo']).first()
         if friend is None:
-            user_friend.abort(400, message='Friend not found')
+            user_friends.abort(400, message='Friend not found')
 
         friends_count = DbUserFriend.query\
                                     .filter((DbUserFriend.user_id == current_session.user.id) &
