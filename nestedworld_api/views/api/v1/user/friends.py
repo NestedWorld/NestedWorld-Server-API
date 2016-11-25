@@ -14,6 +14,7 @@ class UserFriends(user_friends.Resource):
 
         # TODO : Maybe use the User.Schema ?
         class User(ma.Schema):
+            id = ma.Integer(dump_only=True)
             pseudo = ma.String()
             birth_date = ma.Date()
             city = ma.String()

@@ -18,6 +18,7 @@ class Users(users.Resource):
     tags = ['users']
 
     class Schema(ma.Schema):
+        id = ma.Integer(dump_only=True)
         email = ma.Email()
         pseudo = ma.String()
         birth_date = ma.Date()
