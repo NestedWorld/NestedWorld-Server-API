@@ -86,7 +86,6 @@ class UserMonsters(user_monsters.Resource):
         monster.experience = data['experience']
         monster.level = data['level']
         monster.base_sprite = data['base_sprite']
-        monster.enraged_sprite = data['enraged_sprite']
 
         db.session.add(monster)
         db.session.commit()
