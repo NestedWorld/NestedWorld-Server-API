@@ -182,6 +182,48 @@ def import_portals():
     city_region = Region(name=city_name, zone=city_polygon)
     db.session.add(city_region)
 
+    # Paris
+
+    r = query_overpass('area(3600007444)->.searchArea;(node["amenity"](area.searchArea););out body;')
+    points += r[0:]
+
+    city_rel_id = int(3600007444 - 3.6e9)
+    city_polygon = get_polygon(city_rel_id)
+
+    city_name = "Paris"
+
+    print('Importing %s...' % (city_name))
+    city_region = Region(name=city_name, zone=city_polygon)
+    db.session.add(city_region)
+
+    # Epitech Lille
+
+    r = query_overpass('area(3600105122)->.searchArea;(node["amenity"](area.searchArea););out body;')
+    points += r[0:]
+
+    city_rel_id = int(3600007444 - 3.6e9)
+    city_polygon = get_polygon(city_rel_id)
+
+    city_name = "Kremlin-Bicêtre"
+
+    print('Importing %s...' % (city_name))
+    city_region = Region(name=city_name, zone=city_polygon)
+    db.session.add(city_region)
+
+    # Mexique
+
+    r = query_overpass('area(3605605820)->.searchArea;(node["amenity"](area.searchArea););out body;')
+    points += r[0:]
+
+    city_rel_id = int(3600007444 - 3.6e9)
+    city_polygon = get_polygon(city_rel_id)
+
+    city_name = "Guadalajara"
+
+    print('Importing %s...' % (city_name))
+    city_region = Region(name=city_name, zone=city_polygon)
+    db.session.add(city_region)
+
     # Points
     for point in points:
         point_data = from_shape(Point(point['lon'], point['lat']))
