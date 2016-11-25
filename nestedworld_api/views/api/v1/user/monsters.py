@@ -35,6 +35,7 @@ class UserMonsters(user_monsters.Resource):
             hp = ma.Float()
             attack = ma.Float()
             defense = ma.Float()
+            base_sprite = ma.Url()
 
 
         id = ma.Integer(dump_only=True)
@@ -42,8 +43,6 @@ class UserMonsters(user_monsters.Resource):
         surname = ma.String()
         experience = ma.Integer()
         level = ma.Integer()
-        base_sprite = ma.Url()
-        enraged_sprite = ma.Url()
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
@@ -85,7 +84,6 @@ class UserMonsters(user_monsters.Resource):
         monster.surname = data['surname']
         monster.experience = data['experience']
         monster.level = data['level']
-        monster.base_sprite = data['base_sprite']
 
         db.session.add(monster)
         db.session.commit()
