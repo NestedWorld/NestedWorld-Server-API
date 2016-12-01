@@ -204,7 +204,7 @@ def import_portals():
     city_rel_id = int(3600007444 - 3.6e9)
     city_polygon = get_polygon(city_rel_id)
 
-    city_name = "Kremlin-Bicetre"
+    city_name = "KremlinBicetre"
 
     print('Importing %s...' % (city_name))
     city_region = Region(name=city_name, zone=city_polygon)

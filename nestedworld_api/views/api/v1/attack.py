@@ -126,3 +126,4 @@ class Attack(attacks.Resource):
 
         DbAttack.query.filter(DbAttack.id == attack_id).delete()
         db.session.commit()
+        return {"message":"ok"}

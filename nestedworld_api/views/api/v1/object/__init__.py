@@ -68,3 +68,4 @@ class Object(objects.Resource):
 
         DbObject.query.filter(DbObject.id == object_id).delete()
         db.session.commit()
+        return {"message":"ok"}

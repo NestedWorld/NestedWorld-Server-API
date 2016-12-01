@@ -119,3 +119,4 @@ class UserMonster(user_monsters.Resource):
 
         DbUserMonster.query.filter(DbUserMonster.id == monster_id, DbUserMonster.user_id == current_session.user.id).delete()
         db.session.commit()
+        return {"message":"ok"}

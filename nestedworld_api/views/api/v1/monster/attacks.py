@@ -108,3 +108,4 @@ class MonsterAttack(monster_attacks.Resource):
 
         DbMonsterAttack.query.filter(DbMonsterAttack.monster_id == monster_id).filter(DbMonsterAttack.id == attack_id).delete()
         db.session.commit()
+        return {"message":"ok"}

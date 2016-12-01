@@ -109,3 +109,4 @@ class UserFriend(user_friends.Resource):
 
         DbUserFriend.query.filter(DbUserFriend.id == friend_id).delete()
         db.session.commit()
+        return {"message":"ok"}
