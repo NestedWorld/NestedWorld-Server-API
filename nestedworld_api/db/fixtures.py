@@ -35,7 +35,7 @@ def reset_db():
 
     hannot = User(
         email='thannot@gmail.com', pseudo='cazheer', city='Lille',
-        birth_date=arrow.get('1994-13-07').datetime.date(), gender='male'
+        birth_date=arrow.get('1994-07-13').datetime.date(), gender='male'
     )
     hannot.password = 'toto'
 
