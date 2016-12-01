@@ -35,6 +35,7 @@ class UserMonsters(user_monsters.Resource):
             hp = ma.Float()
             attack = ma.Float()
             defense = ma.Float()
+            speed = ma.Float()
             base_sprite = ma.Url()
 
 
