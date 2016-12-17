@@ -106,6 +106,9 @@ class PortalsNear(portals.Resource):
 
     @portals.marshal_with(Schema(many=True))
     def get(self, long, lat):
+        '''
+            Retrieve portals near the specified location
+        '''
         from geoalchemy2 import Geography
         from geoalchemy2 import functions, shape
         from nestedworld_api.db import Portal as DbPortal

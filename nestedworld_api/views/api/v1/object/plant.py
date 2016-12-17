@@ -10,6 +10,7 @@ plant = api.namespace('plants')
 
 @plant.route('/')
 class Plant(plant.Resource):
+    tags = ['objects']
 
     class Schema(ma.Schema):
         id = ma.Integer(dump_only=True)

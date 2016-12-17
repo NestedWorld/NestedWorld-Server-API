@@ -7,8 +7,10 @@ from .. import api
 
 objects = api.namespace('objects')
 
+
 @objects.route('/')
 class Objects(objects.Resource):
+    tags = ['objects']
 
     class Schema(ma.Schema):
         id = ma.Integer(dump_only=True)
@@ -20,7 +22,6 @@ class Objects(objects.Resource):
         kind = ma.String()
         power = ma.Integer()
 
-
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
             namespace = 'Objects' if many else 'Object'
@@ -28,6 +29,9 @@ class Objects(objects.Resource):
 
     @objects.marshal_with(Schema(many=True))
     def get(self):
+        '''
+            Retrieve a list of all objects
+        '''
         from nestedworld_api.db import Object as DbObject
 
         Objects = DbObject.query.all()
@@ -37,6 +41,9 @@ class Objects(objects.Resource):
     @objects.accept(Schema())
     @objects.marshal_with(Schema())
     def post(self, data):
+        '''
+            Create a new object in the DB
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Object as DbObject
 
@@ -51,11 +58,16 @@ class Objects(objects.Resource):
 
         return Object
 
+
 @objects.route('/<object_id>')
 class Object(objects.Resource):
+    tags = ['objects']
 
     @objects.marshal_with(Objects.Schema())
     def get(self, object_id):
+        '''
+            Retrieve a specific object.
+        '''
         from nestedworld_api.db import Object as DbObject
 
         Object = DbObject.query.filter(DbObject.id == object_id).first()
@@ -63,9 +75,12 @@ class Object(objects.Resource):
 
     @login_required
     def delete(self, object_id):
+        '''
+            Delete a specific object.
+        '''
         from nestedworld_api.db import db
         from nestedworld_api.db import Object as DbObject
 
         DbObject.query.filter(DbObject.id == object_id).delete()
         db.session.commit()
-        return {"message":"ok"}
+        return {"message": "ok"}

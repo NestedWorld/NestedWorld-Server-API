@@ -91,6 +91,9 @@ class UserFriend(user_friends.Resource):
     @login_required
     @user_friends.marshal_with(UserFriends.FriendResult())
     def get(self, friend_id):
+        '''
+            Retrieve informations on a specific user's friend.
+        '''
         from nestedworld_api.db import UserFriend as DbUserFriend
 
         friend = DbUserFriend.query.filter(DbUserFriend.id == friend_id).first()
