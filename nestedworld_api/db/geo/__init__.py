@@ -4,6 +4,7 @@ from geoalchemy2 import Geometry, Geography
 from sqlalchemy import func
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy.sql.expression import cast
+from ..commons import elements
 from .. import db
 from ..utils import IDColumn
 
@@ -14,18 +15,13 @@ class Portal(db.Model):
 
     id = IDColumn(doc='Portal ID')
 
-    name = db.Column(db.String, doc='Portal name')
-    description = db.Column(db.Text, doc='Portal description')
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    added_at = db.Column(
-        sau.ArrowType, default=arrow.utcnow, doc='Portal addition date')
-
     point = db.Column(Geography('POINT'), doc='Portal geography point')
+    created = db.Column(sau.ArrowType(timezone=True), default=arrow.utcnow, doc='Portal creation date')
+    captured = db.Column(sau.ArrowType(timezone=True), doc='Date of capture')
+    duration = db.Column(db.Integer, doc='Duration of the capture in seconds')
+    catching_end = db.Column(sau.ArrowType(timezone=True), doc="Date of catching's end")
+    type = db.Column(elements, doc='portal type')
 
-    author = db.relationship('User')
-
-    type = db.Column(db.Enum('water', 'fire', 'earth', 'electric', 'plant',
-                             name='portal_type'), doc='portal type')
 
 class Region(db.Model):
 

@@ -25,6 +25,10 @@ class Portals(portals.Resource):
         name = ma.String()
         position = PointField(attribute='point')
         type = ma.String(validate=[OneOf(['water', 'fire', 'earth', 'electric', 'plant'])])
+        created = ma.DateTime(dump_only=True)
+        captured = ma.DateTime()
+        catching_end = ma.DateTime()
+        duration = ma.Integer()
 
         @post_dump(pass_many=True)
         def add_envelope(self, data, many):
