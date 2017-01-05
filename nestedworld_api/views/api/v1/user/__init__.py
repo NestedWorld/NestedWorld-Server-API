@@ -11,6 +11,7 @@ from . import auth
 from . import monsters
 from . import friends
 from . import inventory
+from . import stats
 
 
 @users.route('/')
@@ -51,7 +52,8 @@ class Users(users.Resource):
 
         return users
 
-@users.route('/me/')
+
+@users.route('/me')
 class Me(users.Resource):
 
     class Schema(Users.Schema):
