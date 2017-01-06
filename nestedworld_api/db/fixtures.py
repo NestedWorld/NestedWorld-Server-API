@@ -63,8 +63,7 @@ def import_monsters():
     from . import Monster, UserMonster
 
     print('Fetching data...')
-    data = json.load(open('monsters.json'))
-    objects = data['objects']
+    objects = json.load(open('monsters.json'))
 
     print('Importing data...')
     monsters = []
@@ -75,21 +74,10 @@ def import_monsters():
         monster.attack = obj['attack']
         monster.defense = obj['defense']
         monster.speed = obj['speed']
-        if obj['types'][0]['name'] == 'electric':
-            monster.type = 'electric'
-        elif obj['types'][0]['name'] == 'grass':
-            monster.type = 'plant'
-        elif obj['types'][0]['name'] == 'rock' or obj['types'][0]['name'] == 'ground':
-            monster.type = 'earth'
-        elif obj['types'][0]['name'] == 'fire':
-            monster.type = 'fire'
-        elif obj['types'][0]['name'] == 'water':
-            monster.type = 'water'
-        else:
-            monster.type = 'plant'
+        monster.type = obj['type']
 
-        monster.base_sprite = 'https://s3-eu-west-1.amazonaws.com/nestedworld/Monsters/default_monster.png'
-        monster.enraged_sprite = 'https://s3-eu-west-1.amazonaws.com/nestedworld/Monsters/bad.png'
+        monster.base_sprite = obj['sprite']
+        monster.enraged_sprite = obj['enraged_sprite']
 
         db.session.add(monster)
         db.session.commit()
@@ -234,7 +222,7 @@ def import_portals():
         type = ['water', 'fire', 'earth', 'electric', 'plant']
         if point_name is not None:
             # print('Importing %s...' % (point_name))
-            point_portal = Portal(name=point_name, author=admin, point=point_data, type=random.sample(type, 1)[0])
+            point_portal = Portal(point=point_data, type=random.sample(type, 1)[0], created=arrow.utcnow())
             db.session.add(point_portal)
 
     monsters = Monster.query.all()

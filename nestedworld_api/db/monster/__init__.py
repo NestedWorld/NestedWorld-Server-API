@@ -2,6 +2,7 @@ import arrow
 import sqlalchemy_utils as sau
 from nestedworld_api.db import db
 
+from ..commons import elements
 from .attacks import MonsterAttack
 
 TYPES = ['water', 'fire', 'earth', 'electric', 'plant']
@@ -19,6 +20,6 @@ class Monster(db.Model):
     attack = db.Column(db.Float, doc='Monster initial attack value')
     defense = db.Column(db.Float, doc='Monster initial defense value')
     speed = db.Column(db.Float, doc='Monster initial speed value')
-    type = db.Column(db.Enum(*TYPES, name='monster_type'), doc='Monster type')
+    type = db.Column(elements, doc='Monster type')
     base_sprite = db.Column(db.String, doc='Monster base sprite')
     enraged_sprite = db.Column(db.String(2000), nullable=True, doc='Monster enraged sprite')

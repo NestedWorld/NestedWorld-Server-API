@@ -10,6 +10,7 @@ from ..utils import IDColumn
 if not hasattr(intervals, 'canonicalize'):
     intervals.canonicalize = intervals.interval.canonicalize
 
+
 class PortalMonster(db.Model):
 
     __tablename__ = 'portal_monsters'
@@ -21,6 +22,7 @@ class PortalMonster(db.Model):
 
     portal = db.relationship('Portal', cascade="all, delete", backref=db.backref('portal_monsters'))
     monster = db.relationship('Monster', cascade="all, delete", backref=db.backref('portal_monsters'))
+
 
 class RegionMonster(db.Model):
 
