@@ -15,6 +15,7 @@ class Portal(db.Model):
 
     id = IDColumn(doc='Portal ID')
 
+    name = db.Column(db.String, doc='Portal name')
     point = db.Column(Geography('POINT'), doc='Portal geography point')
     created = db.Column(sau.ArrowType(timezone=True), default=arrow.utcnow, doc='Portal creation date')
     captured = db.Column(sau.ArrowType(timezone=True), doc='Date of capture')
