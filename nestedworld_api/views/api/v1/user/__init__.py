@@ -54,7 +54,6 @@ class Users(users.Resource):
 
 
 @users.route('/me')
-@users.route('/me/')
 class Me(users.Resource):
 
     class Schema(Users.Schema):
@@ -98,7 +97,6 @@ class Me(users.Resource):
 
 
 @users.route('/<user_id>')
-@users.route('/<user_id>/')
 class User(users.Resource):
     tags = ['users']
 
