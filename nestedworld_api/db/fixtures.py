@@ -156,11 +156,12 @@ def import_portals():
 
         return r.json()['elements']
 
+    # Lille
+
     print('Querying...')
     r = query_overpass('area(3600058404)->.searchArea;(node["amenity"](area.searchArea););out body;')
     points = r[0:]
 
-    # City
     city_rel_id = int(3600058404 - 3.6e9)
     city_polygon = get_polygon(city_rel_id)
 
@@ -222,7 +223,7 @@ def import_portals():
         type = ['water', 'fire', 'earth', 'electric', 'plant']
         if point_name is not None:
             # print('Importing %s...' % (point_name))
-            point_portal = Portal(point=point_data, type=random.sample(type, 1)[0], created=arrow.utcnow())
+            point_portal = Portal(name=point_name, point=point_data, type=random.sample(type, 1)[0], created=arrow.utcnow())
             db.session.add(point_portal)
 
     monsters = Monster.query.all()
