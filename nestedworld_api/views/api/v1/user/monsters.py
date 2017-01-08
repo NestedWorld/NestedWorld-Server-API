@@ -107,6 +107,24 @@ class UserMonster(user_monsters.Resource):
         monster = DbUserMonster.query.filter(DbUserMonster.user_id == current_session.user.id, DbUserMonster.id == monster_id).first()
         return monster
 
+    @login_required
+    @user_monsters.marshal_with(UserMonsters.MonsterResult())
+    @user_monsters.accept(UserMonsters.MonsterResult())
+    def put(self, data, monster_id):
+        '''
+            Update a monster's informations
+
+            This request is used for update the iformation of a specific attack
+        '''
+        from nestedworld_api.db import db
+        from nestedworld_api.db import UserMonster as DbUserMonster
+
+        monster = DbUserMonster.query.get_or_404(monster_id)
+        for (name, value) in data.items():
+            setattr(monster, name, value)
+        db.session.commit()
+
+        return monster
 
     @login_required
     def delete(self, monster_id):
