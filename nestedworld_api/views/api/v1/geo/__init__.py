@@ -27,6 +27,8 @@ class Portals(portals.Resource):
         type = ma.String(validate=[OneOf(['water', 'fire', 'earth', 'electric', 'plant'])])
         created = ma.DateTime(dump_only=True)
         captured = ma.DateTime()
+        captured_by = ma.Integer()
+        monster_on = ma.Integer()
         catching_end = ma.DateTime()
         duration = ma.Integer()
 

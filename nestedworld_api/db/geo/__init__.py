@@ -19,6 +19,8 @@ class Portal(db.Model):
     point = db.Column(Geography('POINT'), doc='Portal geography point')
     created = db.Column(sau.ArrowType(timezone=True), default=arrow.utcnow, doc='Portal creation date')
     captured = db.Column(sau.ArrowType(timezone=True), doc='Date of capture')
+    captured_by = db.Column(db.Integer, doc="Id of the User that captured the portal")
+    monster_on = db.Column(db.Integer, doc="Id of the monster on the portal")
     duration = db.Column(db.Integer, doc='Duration of the capture in seconds')
     catching_end = db.Column(sau.ArrowType(timezone=True), doc="Date of catching's end")
     type = db.Column(elements, doc='portal type')
