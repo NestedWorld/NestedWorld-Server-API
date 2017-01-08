@@ -39,3 +39,15 @@ def import_attacks():
 @db_manager.command
 def import_objects():
     fixtures.import_objects()
+
+
+@db_manager.command
+def full_reset():
+    db.drop_all()
+    db.create_all()
+    fixtures.reset_db()
+    db.session.commit()
+    fixtures.import_monsters()
+    fixtures.import_attacks()
+    fixtures.import_portals()
+    fixtures.import_objects()
