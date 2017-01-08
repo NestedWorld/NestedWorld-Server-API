@@ -13,4 +13,4 @@ spec = APISpec(
 api = Api(spec, api_blueprint)
 
 
-from . import geo, monster, user, attack, object
+from . import geo, monster, user, attack, object, exchange

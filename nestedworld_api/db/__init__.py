@@ -9,3 +9,4 @@ from .monster import Monster, MonsterAttack
 from .user import User, PasswordResetRequest, UserMonster, UserFriend, Inventory
 from .object import Object, Plant
 from .commons import elements
+from .exchange import Exchange
