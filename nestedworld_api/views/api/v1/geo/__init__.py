@@ -28,6 +28,7 @@ class Portals(portals.Resource):
         created = ma.DateTime(dump_only=True)
         captured = ma.DateTime()
         captured_by = ma.Integer()
+        umonster_on = ma.Integer()
         monster_on = ma.Integer()
         catching_end = ma.DateTime()
         duration = ma.Integer()
