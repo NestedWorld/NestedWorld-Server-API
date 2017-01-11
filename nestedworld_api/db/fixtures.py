@@ -87,7 +87,7 @@ def import_monsters():
         select = random.sample(monsters, 5)
         for monster in select:
             user_monster = UserMonster(user=user, monster=monster,
-                                       level=0, experience=0, surname="IAMTOTORO")
+                                       level=1, experience=0, surname="IAMTOTORO")
             db.session.add(user_monster)
 
     db.session.commit()
