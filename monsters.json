@@ -25,7 +25,7 @@
         "hp": 70,
         "attack": 15,
         "defense": 61,
-        "speed": 46
+        "speed": 46,
         "enraged_sprite": "https://s3-eu-west-1.amazonaws.com/nestedworld/Monsters/bad.png",
         "sprite": "https://s3-eu-west-1.amazonaws.com/nestedworld/Monsters/Blue3.png"
     },
