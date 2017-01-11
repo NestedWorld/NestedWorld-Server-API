@@ -83,7 +83,7 @@ class Exchange(exchanges.Resource):
         from nestedworld_api.db import UserMonster as DbUserMonster
 
         exchange = DbExchange.query.get_or_404(exchange_id)
-        monster = DbUserMonster.query.filter(DbUserMonster.id == data['sended']).first()
+        monster = DbUserMonster.query.filter(DbUserMonster.id == data['sended']).first().delete()
         if monster is None:
             api.abort(409, message='User Monster doesn\'t exist')
         opp_monster = DbUserMonster.query.filter(DbUserMonster.id == exchange.umonster_sended).first()
