@@ -27,7 +27,8 @@ class Stats(users.Resource):
 
         monster_types = {ty: 0 for ty in TYPES}
         for entry in user.user_monsters:
-            monster_types[entry.monster.type] += 1
+            if entry.monster is not None:
+                monster_types[entry.monster.type] += 1
 
         return {
             'combats': {
